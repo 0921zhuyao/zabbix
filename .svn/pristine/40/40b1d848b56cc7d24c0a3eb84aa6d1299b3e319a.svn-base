@@ -1,0 +1,120 @@
+package com.jd.project.module.admin.standard.entity;
+
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.jd.framework.web.domain.BasisEntity;
+
+/**
+ * 检查检查属性表 T_CHECK_TABLE_PROP
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-21
+ */
+public class CheckTablePropEntity extends BasisEntity {
+	private static final long serialVersionUID = 1L;
+
+	/** 基础代码编号 */
+	private Long propId;
+	/** 基础代码编号 */
+	private Long checkTableId;
+	/**  */
+	private String propCode;
+	
+	private int maxValue;
+	
+	private int minValue;
+	
+	/** 创建人 */
+	private Long createUser;
+	/** 创建时间 */
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date createTime;
+	/** 最后更新人 */
+	private Long updateUser;
+	/** 最后更新时间 */
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date updateTime;
+	/** 是否删除 */
+	private Long isDelete;
+
+	public String getPropCode() {
+		return propCode;
+	}
+
+	public void setPropCode(String propCode) {
+		this.propCode = propCode;
+	}
+
+	public int getMaxValue() {
+		return maxValue;
+	}
+
+	public void setMaxValue(int maxValue) {
+		this.maxValue = maxValue;
+	}
+
+	public int getMinValue() {
+		return minValue;
+	}
+
+	public void setMinValue(int minValue) {
+		this.minValue = minValue;
+	}
+
+	public void setPropId(Long propId) {
+		this.propId = propId;
+	}
+
+	public Long getPropId() {
+		return propId;
+	}
+
+	public void setCheckTableId(Long checkTableId) {
+		this.checkTableId = checkTableId;
+	}
+
+	public Long getCheckTableId() {
+		return checkTableId;
+	}
+
+	public void setCreateUser(Long createUser) {
+		this.createUser = createUser;
+	}
+
+	public Long getCreateUser() {
+		return createUser;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setUpdateUser(Long updateUser) {
+		this.updateUser = updateUser;
+	}
+
+	public Long getUpdateUser() {
+		return updateUser;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
+
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setIsDelete(Long isDelete) {
+		this.isDelete = isDelete;
+	}
+
+	public Long getIsDelete() {
+		return isDelete;
+	}
+}

@@ -1,0 +1,107 @@
+package com.jd.project.module.admin.standard.controller;
+
+import java.util.List;
+
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.jd.framework.aspectj.lang.annotation.Log;
+import com.jd.framework.aspectj.lang.enums.BusinessType;
+import com.jd.framework.web.controller.BaseController;
+import com.jd.framework.web.domain.Result;
+import com.jd.framework.web.page.TableDataInfo;
+import com.jd.project.module.admin.standard.entity.IndustryEntity;
+import com.jd.project.module.admin.standard.service.IndustryService;
+
+/**
+ * 行业分类 信息操作处理
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-21
+ */
+@Controller
+@RequestMapping("/module/industry")
+public class IndustryController extends BaseController {
+	private String prefix = "module/admin/standard/industry";
+
+	@Autowired
+	private IndustryService industryService;
+
+	@RequiresPermissions("module:industry:view")
+	@GetMapping()
+	public String initList() {
+		return prefix + "/industry_list";
+	}
+
+	/**
+	 * 查询行业分类列表
+	 */
+	@RequiresPermissions("module:industry:list")
+	@PostMapping("/query")
+	@ResponseBody
+	public TableDataInfo query(IndustryEntity industry) {
+		startPage();
+		List<IndustryEntity> list = industryService.selectIndustryList(industry);
+		return getDataTable(list);
+	}
+
+	/**
+	 * 新增行业分类
+	 */
+	@GetMapping("/initAdd")
+	public String initAdd(ModelMap mmap) {
+		mmap.put("industry", new IndustryEntity());
+		return prefix + "/industry_edit";
+	}
+
+	/**
+	 * 新增保存行业分类
+	 */
+	@RequiresPermissions("module:industry:add")
+	@Log(title = "行业分类", businessType = BusinessType.INSERT)
+	@PostMapping("/add")
+	@ResponseBody
+	public Result add(IndustryEntity industry) {
+		return toAjax(industryService.insertIndustry(industry));
+	}
+
+	/**
+	 * 修改行业分类
+	 */
+	@GetMapping("/initEdit/{industryId}")
+	public String initEdit(@PathVariable("industryId") Long industryId, ModelMap mmap) {
+		IndustryEntity industry = industryService.selectIndustryById(industryId);
+		mmap.put("industry", industry);
+		return prefix + "/industry_edit";
+	}
+
+	/**
+	 * 修改保存行业分类
+	 */
+	@RequiresPermissions("module:industry:edit")
+	@Log(title = "行业分类", businessType = BusinessType.UPDATE)
+	@PostMapping("/edit")
+	@ResponseBody
+	public Result edit(IndustryEntity industry) {
+		return toAjax(industryService.updateIndustry(industry));
+	}
+
+	/**
+	 * 删除行业分类
+	 */
+	@RequiresPermissions("module:industry:remove")
+	@Log(title = "行业分类", businessType = BusinessType.DELETE)
+	@PostMapping("/del")
+	@ResponseBody
+	public Result del(String ids) {
+		return toAjax(industryService.deleteIndustryByIds(ids));
+	}
+
+}

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jd.project.module.admin.message.mapper.NoticeMapper">
+    
+    <resultMap type="NoticeEntity" id="MsgResult">
+        <result property="id"    column="ID"    />
+        <result property="title"    column="TITLE"    />
+        <result property="content"    column="CONTENT"    />
+        <!--<result property="type"    column="TYPE"    />-->
+        <result property="status"    column="STATUS"    />
+        <result property="crtTime"    column="CREATE_TIME"    />
+        <result property="crtUser"    column="CREATE_USER"    />
+        <result property="updTime"    column="UPDATE_TIME"    />
+        <result property="updUser"    column="UPDATE_USER"    />
+        <result property="delFlag"    column="IS_DELETE"    />
+    </resultMap>
+	
+	<sql id="selectMsgVo">
+        select ID, TITLE, CONTENT, STATUS, CREATE_TIME, CREATE_USER, UPDATE_TIME, UPDATE_USER, IS_DELETE from T_NOTICE
+    </sql>
+	
+    <select id="selectMsgList" parameterType="NoticeEntity" resultMap="MsgResult">
+        <include refid="selectMsgVo"/>
+        <where>
+            IS_DELETE = 0
+            <if test="id != null and id != ''"> and ID = #{id}</if>
+             <if test="title != null and title != ''">
+                 and TITLE LIKE CONCAT(CONCAT('%',#{title},'%'))
+             </if>
+             <if test="content != null and content != ''">
+                 and CONTENT LIKE CONCAT(CONCAT('%',#{content},'%'))
+             </if>
+             <if test="status != null "> and STATUS = #{status}</if>
+             <if test="crtTime != null and crtTime != ''"> and CREATE_TIME = #{crtTime}</if>
+             <if test="crtUser != null and crtUser != ''"> and CREATE_USER = #{crtUser}</if>
+             <if test="updTime != null and updTime != ''"> and UPDATE_TIME = #{updTime}</if>
+             <if test="updUser != null and updUser != ''"> and UPDATE_USER = #{updUser}</if>
+             <if test="delFlag != null and delFlag != ''"> and IS_DELETE = #{delFlag}</if>
+         </where>
+        ORDER BY UPDATE_TIME DESC
+    </select>
+    
+    <select id="selectMsgById" parameterType="Long" resultMap="MsgResult">
+        <include refid="selectMsgVo"/>
+        where ID = #{id}
+    </select>
+        
+    <insert id="insertMsg" parameterType="NoticeEntity">
+        insert into T_NOTICE
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != '' ">ID,</if>
+			<if test="title != null and title != '' ">TITLE,</if>
+			<if test="content != null and content != '' ">CONTENT,</if>
+			<if test="status != null ">STATUS,</if>
+			CREATE_TIME,
+			<if test="crtUser != null and crtUser != '' ">CREATE_USER,</if>
+			UPDATE_TIME,
+			<if test="updUser != null and updUser != '' ">UPDATE_USER,</if>
+			<if test="delFlag != null ">IS_DELETE,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != ''">#{id},</if>
+			<if test="title != null and title != ''">#{title},</if>
+			<if test="content != null and content != ''">#{content},</if>
+			<if test="status != null">#{status},</if>
+            sysdate(),
+			<if test="crtUser != null and crtUser != ''">#{crtUser},</if>
+            sysdate(),
+			<if test="updUser != null and updUser != ''">#{updUser},</if>
+			<if test="delFlag != null">#{delFlag},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateMsg" parameterType="NoticeEntity">
+        update T_NOTICE
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null  and title != ''  ">TITLE = #{title},</if>
+            <if test="content != null  and content != ''  ">CONTENT = #{content},</if>
+            <if test="status != null  ">STATUS = #{status},</if>
+            <if test="crtUser != null  ">CREATE_USER = #{crtUser},</if>
+            UPDATE_TIME = sysdate(),
+            <if test="updUser != null  ">UPDATE_USER = #{updUser},</if>
+            <if test="delFlag != null  ">IS_DELETE = #{delFlag},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+	<delete id="deleteMsgById" parameterType="Long">
+        update T_NOTICE set IS_DELETE = 1 where ID = #{id}
+    </delete>
+	
+    <delete id="deleteMsgByIds" parameterType="String">
+        update T_NOTICE set IS_DELETE = 1 where ID in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

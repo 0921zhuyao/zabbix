@@ -1,0 +1,90 @@
+package com.jd.project.module.admin.enterprise.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.jd.common.support.Convert;
+import com.jd.common.utils.security.ShiroUtils;
+import com.jd.framework.web.service.BaseService;
+import com.jd.project.module.admin.enterprise.entity.LdsDetailEntity;
+import com.jd.project.module.admin.enterprise.mapper.LdsDetailMapper;
+
+/**
+ * 大中小微 服务层实现
+ * 
+ * @author TrevorPhilips
+ * @date 2018-12-20
+ */
+@Service
+@Transactional(rollbackFor = Exception.class)
+public class LdsDetailServiceImpl extends BaseService implements LdsDetailService {
+	@Autowired
+	private LdsDetailMapper ldsDetailMapper;
+
+	/**
+	 * 查询大中小微信息
+	 * 
+	 * @param ldsDetailId
+	 *            大中小微ID
+	 * @return 大中小微信息
+	 */
+	@Override
+	public LdsDetailEntity selectLdsDetailById(Long ldsDetailId) {
+		return ldsDetailMapper.selectLdsDetailById(ldsDetailId);
+	}
+
+	/**
+	 * 查询大中小微列表
+	 * 
+	 * @param ldsDetail
+	 *            大中小微信息
+	 * @return 大中小微集合
+	 */
+	@Override
+	public List<LdsDetailEntity> selectLdsDetailList(LdsDetailEntity ldsDetail) {
+		return ldsDetailMapper.selectLdsDetailList(ldsDetail);
+	}
+
+	/**
+	 * 新增大中小微
+	 * 
+	 * @param ldsDetail
+	 *            大中小微信息
+	 * @return 结果
+	 */
+	@Override
+	public int insertLdsDetail(LdsDetailEntity ldsDetail) {
+		ldsDetail.setCreateUser(ShiroUtils.getUserId());
+		ldsDetail.setUpdateUser(ShiroUtils.getUserId());
+		return ldsDetailMapper.insertLdsDetail(ldsDetail);
+	}
+
+	/**
+	 * 修改大中小微
+	 * 
+	 * @param ldsDetail
+	 *            大中小微信息
+	 * @return 结果
+	 */
+	@Override
+	public int updateLdsDetail(LdsDetailEntity ldsDetail) {
+		ldsDetail.setUpdateUser(ShiroUtils.getUserId());
+		return ldsDetailMapper.updateLdsDetail(ldsDetail);
+	}
+
+	/**
+	 * 删除大中小微对象
+	 * 
+	 * @param ids
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
+	@Override
+	public int deleteLdsDetailByIds(String ids) {
+		return ldsDetailMapper.deleteLdsDetailByIds(Convert.toStrArray(ids));
+	}
+
+}

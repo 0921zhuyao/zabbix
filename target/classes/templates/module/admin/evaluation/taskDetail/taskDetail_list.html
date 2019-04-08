@@ -1,0 +1,122 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+    <div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 select-info">
+                    <form id="taskDetail-form">
+                        <div class="select-list">
+                            
+                        </div>
+                    </form>
+                </div>
+		<div class="btn-group hidden-xs" id="toolbar" role="group">
+			<a class="btn btn-outline btn-sm btn-success " onclick="$.operate.add()" shiro:hasPermission="module:taskDetail:add">
+				<i class="fa fa-plus"></i> 新增
+			</a>
+			<a class="btn btn-outline btn-sm btn-danger " onclick="$.operate.removeAll()" shiro:hasPermission="module:taskDetail:remove">
+				<i class="fa fa-trash-o"></i> 删除
+			</a>
+		</div>
+			
+		<div class="col-sm-12 select-table table-striped">
+			<table id="bootstrap-table" data-mobile-responsive="true"></table>
+		</div>
+	</div>
+    </div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('module:taskDetail:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('module:taskDetail:remove')}]];
+        var prefix = ctx + "module/taskDetail"
+
+        $(function() {
+            var options = {
+                url: prefix + "/query",
+                createUrl: prefix + "/initAdd",
+                updateUrl: prefix + "/initEdit/{id}",
+                removeUrl: prefix + "/del",
+                modalName: "任务详情",
+                search: false,
+                showExport: false,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'taskDetailId', 
+					title : '任务详情ID' 
+				},
+				{
+					field : 'taskPlanId', 
+					title : '自评计划任务ID' 
+				},
+				{
+					field : 'companyId', 
+					title : '企业ID' 
+				},
+				{
+					field : 'joinTime', 
+					title : '加入时间' 
+				},
+				{
+					field : 'gradeResult', 
+					title : '评级结果' 
+				},
+				{
+					field : 'gradeRemark', 
+					title : '评级备注' 
+				},
+				{
+					field : 'checktableStatus', 
+					title : '自评状态：0 新建 1 进行中 2已完成 3作废' 
+				},
+				{
+					field : 'initLevel', 
+					title : '初始化定级' 
+				},
+				{
+					field : 'remark', 
+					title : '备注' 
+				},
+				{
+					field : 'createUser', 
+					title : '创建人' 
+				},
+				{
+					field : 'createTime', 
+					title : '创建时间' 
+				},
+				{
+					field : 'updateUser', 
+					title : '更新人' 
+				},
+				{
+					field : 'updateTime', 
+					title : '更新时间' 
+				},
+				{
+					field : 'isDelete', 
+					title : '是否删除' 
+				},
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.taskDetailId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.taskDetailId + '\')"><i class="fa fa-remove"></i>删除</a>');
+						return actions.join('');
+		            }
+		        }]
+            };
+            $.table.init(options);
+        });
+        
+        function searchGrid(){
+            $.table.search("taskDetail-form");
+        }
+    </script>
+</body>
+</html>

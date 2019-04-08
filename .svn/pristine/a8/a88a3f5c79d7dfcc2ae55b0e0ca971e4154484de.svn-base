@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jd.project.module.admin.standard.mapper.CheckTablePropMapper">
+    
+    <resultMap type="CheckTablePropEntity" id="CheckTablePropResult">
+        <result property="propId"    column="PROP_ID"    />
+        <result property="checkTableId"    column="CHECK_TABLE_ID"    />
+        <result property="propCode"    column="PROP_CODE"    />
+        <result property="maxValue"    column="MAX_VALUE"    />
+        <result property="minValue"    column="MIN_VALUE"    />
+        <result property="createUser"    column="CREATE_USER"    />
+        <result property="createTime"    column="CREATE_TIME"    />
+        <result property="updateUser"    column="UPDATE_USER"    />
+        <result property="updateTime"    column="UPDATE_TIME"    />
+        <result property="isDelete"    column="IS_DELETE"    />
+    </resultMap>
+	
+	<sql id="selectCheckTablePropVo">
+        SELECT PROP_ID, CHECK_TABLE_ID, PROP_CODE, MIN_VALUE, MAX_VALUE, CREATE_USER, CREATE_TIME, UPDATE_USER, UPDATE_TIME, IS_DELETE FROM T_CHECK_TABLE_PROP
+    </sql>
+	
+    <select id="selectCheckTablePropList" parameterType="CheckTablePropEntity" resultMap="CheckTablePropResult">
+        <include refid="selectCheckTablePropVo"/>
+        <where>  
+            <if test="propId != null and propId != ''"> AND PROP_ID = #{propId}</if>
+             <if test="checkTableId != null and checkTableId != ''"> AND CHECK_TABLE_ID = #{checkTableId}</if>
+             <if test="propCode != null and propCode != ''"> AND PROP_CODE = #{propCode}</if>
+             <if test="maxValue != null and maxValue != ''"> AND MAX_VALUE = #{maxValue}</if>
+             <if test="minValue != null and minValue != ''"> AND MIN_VALUE = #{minValue}</if>
+             <if test="createUser != null and createUser != ''"> AND CREATE_USER = #{createUser}</if>
+             <if test="createTime != null and createTime != ''"> AND CREATE_TIME = #{createTime}</if>
+             <if test="updateUser != null and updateUser != ''"> AND UPDATE_USER = #{updateUser}</if>
+             <if test="updateTime != null and updateTime != ''"> AND UPDATE_TIME = #{updateTime}</if>
+             <if test="isDelete != null"> AND IS_DELETE = #{isDelete}</if>
+         </where>
+    </select>
+    
+    <select id="selectCheckTablePropById" parameterType="Long" resultMap="CheckTablePropResult">
+        <include refid="selectCheckTablePropVo"/>
+        WHERE PROP_ID = #{propId}
+    </select>
+        
+    <insert id="insertCheckTableProp" parameterType="CheckTablePropEntity">
+        INSERT INTO T_CHECK_TABLE_PROP
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="checkTableId != null and checkTableId != '' ">CHECK_TABLE_ID,</if>
+			<if test="propCode != null">PROP_CODE,</if>
+             <if test="maxValue != null">MAX_VALUE,</if>
+             <if test="minValue != null">MIN_VALUE,</if>
+			<if test="createUser != null and createUser != '' ">CREATE_USER,</if>
+			<if test="updateUser != null and updateUser != '' ">UPDATE_USER,</if>
+			CREATE_TIME,
+			UPDATE_TIME,
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="checkTableId != null and checkTableId != ''">#{checkTableId},</if>
+			<if test="propCode != null">#{propCode},</if>
+            <if test="maxValue != null">#{maxValue},</if>
+            <if test="minValue != null">#{minValue},</if>
+			<if test="createUser != null and createUser != ''">#{createUser},</if>
+			<if test="updateUser != null and updateUser != ''">#{updateUser},</if>
+			sysdate(),
+			sysdate(),
+         </trim>
+    </insert>
+	 
+    <update id="updateCheckTableProp" parameterType="CheckTablePropEntity">
+        UPDATE T_CHECK_TABLE_PROP
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="checkTableId != null  ">CHECK_TABLE_ID = #{checkTableId},</if>
+            <if test="propCode != null and propCode != ''">PROP_CODE = #{propCode},</if>
+             <if test="maxValue != null and maxValue != ''">MAX_VALUE = #{maxValue},</if>
+             <if test="minValue != null and minValue != ''">MIN_VALUE = #{minValue},</if>
+            <if test="updateUser != null  ">UPDATE_USER = #{updateUser},</if>
+            UPDATE_TIME = sysdate(),
+        </trim>
+        WHERE PROP_ID = #{propId}
+    </update>
+
+	<delete id="deleteCheckTablePropById" parameterType="Long">
+        DELETE FROM T_CHECK_TABLE_PROP WHERE PROP_ID = #{propId}
+    </delete>
+	
+    <delete id="deleteCheckTablePropByIds" parameterType="String">
+        DELETE FROM T_CHECK_TABLE_PROP WHERE PROP_ID IN 
+        <foreach item="propId" collection="array" open="(" separator="," close=")">
+            #{propId}
+        </foreach>
+    </delete>
+    
+    <!-- 批量新增检查属性 -->
+    <insert id="insertCheckTableProps" parameterType="CheckTablePropEntity">
+        INSERT INTO T_CHECK_TABLE_PROP (CHECK_TABLE_ID, PROP_CODE, MAX_VALUE,MIN_VALUE, UPDATE_USER, UPDATE_TIME, CREATE_USER, CREATE_TIME)
+        VALUES
+        <foreach collection ="list" item="checkTableProp" separator =",">
+            (#{checkTableProp.checkTableId},#{checkTableProp.propCode},#{checkTableProp.maxValue},#{checkTableProp.minValue},#{checkTableProp.updateUser},sysdate(),#{checkTableProp.createUser},sysdate())
+        </foreach >
+    </insert>
+    
+    <delete id="deletCheckTablePropByCheckTableId" parameterType="Long">
+    	DELETE FROM T_CHECK_TABLE_PROP WHERE CHECK_TABLE_ID = #{checkTableId}
+    </delete>
+</mapper>

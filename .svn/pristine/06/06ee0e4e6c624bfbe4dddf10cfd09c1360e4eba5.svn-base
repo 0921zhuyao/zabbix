@@ -1,0 +1,141 @@
+package com.jd.project.module.admin.standard.entity;
+
+import java.util.Date;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.jd.framework.web.domain.BaseEntity;
+
+/**
+ * 检查依据表 T_CHECK_TABLE_BASE
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-21
+ */
+public class CheckTableBaseEntity extends BaseEntity {
+	private static final long serialVersionUID = 1L;
+
+	/** 基础代码编号 */
+	private Long ctbId;
+	/** 基础代码编号 */
+	private Long checkTableId;
+	/** 检查依据标题 */
+	private String ctbTitle;
+	/** 检查依据内容 */
+	private String ctbContent;
+	/** 排序号 */
+	private Long sort;
+	/** 备注 */
+	private String remark;
+	/** 创建人 */
+	private Long createUser;
+	/** 创建时间 */
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date createTime;
+	/** 最后更新人 */
+	private Long updateUser;
+	/** 最后更新时间 */
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date updateTime;
+	/** 0 未删 1 已删 */
+	private Long isDelete;
+
+	public void setCtbId(Long ctbId) {
+		this.ctbId = ctbId;
+	}
+
+	public Long getCtbId() {
+		return ctbId;
+	}
+
+	public void setCheckTableId(Long checkTableId) {
+		this.checkTableId = checkTableId;
+	}
+
+	public Long getCheckTableId() {
+		return checkTableId;
+	}
+
+	public void setCtbTitle(String ctbTitle) {
+		this.ctbTitle = ctbTitle;
+	}
+
+	public String getCtbTitle() {
+		return ctbTitle;
+	}
+
+	public void setCtbContent(String ctbContent) {
+		this.ctbContent = ctbContent;
+	}
+
+	public String getCtbContent() {
+		return ctbContent;
+	}
+
+	public void setsort(Long sort) {
+		this.sort = sort;
+	}
+
+	public Long getsort() {
+		return sort;
+	}
+
+	public void setremark(String remark) {
+		this.remark = remark;
+	}
+
+	public String getremark() {
+		return remark;
+	}
+
+	public void setCreateUser(Long createUser) {
+		this.createUser = createUser;
+	}
+
+	public Long getCreateUser() {
+		return createUser;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setUpdateUser(Long updateUser) {
+		this.updateUser = updateUser;
+	}
+
+	public Long getUpdateUser() {
+		return updateUser;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
+
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setIsDelete(Long isDelete) {
+		this.isDelete = isDelete;
+	}
+
+	public Long getIsDelete() {
+		return isDelete;
+	}
+
+	public String toString() {
+		return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).append("ctbId", getCtbId())
+				.append("checkTableId", getCheckTableId()).append("ctbTitle", getCtbTitle())
+				.append("ctbContent", getCtbContent()).append("sort", getsort()).append("remark", getremark())
+				.append("createUser", getCreateUser()).append("createTime", getCreateTime())
+				.append("updateUser", getUpdateUser()).append("updateTime", getUpdateTime())
+				.append("isDelete", getIsDelete()).toString();
+	}
+}

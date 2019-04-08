@@ -1,0 +1,202 @@
+package com.jd.project.module.admin.evaluation.entity;
+
+import java.util.Date;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.jd.framework.web.domain.BasisEntity;
+import com.jd.project.module.admin.enterprise.entity.QyjcxxEntity;
+
+/**
+ * 自评计划任务表 T_TASK_PLAN
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-29
+ */
+public class TaskPlanEntity extends BasisEntity {
+	private static final long serialVersionUID = 1L;
+
+	/** 自评计划任务ID */
+	private Long planId;
+	/** 自评计划任务名称 */
+	private String planName;
+	/** 自评计划任务开始时间 */
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date planStartTime;
+	/** 审核状态：0 未审核 1审核通过 2审核未通过 */
+	private Long planStatus;
+	/** 审核意见 */
+	private String auditContent;
+	/** 备注 */
+	private String remark;
+	/** 排序号 */
+	private Long sort;
+	/** 创建人 */
+	private Long createUser;
+	/** 创建时间 */
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date createTime;
+	/** 更新人 */
+	private Long updateUser;
+	/** 更新时间 */
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date updateTime;
+	/** 0 未删 1 已删 */
+	private Long isDelete;
+	/** 自评表中总企业数 */
+	private Integer detailCount;
+	/** 完成自评企业数 */
+	private Integer finishCheck;
+
+	public Integer getDetailCount() {
+		return detailCount;
+	}
+
+	public void setDetailCount(Integer detailCount) {
+		this.detailCount = detailCount;
+	}
+
+	public Integer getFinishCheck() {
+		return finishCheck;
+	}
+
+	public void setFinishCheck(Integer finishCheck) {
+		this.finishCheck = finishCheck;
+	}
+
+	private String planStartTimeStr;
+
+	private String enterpriseIds;
+
+	private List<QyjcxxEntity> enterprises;
+
+	private String removeEnterprise;
+
+	public String getRemoveEnterprise() {
+		return removeEnterprise;
+	}
+
+	public void setRemoveEnterprise(String removeEnterprise) {
+		this.removeEnterprise = removeEnterprise;
+	}
+
+	public List<QyjcxxEntity> getEnterprises() {
+		return enterprises;
+	}
+
+	public void setEnterprises(List<QyjcxxEntity> enterprises) {
+		this.enterprises = enterprises;
+	}
+
+	public String getEnterpriseIds() {
+		return enterpriseIds;
+	}
+
+	public void setEnterpriseIds(String enterpriseIds) {
+		this.enterpriseIds = enterpriseIds;
+	}
+
+	public String getPlanStartTimeStr() {
+		return planStartTimeStr;
+	}
+
+	public void setPlanStartTimeStr(String planStartTimeStr) {
+		this.planStartTimeStr = planStartTimeStr;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public Long getSort() {
+		return sort;
+	}
+
+	public void setSort(Long sort) {
+		this.sort = sort;
+	}
+
+	public void setPlanId(Long planId) {
+		this.planId = planId;
+	}
+
+	public Long getPlanId() {
+		return planId;
+	}
+
+	public void setPlanName(String planName) {
+		this.planName = planName;
+	}
+
+	public String getPlanName() {
+		return planName;
+	}
+
+	public void setPlanStartTime(Date planStartTime) {
+		this.planStartTime = planStartTime;
+	}
+
+	public Date getPlanStartTime() {
+		return planStartTime;
+	}
+
+	public void setPlanStatus(Long planStatus) {
+		this.planStatus = planStatus;
+	}
+
+	public Long getPlanStatus() {
+		return planStatus;
+	}
+
+	public void setAuditContent(String auditContent) {
+		this.auditContent = auditContent;
+	}
+
+	public String getAuditContent() {
+		return auditContent;
+	}
+
+	public void setCreateUser(Long createUser) {
+		this.createUser = createUser;
+	}
+
+	public Long getCreateUser() {
+		return createUser;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setUpdateUser(Long updateUser) {
+		this.updateUser = updateUser;
+	}
+
+	public Long getUpdateUser() {
+		return updateUser;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
+
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setIsDelete(Long isDelete) {
+		this.isDelete = isDelete;
+	}
+
+	public Long getIsDelete() {
+		return isDelete;
+	}
+}

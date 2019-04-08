@@ -1,0 +1,76 @@
+package com.jd.project.module.admin.enterprise.service;
+
+import java.util.List;
+import java.util.Map;
+
+import com.jd.project.module.admin.enterprise.entity.LdsEntity;
+
+/**
+ * 大中小微 服务层
+ * 
+ * @author TrevorPhilips
+ * @date 2018-12-20
+ */
+public interface LdsService {
+	/**
+	 * 查询大中小微信息
+	 * 
+	 * @param lmsId
+	 *            大中小微ID
+	 * @return 大中小微信息
+	 */
+	public LdsEntity selectLdsById(Long lmsId);
+
+	/**
+	 * 查询大中小微列表
+	 * 
+	 * @param lds
+	 *            大中小微信息
+	 * @return 大中小微集合
+	 */
+	public List<LdsEntity> selectLdsList(LdsEntity lds);
+
+	/**
+	 * 新增大中小微
+	 * 
+	 * @param lds
+	 *            大中小微信息
+	 * @return 结果
+	 */
+	public int insertLds(LdsEntity lds);
+
+	/**
+	 * 修改大中小微
+	 * 
+	 * @param lds
+	 *            大中小微信息
+	 * @return 结果
+	 */
+	public int updateLds(LdsEntity lds);
+
+	/**
+	 * 删除大中小微信息
+	 * 
+	 * @param ids
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
+	public int deleteLdsByIds(String ids);
+
+	/**
+	 * 查询国民经济行业分类和指标名称
+	 * 
+	 * @param lmsId
+	 * @return
+	 */
+	public Map<String, Object> findLdsNationallEconomyByLmsId(Long lmsId);
+
+	/**
+	 * 通过国民经济分类编码查找指标
+	 * 
+	 * @param string
+	 * @return
+	 */
+	public List<Map<String, Object>> findLdsByNationallEconomyId(String string);
+
+}

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-directional-buttons.css}">
+    <link th:href="@{/css/app/mui.min.css}" rel="stylesheet"/>
+	<link th:href="@{/css/app/reset.css}" rel="stylesheet"/>
+	<link  th:href="@{/css/app/swiper.min.css}" rel="stylesheet"/>
+	<link th:href="@{/css/app/Co_index.css}" rel="stylesheet"/>
+
+	<script th:src="@{/js/app/swiper.min.js}"></script>
+	<script th:src="@{/js/app/jquery-3.0.0.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/app/mui.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/app/app_base.js}"></script>
+	<script type="text/javascript" th:src="@{/js/app/echarts.min.js}"></script>
+
+	<style type="text/css">
+		.con_name>span{
+			float: right;
+			font-size: 12px;
+			font-family: cursive;
+		}
+		.con_name>span:first-child{
+			color: red;
+            font-size: 15px;
+		}
+		.process_text{
+			font-size: 13px;
+		}
+		.process-choose{
+			left: 2%;
+			position: relative;
+			top: 12px;
+		}
+	</style>
+</head>
+<body>
+	<!--头部内容-->
+	<header id="header" class="mui-bar mui-bar-nav">
+	    <span class="action-back" onclick="android.doClose();">
+	        <img src="../../images/return.png" alt="">
+	    </span>
+	    <h1 class="mui-title">江宁安监分级管理系统</h1>
+	    <span class="pic_mine"><a href="/app/userCenter/info"><img src="/images/fig.png" alt=""></a></span>
+		<i class="num_tag" th:if="${msgCount} gt '0'">[[${msgCount}]]</i>
+	</header>
+	<div class="content">
+		<!--<img src="../images/main_bg.jpg" alt="" class="main_bg">-->
+		<div class="swiper-container main_bg">
+			<div class="swiper-wrapper">
+				<div class="swiper-slide">
+					<img src="../../images/main_bg.jpg" alt="">
+				</div>
+				<div class="swiper-slide">
+					<img src="../../images/main_bg2.jpg" alt="">
+				</div>
+				<div class="swiper-slide">
+					<img src="../../images/main_bg3.jpg" alt="">
+				</div>
+			</div>
+			<!-- 如果需要分页器 -->
+			<div class="swiper-pagination"></div>
+		</div>
+		<div class="notice">
+			<a href="/app/notice/initList"><p class="omg">通知公告：[[${notice?.title}]]</p></a>
+		</div>
+		<div class="self_judge">
+			<h3>企业信息</h3>
+			<a th:href="@{'/app/qyjcxx/detail/'+ ${enterpriseId}}" class="go_judge">更多 &gt;</a>
+		</div>
+		<div class="con_in">
+			<div>
+				<p class="con_name">[[${enterprise?.scjydwqc}]]
+					<span >[[${taskDetail.initLevel}]]</span>
+					<span>评估等级：</span></p>
+				<p class="omg con_address">[[${enterprise?.scjydz}]]</p>
+			</div>
+		</div>
+		<div class="self_judge states">
+			<h3>运行状态</h3>
+			<a id="evaluation" onclick="toEvaluation();" class="go_judge">企业自评 &gt;</a>
+		</div>
+		<div class="process">
+			<!-- <img src="../images/process.png" alt=""> -->
+			<div class="process_content">
+				<div class="process-choose">
+					<div class="process_text">
+						<span>当前阶段:</span>
+						<span>企业自评</span>
+					</div>
+					<div class="caret"></div>
+				</div>
+				<div class="process_info">
+					<div>
+						<div class="pro_textOne">企业自评</div>
+						<div class="zfx one"></div>
+					</div>
+					<div>
+						<div class="pro_textTwo">专家审核</div>
+						<div class="zfx two"></div>
+					</div>
+					<div>
+						<div class="pro_textThree">企业持续改进</div>
+						<div class="zfx"></div>
+					</div>
+
+
+				</div>
+			</div>
+		</div>
+        <div class="self_judge states">
+            <h3>动态运行</h3>
+        </div>
+        <div class="process">
+            <!-- <img src="../images/process.png" alt=""> -->
+            <div id="main" style="width:100%;height:230px"></div>
+        </div>
+        <div class="self_judge Dynamic">
+            <ul id="tabNav">
+                <li class="current">初始化不符合项</li>
+                <li>执法检查项不符合项</li>
+                <li>已整改</li>
+            </ul>
+            <a href="#" onclick="toDynamic()" class="go_judge">更多 &gt;</a>
+        </div>
+
+		<div class="Dynamic_list">
+			<ul id="tabList">
+				<li class="current" data-id="0" >
+					<div class="item" style="display: list-item;" th:each="di:${dynamicInconformity}">
+						<div  th:data-check-id="${di.checkTableEntity?.checkTableId}" th:data-dynamic-id="${di.dynamicsId}" >
+							<p class="omg">[[${di.checkTableEntity?.checkTableTypeContent}]]</p>
+							<div th:switch="${di.dynamicType}">
+								<button th:case="0" style="background-color:#57ABFF;">待处理</button>
+								<button th:case="1" style="background-color:#57D857;">待审核</button>
+								<button th:case="3" style="background-color:red">已驳回</button>
+							</div>
+						</div>
+					</div>
+				</li>
+				<li data-id="1"  >
+					<div class="item" style="display: list-item;" th:each="de:${dynamicEnforce}">
+						<div  data-check-id="" data-dynamic-id="" >
+							<p class="omg">[[${de.checkTableEntity?.checkTableTypeContent}]]</p>
+							<div th:switch="${de.dynamicType}">
+								<button th:case="0" style="background-color:#57ABFF;">待处理</button>
+								<button th:case="1" style="background-color:#57D857;">待审核</button>
+								<button th:case="3" style="background-color:red">已驳回</button>
+							</div>
+						</div>
+					</div>
+				</li>
+                <li data-id="2"  >
+					<div class="item" style="display: list-item;" th:each="dh:${dynamicHistory}">
+						<div data-check-id="" data-dynamic-id="" >
+							<p class="omg">[[${de.checkTableEntity?.checkTableTypeContent}]]</p>
+							<div th:switch="${de.dynamicType}">
+								<button th:case="0" style="background-color:#57ABFF;">待处理</button>
+								<button th:case="1" style="background-color:#57D857;">待审核</button>
+								<button th:case="3" style="background-color:red">已驳回</button>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="zhezhao" style="display:none;">
+	    <div class="remind_bg">
+	    	请完善企业信息
+	    	<button onclick="window.location='edit-page.html'">下一步</button>
+	    </div>
+	</div>
+</body>
+<script th:inline="javascript">
+    var enterprise = [[${enterprise}]]
+    var taskDetail = [[${taskDetail}]];
+    function toDynamic() {
+        var type = $("#tabList .current").attr("data-id");
+        window.location.href='/app/companyChecktable/initList/'+ type + '/' + '[[${enterpriseId}]]'  ;
+    }
+    //自评时跳转到企业确认信息页面，审核时直接跳转到检查表页面
+    function toEvaluation(){
+        if(null != taskDetail && (taskDetail.checktableStatus == 1 || taskDetail.checktableStatus == 0)){
+            mui.alert('请先确认企业信息！', '提示', function() {
+                window.location.href='/app/qyjcxx/editPage/' + [[${enterpriseId}]];
+            });
+        }else
+            window.location.href='/app/companyChecktable/selfJudge/' + [[${enterpriseId}]];
+	}
+
+	$(function () {
+        var mySwiper = new Swiper ('.swiper-container', {
+            direction: 'horizontal', // 垂直切换选项
+            loop: true, // 循环模式选项
+            autoplay:true,
+            // 如果需要分页器
+            pagination: {
+                el: '.swiper-pagination',
+            }
+        })
+    });
+	
+	 //mui初始化
+            mui.init({
+                swipeBack: true //启用右滑关闭功能
+            });
+			
+			
+    window.onload=function(){
+
+
+        if(null != taskDetail) {
+            switch (taskDetail.checktableStatus) {
+           //  switch (2) {
+                case 0:
+                case 1:
+                    $(".process_info").children("div:eq(0)").addClass("pro_active")
+                    $(".process_info").children("div:eq(0)").find(".zfx").css("background-color", "#5CB95C")
+                    break;
+                case 2:
+                    $(".process_info").children("div:eq(1)").addClass("pro_active")
+                    $(".process_info").children("div:eq(1)").find(".zfx").css("background-color", "#5CB95C")
+                    $(".process-choose").css("left","32%")
+                    $(".process_text span:last-child").text("专家审核")
+                    $("#evaluation").text("查看详情")
+                    break;
+                case 3:
+                case 4:
+                    $(".process_info").children("div:eq(2)").addClass("pro_active")
+                    $(".process_info").children("div:eq(2)").find(".zfx").css("background-color", "#5CB95C")
+                    $(".process-choose").css("left","62%")
+                    $(".process_text span:last-child").text("企业持续改进")
+                    $("#evaluation").text("查看详情")
+                    break;
+                default:
+                    $(".process_text span:last-child").text("N/A")
+                    $(".caret").hide();
+                    $("#evaluation").text("");
+            }
+        }else {
+            $(".process_text span:last-child").text("N/A")
+            $(".caret").hide();
+            $("#evaluation").text("");
+         }
+        var tabNav= document.getElementById('tabNav').getElementsByTagName('li');
+        var tabList= document.getElementById('tabList').getElementsByTagName('li');
+        for(var i=0;i<tabNav.length;i++){
+            tabNav[i].index=i;
+            tabNav[i].onmouseenter=function(){
+                for(var j=0;j<tabNav.length;j++){
+                 tabNav[j].className='';
+                 if(tabList[j] != undefined)
+                 	tabList[j].className='';
+                }
+                this.className='current';
+                if(tabList[this.index] != undefined)
+                	tabList[this.index].className='current';
+            }
+        }
+        // setTimeout(function () {
+        //     var btnArray = ['否', '是'];
+        //     if(![[${enterpriseFull}]]){
+        //         mui.confirm('请先完善企业信息', '提示', btnArray, function(e) {
+        //             if (e.index == 1) {
+        //                 location.href='[[@{/app/qyjcxx/editPage}]]/[[${enterpriseId}]]'
+        //             } else {
+		//
+        //             }
+        //         })
+        //     }
+        // },1000);
+		//动态运行详情跳转
+		$(".item div:first").click(function (e) {
+            window.location.href='[[@{/app/companyChecktable/answereDynamic/}]]/'+ this.dataset.checkId + '/' + this.dataset.dynamicId  ;
+        })
+    }
+
+    //折线图
+    var main = document.getElementById("main");
+    var myChart = echarts.init(main);
+    var option = {
+        tooltip:{
+            trigger: 'axis',
+            axisPointer:{type:'none'}
+        },
+        legend:{
+            itemWidth: 15,
+            itemHeight: 10,
+            itemGap: 5,
+            data:[  {name:'初始化不符合项'},
+                {name:'执法检查不符合项'}
+            ],
+            top: '15%',
+            textStyle: {
+                fontSize: 12,
+                color: '#a0a0a0'
+            }
+        },
+        xAxis:{
+            nameLocation:"middle",
+            nameTextStyle:{color:"#5ac1df",fontWeight:550},
+            axisLabel : {
+                textStyle: {color: '#5ac1df'}
+            },
+            axisLine:{
+                lineStyle:{
+                    color:'#eeeeee',
+                    width:5,
+                },
+                symbol: ["none","arrow"],
+            },
+            data:[[${months}]],
+            splitLine:{show:false,},
+        },
+        yAxis:{
+            name:"数量",
+            nameTextStyle:{color:"#5ac1df",fontWeight:550},
+            splitNumber:10,
+            axisLabel : {textStyle: {color: '#5ac1df'}},
+            axisLine:{
+                lineStyle:{
+                    color:'#eeeeee',
+                    width:1,
+                },
+                symbol: ["none","arrow"],
+            },
+            splitLine:{show:false,},
+        },
+        series:[
+            {name:"初始化不符合项",
+                type:"line",
+                symbol: "none",
+                smooth:false,
+                itemStyle:{
+                    normal:{lineStyle:{width:1,type:'dotted',}}
+                },
+                data:[[${initNon}]],
+            },
+            {name:"执法检查不符合项",
+                type:"line",
+                symbol: "none",
+                smooth:false,
+                itemStyle:{
+                    normal:{lineStyle:{width:1,type:'dotted',color:'#5cb95c'}}
+                },
+                data:[[${dynaNon}]],
+            }
+        ]
+    }
+    myChart.setOption(option);
+</script>
+</html>

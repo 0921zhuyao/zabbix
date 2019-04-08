@@ -1,0 +1,86 @@
+package com.jd.project.module.admin.standard.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.jd.common.support.Convert;
+import com.jd.framework.web.service.BaseService;
+import com.jd.project.module.admin.standard.entity.CheckRegulationRefEntity;
+import com.jd.project.module.admin.standard.mapper.CheckRegulationRefMapper;
+
+/**
+ * 检查依据配置 服务层实现
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-22
+ */
+@Service
+@Transactional(rollbackFor = Exception.class)
+public class CheckRegulationRefServiceImpl extends BaseService implements CheckRegulationRefService {
+	@Autowired
+	private CheckRegulationRefMapper checkRegulationRefMapper;
+
+	/**
+	 * 查询检查依据配置信息
+	 * 
+	 * @param id
+	 *            检查依据配置ID
+	 * @return 检查依据配置信息
+	 */
+	@Override
+	public CheckRegulationRefEntity selectCheckRegulationRefById(Long id) {
+		return checkRegulationRefMapper.selectCheckRegulationRefById(id);
+	}
+
+	/**
+	 * 查询检查依据配置列表
+	 * 
+	 * @param checkRegulationRef
+	 *            检查依据配置信息
+	 * @return 检查依据配置集合
+	 */
+	@Override
+	public List<CheckRegulationRefEntity> selectCheckRegulationRefList(CheckRegulationRefEntity checkRegulationRef) {
+		return checkRegulationRefMapper.selectCheckRegulationRefList(checkRegulationRef);
+	}
+
+	/**
+	 * 新增检查依据配置
+	 * 
+	 * @param checkRegulationRef
+	 *            检查依据配置信息
+	 * @return 结果
+	 */
+	@Override
+	public int insertCheckRegulationRef(CheckRegulationRefEntity checkRegulationRef) {
+		return checkRegulationRefMapper.insertCheckRegulationRef(checkRegulationRef);
+	}
+
+	/**
+	 * 修改检查依据配置
+	 * 
+	 * @param checkRegulationRef
+	 *            检查依据配置信息
+	 * @return 结果
+	 */
+	@Override
+	public int updateCheckRegulationRef(CheckRegulationRefEntity checkRegulationRef) {
+		return checkRegulationRefMapper.updateCheckRegulationRef(checkRegulationRef);
+	}
+
+	/**
+	 * 删除检查依据配置对象
+	 * 
+	 * @param ids
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
+	@Override
+	public int deleteCheckRegulationRefByIds(String ids) {
+		return checkRegulationRefMapper.deleteCheckRegulationRefByIds(Convert.toStrArray(ids));
+	}
+
+}

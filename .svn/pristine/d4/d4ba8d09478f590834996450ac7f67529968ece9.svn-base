@@ -1,0 +1,13 @@
+.info-list-box{
+    overflow: hidden;
+}
+.info_list{
+    width: 90%;
+    float: right;
+    padding:  0 0;
+}
+.info-list-box>img{
+    width: 15px;
+    height: 15px;
+    margin: 32px 0 0 8px;
+}

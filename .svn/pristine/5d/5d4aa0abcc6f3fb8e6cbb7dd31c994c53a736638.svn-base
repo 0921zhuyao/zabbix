@@ -1,0 +1,86 @@
+package com.jd.project.module.admin.standard.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.jd.common.support.Convert;
+import com.jd.framework.web.service.BaseService;
+import com.jd.project.module.admin.standard.entity.CheckTableTypeEntity;
+import com.jd.project.module.admin.standard.mapper.CheckTableTypeMapper;
+
+/**
+ * 检查分类(通用，行业，专项) 服务层实现
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-21
+ */
+@Service
+@Transactional(rollbackFor = Exception.class)
+public class CheckTableTypeServiceImpl extends BaseService implements CheckTableTypeService {
+	@Autowired
+	private CheckTableTypeMapper checkTableTypeMapper;
+
+	/**
+	 * 查询检查分类(通用，行业，专项)信息
+	 * 
+	 * @param checkTableTypeId
+	 *            检查分类(通用，行业，专项)ID
+	 * @return 检查分类(通用，行业，专项)信息
+	 */
+	@Override
+	public CheckTableTypeEntity selectCheckTableTypeById(Long checkTableTypeId) {
+		return checkTableTypeMapper.selectCheckTableTypeById(checkTableTypeId);
+	}
+
+	/**
+	 * 查询检查分类(通用，行业，专项)列表
+	 * 
+	 * @param checkTableType
+	 *            检查分类(通用，行业，专项)信息
+	 * @return 检查分类(通用，行业，专项)集合
+	 */
+	@Override
+	public List<CheckTableTypeEntity> selectCheckTableTypeList(CheckTableTypeEntity checkTableType) {
+		return checkTableTypeMapper.selectCheckTableTypeList(checkTableType);
+	}
+
+	/**
+	 * 新增检查分类(通用，行业，专项)
+	 * 
+	 * @param checkTableType
+	 *            检查分类(通用，行业，专项)信息
+	 * @return 结果
+	 */
+	@Override
+	public int insertCheckTableType(CheckTableTypeEntity checkTableType) {
+		return checkTableTypeMapper.insertCheckTableType(checkTableType);
+	}
+
+	/**
+	 * 修改检查分类(通用，行业，专项)
+	 * 
+	 * @param checkTableType
+	 *            检查分类(通用，行业，专项)信息
+	 * @return 结果
+	 */
+	@Override
+	public int updateCheckTableType(CheckTableTypeEntity checkTableType) {
+		return checkTableTypeMapper.updateCheckTableType(checkTableType);
+	}
+
+	/**
+	 * 删除检查分类(通用，行业，专项)对象
+	 * 
+	 * @param ids
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
+	@Override
+	public int deleteCheckTableTypeByIds(String ids) {
+		return checkTableTypeMapper.deleteCheckTableTypeByIds(Convert.toStrArray(ids));
+	}
+
+}

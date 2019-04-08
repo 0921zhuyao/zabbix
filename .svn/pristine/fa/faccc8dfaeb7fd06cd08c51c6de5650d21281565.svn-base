@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<script type="text/javascript" src="../js/jquery-3.0.0.min.js" th:src="@{ /js/app/jquery-3.0.0.min.js}"></script>
+	<link rel="stylesheet" type="text/css" href="../css/reset.css"th:href="@{ /css/app/alert.css}">
+	<link rel="stylesheet" type="text/css" href="../css/reset.css"th:href="@{ /css/app/reset.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{ /css/app/Co_details.css}" href="../css/Co_details.css">
+</head>
+<body>
+	<!--头部内容-->
+	<header id="header" class="mui-bar mui-bar-nav">
+	    <span class="action-back" onclick="closDetail()">
+	        <img src="../images/return.png" th:src="@{ /images/return.png}" alt="">
+	    </span>
+	    <h1 class="mui-title" th:text="${result.scjydwqc}">南京江宁申江有限公司</h1>
+	    <!--<span class="submit-btn">编辑</span>-->
+	</header>
+	<div class="content" th:if="${status}=='success'">
+		<div class="info_list">
+			<img src="../images/pic1.png" th:src="@{ /images/pic1.png}" alt="">
+			<div class="list_left">
+				<p class="list_title" th:text="${result?.scjydwqc}">南京江宁申江有限公司</p>
+				<p class="list_address omg" th:if="${result?.scjydz}!=null or ${result?.scjydz}!=''" th:text="${result?.scjydz}"></p>
+				<p class="list_address omg" th:if="${result?.scjydz}==null or ${result?.scjydz}==''">地址: 未录入</p>
+			</div>
+		</div>
+		<div class="more_info">
+			<div class="more_info_list alert-btn">
+				<img src="../images/icon_1.png" th:src="@{ /images/icon_1.png}" alt="">
+				<p>企业负责人</p>
+			</div>
+			<div class="more_info_list alert-btn">
+				<img src="../images/icon_2.png" th:src="@{ /images/icon_2.png}" alt="">
+				<p>企业资质</p>
+			</div>
+			<div class="more_info_list alert-btn">
+				<img src="../images/icon_3.png" th:src="@{ /images/icon_3.png}" alt="">
+				<p>预案查询</p>
+			</div>
+			<div class="more_info_list alert-btn">
+				<img src="../images/icon_4.png" th:src="@{ /images/icon_4.png}" alt="">
+				<p>危险源查询</p>
+			</div>
+			<div class="more_info_list alert-btn">
+				<img src="../images/icon_5.png" th:src="@{ /images/icon_5.png}" alt="">
+				<p>危化品查询</p>
+			</div>
+			<div class="more_info_list alert-btn">
+				<img src="../images/icon_6.png" th:src="@{ /images/icon_6.png}" alt="">
+				<p>安全生产状况查询</p>
+			</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript" th:src="@{/js/app/alert.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/app/mui.min.js}"></script>
+<script>
+    /*var M = {
+    };
+    $(document).delegate(".alert-btn",'click',function(){
+        if(M.dialog1){
+            return M.dialog1.show();
+        }
+        M.dialog1 = jqueryAlert({
+            'content' : '功能暂未开放',
+            'closeTime' : 1500,
+        })
+    });*/
+	function closDetail(){
+	    var dom=$("#alert-box");
+	    if(dom.attr("id")){
+            $("#alert-box").css("display","none")
+		}else{
+            mui.back();
+		}
+
+	}
+</script>
+</html>           

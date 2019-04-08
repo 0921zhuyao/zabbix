@@ -1,0 +1,24 @@
+package com.jd.project.module.app.homePage.service;
+
+
+import com.jd.project.module.admin.evaluation.entity.DynamicEntity;
+
+import java.util.List;
+import java.util.Map;
+/**
+ * 检查内容分类 服务层
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-21
+ */
+public interface HomePageService {
+	
+	public Map<String,String> countEntNumber(Map<String,Object> map);
+
+	public List<DynamicEntity> queryNocomfirmance(Map<String,Object> map);
+
+	public List<Map<String, String>> queryCompany(Map<String, Object> map);
+
+	public List<DynamicEntity> queryDynamic(Map<String, Object> map);
+
+}

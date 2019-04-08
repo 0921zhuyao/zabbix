@@ -1,0 +1,59 @@
+package com.jd.project.module.admin.standard.service;
+
+import java.util.List;
+
+import com.jd.project.module.admin.standard.entity.CheckTableTypeEntity;
+
+/**
+ * 检查分类(通用，行业，专项) 服务层
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-21
+ */
+public interface CheckTableTypeService {
+	/**
+	 * 查询检查分类(通用，行业，专项)信息
+	 * 
+	 * @param checkTableTypeId
+	 *            检查分类(通用，行业，专项)ID
+	 * @return 检查分类(通用，行业，专项)信息
+	 */
+	public CheckTableTypeEntity selectCheckTableTypeById(Long checkTableTypeId);
+
+	/**
+	 * 查询检查分类(通用，行业，专项)列表
+	 * 
+	 * @param checkTableType
+	 *            检查分类(通用，行业，专项)信息
+	 * @return 检查分类(通用，行业，专项)集合
+	 */
+	public List<CheckTableTypeEntity> selectCheckTableTypeList(CheckTableTypeEntity checkTableType);
+
+	/**
+	 * 新增检查分类(通用，行业，专项)
+	 * 
+	 * @param checkTableType
+	 *            检查分类(通用，行业，专项)信息
+	 * @return 结果
+	 */
+	public int insertCheckTableType(CheckTableTypeEntity checkTableType);
+
+	/**
+	 * 修改检查分类(通用，行业，专项)
+	 * 
+	 * @param checkTableType
+	 *            检查分类(通用，行业，专项)信息
+	 * @return 结果
+	 */
+	public int updateCheckTableType(CheckTableTypeEntity checkTableType);
+
+	/**
+	 * 删除检查分类(通用，行业，专项)信息
+	 * 
+	 * @param ids
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
+	public int deleteCheckTableTypeByIds(String ids);
+
+}

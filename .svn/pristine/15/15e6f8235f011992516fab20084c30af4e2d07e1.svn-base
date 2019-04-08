@@ -1,0 +1,112 @@
+package com.jd.project.module.admin.enterprise.controller;
+
+import com.jd.project.module.admin.enterprise.entity.DmJnajHylxEntity;
+import com.jd.project.module.admin.enterprise.service.DmJnajHylxService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import com.jd.framework.aspectj.lang.annotation.Log;
+import com.jd.framework.aspectj.lang.enums.BusinessType;
+import com.jd.framework.web.controller.BaseController;
+import com.jd.framework.web.page.TableDataInfo;
+import com.jd.framework.web.domain.Result;
+
+import java.util.List;
+
+/**
+ * 行业类型 信息操作处理
+ * 
+ * @author TrevorPhilips
+ * @date 2019-01-04
+ */
+@Controller
+@RequestMapping("/module/dmJnajHylx")
+public class DmJnajHylxController extends BaseController{
+    private String prefix = "module/dmJnajHylx";
+	
+	@Autowired
+	private DmJnajHylxService dmJnajHylxService;
+	
+	@RequiresPermissions("module:dmJnajHylx:view")
+	@GetMapping()
+	public String initList() {
+	    return prefix + "/dmJnajHylx_list";
+	}
+	
+	/**
+	 * 查询行业类型列表
+	 */
+	@RequiresPermissions("module:dmJnajHylx:list")
+	@PostMapping("/query")
+	@ResponseBody
+	public TableDataInfo query(DmJnajHylxEntity dmJnajHylx) {
+		startPage();
+        List<DmJnajHylxEntity> list = dmJnajHylxService.selectDmJnajHylxList(dmJnajHylx);
+		return getDataTable(list);
+	}
+	
+	/**
+	 * 新增行业类型
+	 */
+	@GetMapping("/initAdd")
+	public String initAdd(ModelMap mmap) {
+	    mmap.put("dmJnajHylx",new DmJnajHylxEntity());
+	    return prefix + "/dmJnajHylx_edit";
+	}
+	
+	/**
+	 * 新增保存行业类型
+	 */
+	@RequiresPermissions("module:dmJnajHylx:add")
+	@Log(title = "行业类型", businessType = BusinessType.INSERT)
+	@PostMapping("/add")
+	@ResponseBody
+	public Result add(DmJnajHylxEntity dmJnajHylx) {		
+		return toAjax(dmJnajHylxService.insertDmJnajHylx(dmJnajHylx));
+	}
+
+	/**
+	 * 修改行业类型
+	 */
+	@GetMapping("/initEdit/{id}")
+	public String initEdit(@PathVariable("id") Long id, ModelMap mmap) {
+		DmJnajHylxEntity dmJnajHylx = dmJnajHylxService.selectDmJnajHylxById(id);
+		mmap.put("dmJnajHylx", dmJnajHylx);
+	    return prefix + "/dmJnajHylx_edit";
+	}
+	
+	/**
+	 * 修改保存行业类型
+	 */
+	@RequiresPermissions("module:dmJnajHylx:edit")
+	@Log(title = "行业类型", businessType = BusinessType.UPDATE)
+	@PostMapping("/edit")
+	@ResponseBody
+	public Result edit(DmJnajHylxEntity dmJnajHylx) {		
+		return toAjax(dmJnajHylxService.updateDmJnajHylx(dmJnajHylx));
+	}
+	
+	/**
+	 * 删除行业类型
+	 */
+	@RequiresPermissions("module:dmJnajHylx:remove")
+	@Log(title = "行业类型", businessType = BusinessType.DELETE)
+	@PostMapping( "/del")
+	@ResponseBody
+	public Result del(String ids) {		
+		return toAjax(dmJnajHylxService.deleteDmJnajHylxByIds(ids));
+	}
+
+
+//	@GetMapping("/industry_type")
+//	@ResponseBody
+//	public Result get(String ids) {
+//		return toAjax(dmJnajHylxService.selectAllDmJnajHylxList());
+//	}
+}

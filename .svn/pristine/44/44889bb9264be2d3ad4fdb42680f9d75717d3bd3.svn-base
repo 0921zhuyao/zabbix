@@ -1,0 +1,116 @@
+package com.jd.project.module.admin.message.entity;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.jd.framework.web.domain.BasisEntity;
+import org.hibernate.validator.constraints.Length;
+
+import java.util.Date;
+
+/**
+ * 消息表 T_MSG
+ * 
+ * @author zaq
+ * @date 2018-11-26
+ */
+public class NoticeEntity extends BasisEntity {
+	private static final long serialVersionUID = 1L;
+	
+	/**  */
+	private Long id;
+	/** 消息标题 */
+	@Length(min = 1,max = 30,message ="消息标题最多输入30个字")
+	private String title;
+	/** 消息内容 */
+	@Length(min = 1,max = 500,message ="消息内容最多输入500个字")
+	private String content;
+	/** 消息类型 0 公告 1 消息通知
+	private Long type;*/
+	/** 0 暂存，1 已发送 */
+	@Length(min = 1,message ="状态不能为空")
+	private Long status;
+	/** 创建时间 */
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date crtTime;
+	/** 创建人 */
+	private Long crtUser;
+	/** 更新时间 */
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date updTime;
+	/** 更新人 */
+	private Long updUser;
+	/** 删除标记 */
+	private Long delFlag;
+
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public Long getStatus() {
+		return status;
+	}
+
+	public void setStatus(Long status) {
+		this.status = status;
+	}
+
+	public Date getCrtTime() {
+		return crtTime;
+	}
+
+	public void setCrtTime(Date crtTime) {
+		this.crtTime = crtTime;
+	}
+
+	public Long getCrtUser() {
+		return crtUser;
+	}
+
+	public void setCrtUser(Long crtUser) {
+		this.crtUser = crtUser;
+	}
+
+	public Date getUpdTime() {
+		return updTime;
+	}
+
+	public void setUpdTime(Date updTime) {
+		this.updTime = updTime;
+	}
+
+	public Long getUpdUser() {
+		return updUser;
+	}
+
+	public void setUpdUser(Long updUser) {
+		this.updUser = updUser;
+	}
+
+	public Long getDelFlag() {
+		return delFlag;
+	}
+
+	public void setDelFlag(Long delFlag) {
+		this.delFlag = delFlag;
+	}
+}

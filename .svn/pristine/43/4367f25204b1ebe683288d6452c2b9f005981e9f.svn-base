@@ -1,0 +1,61 @@
+package com.jd.project.task;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.jd.common.utils.WebServiceUtils.CxfUtils;
+import com.jd.project.module.admin.enterprise.entity.SysuserEntity;
+import com.jd.project.module.ws.InterfaceAddress;
+import com.jd.project.system.sysorg.entity.SysorgEntity;
+import com.jd.project.system.sysorg.service.SysorgService;
+import com.jd.project.system.user.service.IUserService;
+
+@Component
+public class SyncOrgAndUserJobs {
+
+	@Autowired
+	private IUserService userService;
+
+	@Autowired
+	private SysorgService sysorgService;
+
+	@Scheduled(cron = "${scheduled.cron}")
+	public void syncLsUserJob() {
+		List<SysuserEntity> syncData = new ArrayList<>();
+		try {
+			String jsonStr = CxfUtils.getLsJSONStr(InterfaceAddress.getQueryYhxxList(), 5000, 0);
+			JSONObject jsonObject = JSON.parseObject(jsonStr);
+			syncData = JSON.parseArray(jsonObject.getString("data"), SysuserEntity.class);
+			if (syncData.size() > 0) {
+				userService.modifyLsUser(syncData);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println(new Date() + " ...>>cron....");
+	}
+
+	@Scheduled(cron = "${scheduled.cron}")
+	public void syncLsOrgJob() {
+		List<SysorgEntity> syncData = new ArrayList<>();
+		try {
+			String jsonStr = CxfUtils.getLsJSONStr(InterfaceAddress.getQueryZzjgxxList(), 5000, 0);
+			JSONObject jsonObject = JSON.parseObject(jsonStr);
+			syncData = JSON.parseArray(jsonObject.getString("data"), SysorgEntity.class);
+			if (syncData.size() > 0) {
+				sysorgService.modifyLsOrg(syncData);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println(new Date() + " ...>>cron11....");
+	}
+
+}

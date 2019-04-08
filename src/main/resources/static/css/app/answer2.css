@@ -1,0 +1,234 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+    /*overflow-y: hidden;*/
+    background-color: rgb(248, 248, 251);
+}
+#header{
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 45px;
+    background: #333333;
+    width: 100%;
+    overflow: hidden;
+    z-index:99;
+}
+.action-back{
+    float: left;
+}
+.action-back img{
+    width: 11px;
+    margin: 14px 0 0 17px;
+}
+.mui-title {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 44px;
+    position: absolute;
+    display: block;
+    width: 70%;
+    margin: 0 -10px;
+    padding: 0;
+    text-align: center;
+    white-space: nowrap;
+    color: #fff;
+    right: 40px;
+    left: 40px;
+    display: inline-block;
+    overflow: hidden;
+    width: auto;
+    margin: 0;
+    text-overflow: ellipsis;
+}
+.submit-btn{
+    float: right;
+    height: 45px;
+    line-height: 48px;
+    margin-right: 8px;
+    font-size: 15px;
+    text-decoration: underline;
+    color: #fff;
+    text-decoration:none;
+}
+.content{
+    width: 100%;
+    /*height: 1211px;*/
+    margin: 57px auto;
+    background-color: rgb(248, 248, 251);
+}
+.question-num{
+    font-size: 20px;
+    color: #d72822;
+    font-weight: bold;
+    margin:19px 0 0 29px;
+    padding-top: 19px;
+}
+.question{
+    text-align: left;
+    font-size: 17px;
+    color: #5b5b5b;
+    line-height: 40px;
+    margin: 10px 29px 0;
+}
+.content ul{
+    list-style: none;
+    overflow: hidden;
+    width: 70%;
+    margin: 30px auto 0;
+}
+.content ul li{
+    float: right;
+    width: 40%;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    font-size: 17px;
+    color: #5b5b5b;
+    font-weight: bold;
+}
+.content ul li:nth-child(2){
+    background: url("/images/wrong.png") no-repeat 4%;
+    background-size: 28px 28px;
+}
+.content ul li:nth-child(1){
+    background: url("/images/right.png") no-repeat 4%;
+    background-size: 28px 28px;
+}
+.file {
+    position: relative;
+    display: block;
+    background: url(/images/upload.png) no-repeat;
+    background-size: 30px 30px;
+    border-radius: 50%;
+    overflow: hidden;
+    color: #1E88C7;
+    text-decoration: none;
+    width: 30px;
+    height: 30px;
+    margin: 20% auto 0;
+}
+.file input {
+    position: absolute;
+    font-size: 100px;
+    right: 0;
+    top: 0;
+    opacity: 0;
+}
+.fileLoad{
+    position: relative;
+    display: inline-block;
+    background:url("/images/right1.png") no-repeat;
+    background-size: 30px 30px;
+    border-radius: 50%;
+    overflow: hidden;
+    color: #1E88C7;
+    text-decoration: none;
+    text-indent: 0;
+    line-height: 20px;
+    margin: 31px 0 0 45%;
+    width: 30px;
+    height: 30px;
+}
+.fileLoad input {
+    position: absolute;
+    font-size: 100px;
+    right: 0;
+    top: 0;
+    opacity: 0;
+}
+.img-box{
+    width: 40%;
+    margin: 15px 0 15px 7%;
+    float: left;
+    height: 134px;
+    border: 1px dashed #9aa0aa;
+    position: relative;
+}
+.img-box span{
+    display: block;
+    text-align: center;
+    width: 100%;
+}
+.upload-text{
+    font-size: 13px;
+    color: #5b5b5b;
+    margin: 6px 0 2px;
+}
+.upload-info{
+    font-size: 11px;
+    color: #b0b0b0;
+}
+textarea{
+    width: 80%;
+    height: 70px;
+    margin-left:8%;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    border:  1px solid #9aa0aa;
+    background: #eeeeee;
+    font-size: 13px;
+    padding: 10px 0 0 4%;
+}
+button{
+    display: block;
+    width: 69.3%;
+    height: 40px;
+    background: #ff3636;
+    border: none;
+    margin: 20px auto 0;
+    border-radius: 6px;
+    font-size: 16px;
+    color: #fff;
+}
+.dashed{
+	width: 80%;
+    height: 1px;
+    margin: 15px 0 10px 8%;
+    padding: 10px 0 0 4%;
+	border-top:1px dashed #ccc; 
+}
+.img-box img {
+    width: 100%;
+    height: 100%;
+    margin: 0 10px 0 0;
+}
+.img-box .removeFile {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    background: url(/images/wrong1.png) no-repeat;
+    background-size: 1.5rem 1.5rem;
+}
+@media screen and (max-height: 630px) {
+    .content ul li:nth-child(1){
+        background: url("/images/wrong.png") no-repeat 4%;
+        background-size: 22px 22px;
+    }
+    .content ul li:nth-child(2){
+        background: url("/images/right.png") no-repeat 4%;
+        background-size: 22px 22px;
+    }
+    .content ul {
+        margin: 10px auto 0;
+    }
+    .img-box {
+        height: 100px;
+    }
+    .file {
+        margin: 16px 0 0 45%;
+    }
+    textarea {
+        height: 60px;
+        margin-bottom: 0px;
+    }
+}
+@media screen and (max-height: 660px)and (min-height: 630px) {
+    .content ul {
+        margin: 10px auto 0;
+    }
+}

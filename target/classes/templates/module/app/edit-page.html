@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>企业信息</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" type="text/css" href="../css/reset.css">
+    <link rel="stylesheet" type="text/css" href="../css/edit-page.css">
+</head>
+<body>
+<!--头部内容-->
+<header id="header" class="mui-bar mui-bar-nav">
+    <span class="action-back" onclick="window.history.back()">
+        <img src="../images/return.png" alt="">
+    </span>
+    <h1 class="mui-title">安全生 产管理机构设置及…</h1>
+    <span class="submit-btn">提交</span>
+</header>
+<div class="content">
+    <div class="table-box-1">
+        <div class="input-box">
+            <div class="input-list">
+                <div class="finish-icon">
+                    <img src="../images/finish-icon.png" alt="">
+                </div>
+                <span>企业名称 : &nbsp;</span>
+                <div class="input">
+                    <input type="text" value="南京盛开企业信息技术有限公司">
+                </div>
+
+            </div>
+            <div class="input-list wid">
+                <div class="finish-icon">
+                    <img src="../images/finish-icon.png" alt="">
+                </div>
+                <span>社会信用组织代码 : &nbsp;</span>
+                <div class="input input1">
+                    <input type="text" class="input1" value="21220089013">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="table-box-1">
+        <div class="input-box1">
+            <div class="input-list">
+                <div class="finish-icon">
+                    <img src="../images/finish-icon.png" alt="" style="display: none">
+                </div>
+                <span>所属行业 : &nbsp;</span>
+                    <dl class="select">
+                        <dt>请选择所属行业</dt>
+                        <dd>
+                            <ul>
+                                <li><a>选项1</a></li>
+                                <li><a>选项2</a></li>
+                                <li><a>选项3</a></li>
+                                <li><a>选项4</a></li>
+                                <li><a>选项5</a></li>
+                                <li><a>选项6</a></li>
+                            </ul>
+                        </dd>
+                    </dl>
+                <!--</div>-->
+            </div>
+            <div class="input-list">
+                <div class="finish-icon">
+                    <img src="../images/finish-icon.png" alt="">
+                </div>
+                <span>年营业额 : &nbsp;</span>
+                <dl class="select">
+                    <dt>请选择营业额</dt>
+                    <dd>
+                        <ul>
+                            <li><a>选项1</a></li>
+                            <li><a>选项2</a></li>
+                            <li><a>选项3</a></li>
+                        </ul>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    <div class="table-box-1">
+        <div class="input-box">
+            <div class="input-list">
+                <div class="finish-icon">
+                    <img src="../images/finish-icon.png" alt="" style="display: none">
+                </div>
+                <span>是否属于高危企业 : &nbsp;</span>
+                <div class="input-radio">
+                    <input type="radio" name="radio" checked/> <lable>是</lable>
+                    <input type="radio" name="radio"/> <lable>否</lable>
+                </div>
+            </div>
+            <div class="input-list">
+                <div class="finish-icon">
+                    <img src="../images/finish-icon.png" alt="" style="display: none">
+                </div>
+                <span>是否属于专项治理 : &nbsp;</span>
+                <div class="input-radio">
+                    <input type="radio" name="radio1"/> <lable>是</lable>
+                    <input type="radio" name="radio1" checked/> <lable>否</lable>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="table-box-1">
+        <div class="input-box1">
+            <div class="input-list">
+                <div class="finish-icon">
+                    <img src="../images/finish-icon.png" alt="" style="display: none">
+                </div>
+                <span>企业规模 : &nbsp;</span>
+                <dl class="select">
+                    <dt>请选择企业规模</dt>
+                    <dd>
+                        <ul>
+                            <li><a>选项1</a></li>
+                            <li><a>选项2</a></li>
+                            <li><a>选项3</a></li>
+                            <li><a>选项4</a></li>
+                            <li><a>选项5</a></li>
+                            <li><a>选项6</a></li>
+                        </ul>
+                    </dd>
+                </dl>
+            </div>
+            <div class="input-list">
+                <div class="finish-icon">
+                    <img src="../images/finish-icon.png" alt="" style="display: none">
+                </div>
+                <span>大中小微 : &nbsp;</span>
+                <dl class="select">
+                    <dt>请选择类型</dt>
+                    <dd>
+                        <ul>
+                            <li><a>选项1</a></li>
+                            <li><a>选项2</a></li>
+                            <li><a>选项3</a></li>
+                            <li><a>选项4</a></li>
+                            <li><a>选项5</a></li>
+                            <li><a>选项6</a></li>
+                        </ul>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    <img src="../images/sure.png" alt="" class="confirm">
+</div>
+</body>
+<script src="../js/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $(".select").width($(window).width()-117-22);
+        $(".select dt").width($(window).width()-139-22);
+        var selectWidth=$(".select").width();
+        var wid = $(".finish-icon").width();
+        var spanw = $(".wid > span").width();
+        $(".input").width(selectWidth);
+        $(".input1").width($(".input-list").width()-wid-spanw);
+        $(".select dd").width(selectWidth);
+        $(".select dd ul").width(selectWidth);
+        $(".select dd li").width(selectWidth);
+        $(".select").each(function(){
+            var s=$(this);
+            var z=parseInt(s.css("z-index"));
+            var dt=$(this).children("dt");
+            var dd=$(this).children("dd");
+            var _show=function(){dd.slideDown(200);dt.addClass("cur");s.css("z-index",z+1);};   //展开效果
+            var _hide=function(){dd.slideUp(200);dt.removeClass("cur");s.css("z-index",z);};    //关闭效果
+            dt.click(function(){dd.is(":hidden")?_show():_hide();});
+            dd.find("a").click(function(){dt.html($(this).html());_hide();});     //选择效果（如需要传值，可自定义参数，在此处返回对应的“value”值 ）
+            $("body").click(function(i){ !$(i.target).parents(".select").first().is(s) ? _hide():"";});
+        })
+        $(".confirm").click(function () {
+            window.location="self-judge.html"
+        })
+    });
+</script>
+</html>

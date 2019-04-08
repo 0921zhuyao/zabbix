@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link th:href="@{/css/app/reset.css}" rel="stylesheet"/>
+    <link th:href="@{/css/app/Organization.css}" rel="stylesheet"/>
+    <link th:href="@{/css/app/user.css}" rel="stylesheet"/>
+    <title>Document</title>
+</head>
+<body>
+    <header id="header" class="mui-bar mui-bar-nav">
+	    <span class="action-back" onclick="window.history.back()">
+	        <img src="/images/return.png" alt="">
+	    </span>
+        <h1 class="mui-title">我的</h1>
+    </header>
+    <div class="space"></div>
+    <div class="user-title">
+        <div class="user-img">
+            <img src="/images/fig.png" alt="">
+        </div>
+        <p>[[${lsUserModel?.username}]]</p>
+    </div>
+    <div class="space1"></div>
+    <!--<ul class="list">-->
+        <!--<li onclick="window.location='changeName.html'">-->
+            <!--<img src="../../images/count-list1.png" alt="" class="list-icon">-->
+            <!--<span>修改昵称</span>-->
+            <!--<img src="../../images/arrow.png" alt="" class="arrow">-->
+        <!--</li>-->
+        <!--<li onclick="window.location='changePassword.html'">-->
+            <!--<img src="../../images/count-list2.png" alt="" class="list-icon">-->
+            <!--<span>修改密码</span>-->
+            <!--<img src="../../images/arrow.png" alt="" class="arrow">-->
+        <!--</li>-->
+    <!--</ul>-->
+    <div class="space1"></div>
+    <ul class="list">
+        <li onclick="window.location='/app/userCenter/initMessages'">
+            <img src="/images/count-list3.png" alt="" class="list-icon">
+            <span>消息通知</span>
+            <img src="../../images/arrow.png" alt="" class="arrow">
+        </li>
+        <li onclick="window.location='/app/userCenter/about'">
+            <img src="/images/count-list4.png" alt="" class="list-icon">
+            <span>关于我们</span>
+            <img src="/images/arrow.png" alt="" class="arrow">
+        </li>
+        <!-- <li onclick="window.location='question.html'">
+            <img src="../images/count-list5.png" alt="" class="list-icon">
+            <span>常见问题</span>
+            <img src="../images/arrow.png" alt="" class="arrow">
+        </li> -->
+    </ul>
+    <div class="space1"></div>
+    <button>退出</button>
+</body>
+</html>

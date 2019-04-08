@@ -1,0 +1,261 @@
+package com.jd.project.module.admin.evaluation.entity;
+
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.jd.framework.web.domain.BasisEntity;
+
+/**
+ * 任务详情表 T_TASK_DETAIL
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-29
+ */
+public class TaskDetailEntity extends BasisEntity {
+	private static final long serialVersionUID = 1L;
+
+	/** 任务详情ID */
+	private Long taskDetailId;
+	/** 自评计划任务ID */
+	private Long taskPlanId;
+	/** 企业ID */
+	private String companyId;
+	/** 加入时间 */
+	private Date joinTime;
+	/** 评级结果 */
+	private Long gradeResult;
+	/** 评级备注 */
+	private String gradeRemark;
+	/** 自评状态：0 新建 1 进行中 2已完成 3作废 */
+	private int checktableStatus;
+	/** 初始化定级 */
+	private String initLevel;
+	/** 备注 */
+	private String remark;
+	/** 创建人 */
+	private Long createUser;
+	/** 创建时间 */
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date createTime;
+	/** 更新人 */
+	private Long updateUser;
+	/** 更新时间 */
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date updateTime;
+	/** 是否删除 */
+	private Long isDelete;
+	/** 详情关联的企业名称 */
+	private String scjydwqc;
+	/** 详情关联的企业地址 */
+	private String tyshxydm;
+	/** 查询条件之--行业类别 */
+	private String fddbr;
+	/** 查询条件之--街道id(所属机构) */
+	private String orgId;
+	/** 查询条件之--规模情况 */
+	private String frdh;
+	/** 动态运行表的dynamicType */
+	private Integer dynamicType;
+	/** 不符合项*/
+	private Integer noPassNumber;
+	/** 行政执法 */
+	private Integer xzzfNumber;
+
+	/** LS_SYSORG表的code值 */
+	private String orgCode;
+	
+	/** LS_SYSORG表的主键 */
+	private String[] orgIds;
+	
+	public String getScjydwqc() {
+		return scjydwqc;
+	}
+
+	public String[] getOrgIds() {
+		return orgIds;
+	}
+
+	public void setOrgIds(String[] orgIds) {
+		this.orgIds = orgIds;
+	}
+
+	public void setScjydwqc(String scjydwqc) {
+		this.scjydwqc = scjydwqc;
+	}
+
+	public String getTyshxydm() {
+		return tyshxydm;
+	}
+
+	public void setTyshxydm(String tyshxydm) {
+		this.tyshxydm = tyshxydm;
+	}
+
+	public String getFddbr() {
+		return fddbr;
+	}
+
+	public void setFddbr(String fddbr) {
+		this.fddbr = fddbr;
+	}
+
+	public String getFrdh() {
+		return frdh;
+	}
+
+	public void setFrdh(String frdh) {
+		this.frdh = frdh;
+	}
+
+	public String getOrgCode() {
+		return orgCode;
+	}
+
+	public void setOrgCode(String orgCode) {
+		this.orgCode = orgCode;
+	}
+
+	public Integer getNoPassNumber() {
+		return noPassNumber;
+	}
+
+	public void setNoPassNumber(Integer noPassNumber) {
+		this.noPassNumber = noPassNumber;
+	}
+
+	public Integer getXzzfNumber() {
+		return xzzfNumber;
+	}
+
+	public void setXzzfNumber(Integer xzzfNumber) {
+		this.xzzfNumber = xzzfNumber;
+	}
+
+	public Integer getDynamicType() {
+		return dynamicType;
+	}
+
+	public void setDynamicType(Integer dynamicType) {
+		this.dynamicType = dynamicType;
+	}
+	
+	public String getOrgId() {
+		return orgId;
+	}
+
+	public void setOrgId(String orgId) {
+		this.orgId = orgId;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public void setTaskDetailId(Long taskDetailId) {
+		this.taskDetailId = taskDetailId;
+	}
+
+	public Long getTaskDetailId() {
+		return taskDetailId;
+	}
+
+	public void setTaskPlanId(Long taskPlanId) {
+		this.taskPlanId = taskPlanId;
+	}
+
+	public Long getTaskPlanId() {
+		return taskPlanId;
+	}
+
+	public void setCompanyId(String companyId) {
+		this.companyId = companyId;
+	}
+
+	public String getCompanyId() {
+		return companyId;
+	}
+
+	public void setJoinTime(Date joinTime) {
+		this.joinTime = joinTime;
+	}
+
+	public Date getJoinTime() {
+		return joinTime;
+	}
+
+	public void setGradeResult(Long gradeResult) {
+		this.gradeResult = gradeResult;
+	}
+
+	public Long getGradeResult() {
+		return gradeResult;
+	}
+
+	public void setGradeRemark(String gradeRemark) {
+		this.gradeRemark = gradeRemark;
+	}
+
+	public String getGradeRemark() {
+		return gradeRemark;
+	}
+
+	public void setChecktableStatus(int checktableStatus) {
+		this.checktableStatus = checktableStatus;
+	}
+
+	public int getChecktableStatus() {
+		return checktableStatus;
+	}
+
+	public void setInitLevel(String initLevel) {
+		this.initLevel = initLevel;
+	}
+
+	public String getInitLevel() {
+		return initLevel;
+	}
+
+	public void setCreateUser(Long createUser) {
+		this.createUser = createUser;
+	}
+
+	public Long getCreateUser() {
+		return createUser;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setUpdateUser(Long updateUser) {
+		this.updateUser = updateUser;
+	}
+
+	public Long getUpdateUser() {
+		return updateUser;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
+
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setIsDelete(Long isDelete) {
+		this.isDelete = isDelete;
+	}
+
+	public Long getIsDelete() {
+		return isDelete;
+	}
+}

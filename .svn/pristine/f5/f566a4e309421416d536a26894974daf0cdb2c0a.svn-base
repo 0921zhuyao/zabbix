@@ -1,0 +1,72 @@
+package com.jd.project.module.app.notice;
+
+import com.github.pagehelper.PageInfo;
+import com.jd.framework.web.controller.BaseController;
+import com.jd.framework.web.domain.Result;
+import com.jd.project.module.admin.message.entity.NoticeEntity;
+import com.jd.project.module.admin.message.service.NoticeService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+/**
+ * @author zaq
+ * @date 2018/12/3 下午 9:07
+ */
+@Controller
+@RequestMapping("/app/notice")
+public class AppNoticeController extends BaseController {
+
+    private static final Logger logger = LoggerFactory.getLogger(AppNoticeController.class);
+
+    private String prefix = "module/app/notice";
+
+    @Autowired
+    private NoticeService noticeService;
+
+    /**
+     * 公告列表初始化
+     */
+    @GetMapping("/initList")
+    public String initList(){
+        return prefix + "/noticeListTop";
+    }
+
+    /**
+     * 公告列表初始化
+     */
+    @GetMapping("/initListBody")
+    public String initListBody(){
+        return prefix + "/noticeList";
+    }
+
+    /**
+     * 查询公告列表
+     * 返回data数据
+     */
+    @PostMapping("/list")
+    @ResponseBody
+    public Result list(NoticeEntity notice) {
+        notice.setStatus(1L);                                               // 读取已发送的通告
+        startPage();
+        List<NoticeEntity> list = noticeService.selectMsgList(notice);
+        PageInfo<NoticeEntity> pageInfo =new PageInfo<>(list);
+        return Result.success(list,pageInfo.getPages());
+    }
+
+    /**
+     * 通告详情
+     */
+    @GetMapping("/info/{id}")
+    public String getMessageInfo(ModelMap mmap,@PathVariable("id") long id){
+        mmap.put("noticeInfo",noticeService.selectMsgById(id));
+        return prefix + "/noticeInfo";
+    }
+
+
+}

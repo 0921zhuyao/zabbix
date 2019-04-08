@@ -1,0 +1,148 @@
+package com.jd.project.module.admin.standard.entity;
+
+import java.util.Date;
+
+import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.validator.constraints.Length;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.jd.framework.web.domain.BasisEntity;
+
+/**
+ * 政策法规表 T_REGULATION
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-22
+ */
+public class RegulationEntity extends BasisEntity {
+	private static final long serialVersionUID = 1L;
+
+	/** 主键ID */
+	private Long id;
+	/** 父节点ID */
+	private Long pid;
+	/** 标题 */
+	@NotEmpty(message="标题不能为空")
+	@Length(max=32,message="标题长度不能大于32字")
+	private String title;
+	/** 排序号 */
+	@NotEmpty(message="排序号不能为空")
+	private String sort;
+	/** 内容 */
+	@NotEmpty(message="内容不能为空")
+	@Length(max=500,message="内容长度不能大于500字")
+	private String content;
+	/** 层级 */
+	private Long level;
+	/** 备注 */
+	private String remark;
+	/** 创建人 */
+	private Long crtUser;
+	/** 创建时间 */
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date crtTime;
+	/** 最后更新人 */
+	private Long updUser;
+	/** 最后更新时间 */
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date updTime;
+	/** 0 未删 1 已删 */
+	private Long isDelete;	
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Long getPid() {
+		return pid;
+	}
+
+	public void setPid(Long pid) {
+		this.pid = pid;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getSort() {
+		return sort;
+	}
+
+	public void setSort(String sort) {
+		this.sort = sort;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public Long getLevel() {
+		return level;
+	}
+
+	public void setLevel(Long level) {
+		this.level = level;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public Long getCrtUser() {
+		return crtUser;
+	}
+
+	public void setCrtUser(Long crtUser) {
+		this.crtUser = crtUser;
+	}
+
+	public Date getCrtTime() {
+		return crtTime;
+	}
+
+	public void setCrtTime(Date crtTime) {
+		this.crtTime = crtTime;
+	}
+
+	public Long getUpdUser() {
+		return updUser;
+	}
+
+	public void setUpdUser(Long updUser) {
+		this.updUser = updUser;
+	}
+
+	public Date getUpdTime() {
+		return updTime;
+	}
+
+	public void setUpdTime(Date updTime) {
+		this.updTime = updTime;
+	}
+
+	public Long getIsDelete() {
+		return isDelete;
+	}
+
+	public void setIsDelete(Long isDelete) {
+		this.isDelete = isDelete;
+	}
+}

@@ -1,0 +1,126 @@
+package com.jd.project.module.admin.evaluation.mapper;
+
+import java.util.List;
+
+import com.jd.framework.web.mapper.BaseMapper;
+import com.jd.project.module.admin.evaluation.entity.TaskDetailEntity;
+
+/**
+ * 任务详情 数据层
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-29
+ */
+public interface TaskDetailMapper extends BaseMapper<TaskDetailEntity> {
+	/**
+	 * 查询任务详情信息
+	 * 
+	 * @param taskDetailId
+	 *            任务详情ID
+	 * @return 任务详情信息
+	 */
+	public TaskDetailEntity selectTaskDetailById(Long taskDetailId);
+
+	/**
+	 * 查询任务详情列表
+	 * 
+	 * @param taskDetail
+	 *            任务详情信息
+	 * @return 任务详情集合
+	 */
+	public List<TaskDetailEntity> selectTaskDetailList(TaskDetailEntity taskDetail);
+
+	/**
+	 * 手机端根据计划详情查询企业数据
+	 *
+	 * @param taskDetail
+	 *            任务详情信息
+	 * @return 结果
+	 */
+	public List<TaskDetailEntity> queryQyjcxxByTaskPlanDetailId(TaskDetailEntity taskDetail);
+
+	/**
+	 * 新增任务详情
+	 * 
+	 * @param taskDetail
+	 *            任务详情信息
+	 * @return 结果
+	 */
+	public int insertTaskDetail(TaskDetailEntity taskDetail);
+
+	/**
+	 * 修改任务详情
+	 * 
+	 * @param taskDetail
+	 *            任务详情信息
+	 * @return 结果
+	 */
+	public int updateTaskDetail(TaskDetailEntity taskDetail);
+
+	/**
+	 * 删除任务详情
+	 * 
+	 * @param taskDetailId
+	 *            任务详情ID
+	 * @return 结果
+	 */
+	public int deleteTaskDetailById(Long taskDetailId);
+
+	/**
+	 * 批量删除任务详情
+	 * 
+	 * @param taskDetailIds
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
+	public int deleteTaskDetailByIds(String[] taskDetailIds);
+
+	/**
+	 * 批量插入任务详情
+	 * 
+	 * @param detailEntities
+	 * @return
+	 */
+	public int insertTaskDetailBatch(List<TaskDetailEntity> detailEntities);
+
+	/**
+	 * 批量更新任务详情
+	 * 
+	 * @param detailEntities
+	 * @return
+	 */
+	public int updateTaskDetailBatch(List<TaskDetailEntity> detailEntities);
+
+	/**
+	 * 根据企业ID查询属于其的任务详情ID
+	 * 
+	 * @param companyId
+	 * @return
+	 */
+	public List<TaskDetailEntity> queryTaskDetailByCompanyId(String companyId);
+
+	/**
+	 * 修改企业自评状态
+	 * 
+	 * @param taskDetail
+	 * @return
+	 */
+	public int updateChecktableStatus(TaskDetailEntity taskDetail);
+
+	/**
+	 * 通过企业ID查询任务详情信息
+	 * 
+	 * @param enterpriseId
+	 * @return
+	 */
+	public TaskDetailEntity findTaskDetailByCompanyId(String enterpriseId);
+
+	/**
+	 * 通过任务ID删除详情信息
+	 * 
+	 * @param taskPlanIds
+	 * @return
+	 */
+	public int deleteTaskDetailByTaskPlanId(String[] taskPlanIds);
+
+}

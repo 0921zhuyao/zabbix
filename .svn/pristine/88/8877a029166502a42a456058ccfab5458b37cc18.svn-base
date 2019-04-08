@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jd.project.module.admin.standard.mapper.CheckContentTypeMapper">
+    
+    <resultMap type="CheckContentTypeEntity" id="CheckContentTypeResult">
+        <result property="contentTypeId"    column="CONTENT_TYPE_ID"    />
+        <result property="contentTypeCode"    column="CONTENT_TYPE_CODE"    />
+        <result property="contentTypeName"    column="CONTENT_TYPE_NAME"    />
+        <result property="contentTypeParentId"    column="CONTENT_TYPE_PARENT_ID"    />
+        <result property="sort"    column="SORT"    />
+        <result property="remark"    column="REMARK"    />
+        <result property="createUser"    column="CREATE_USER"    />
+        <result property="createTime"    column="CREATE_TIME"    />
+        <result property="updateUser"    column="UPDATE_USER"    />
+        <result property="updateTime"    column="UPDATE_TIME"    />
+        <result property="isDelete"    column="IS_DELETE"    />
+    </resultMap>
+	
+	<sql id="selectCheckContentTypeVo">
+        SELECT CONTENT_TYPE_ID, CONTENT_TYPE_CODE, CONTENT_TYPE_NAME, CONTENT_TYPE_PARENT_ID, SORT, REMARK, CREATE_USER, CREATE_TIME, UPDATE_USER, UPDATE_TIME, IS_DELETE FROM T_CHECK_CONTENT_TYPE
+    </sql>
+	
+    <select id="selectCheckContentTypeList" parameterType="CheckContentTypeEntity" resultMap="CheckContentTypeResult">
+        <include refid="selectCheckContentTypeVo"/>
+        <where>  
+            <if test="contentTypeId != null and contentTypeId != ''"> AND CONTENT_TYPE_ID = #{contentTypeId}</if>
+             <if test="contentTypeCode != null and contentTypeCode != ''"> AND CONTENT_TYPE_CODE = #{contentTypeCode}</if>
+             <if test="contentTypeName != null and contentTypeName != ''"> AND CONTENT_TYPE_NAME LIKE concat('%', #{contentTypeName}, '%')</if>
+             <if test="contentTypeParentId != null"> AND CONTENT_TYPE_PARENT_ID = #{contentTypeParentId}</if>
+             <if test="sort != null and sort != ''"> AND SORT = #{sort}</if>
+             <if test="remark != null and remark != ''"> AND REMARK = #{remark}</if>
+             <if test="createUser != null and createUser != ''"> AND CREATE_USER = #{createUser}</if>
+             <if test="createTime != null">
+                AND date_format(CREATE_TIME,'%y%m%d') &gt;= date_format(#{createTime},'%y%m%d')
+             </if>
+             <if test="updateUser != null and updateUser != ''"> AND UPDATE_USER = #{updateUser}</if>
+             <if test="updateTime != null">
+                AND date_format(UPDATE_TIME,'%y%m%d') &lt;= date_format(#{updateTime},'%y%m%d')
+             </if>
+              AND IS_DELETE = 0
+         </where>
+    </select>
+    
+    <select id="selectCheckContentTypeById" parameterType="Long" resultMap="CheckContentTypeResult">
+        <include refid="selectCheckContentTypeVo"/>
+        WHERE CONTENT_TYPE_ID = #{contentTypeId}
+    </select>
+        
+    <insert id="insertCheckContentType" parameterType="CheckContentTypeEntity">
+        INSERT INTO T_CHECK_CONTENT_TYPE
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="contentTypeId != null and contentTypeId != '' ">CONTENT_TYPE_ID,</if>
+			<if test="contentTypeCode != null and contentTypeCode != '' ">CONTENT_TYPE_CODE,</if>
+			<if test="contentTypeName != null and contentTypeName != '' ">CONTENT_TYPE_NAME,</if>
+			<if test="contentTypeParentId != null">CONTENT_TYPE_PARENT_ID,</if>
+			<if test="sort != null and sort != '' ">SORT,</if>
+			<if test="remark != null and remark != '' ">REMARK,</if>
+			<if test="createUser != null and createUser != '' ">CREATE_USER,</if>
+			CREATE_TIME,
+			<if test="updateUser != null and updateUser != '' ">UPDATE_USER,</if>
+			UPDATE_TIME,
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="contentTypeId != null and contentTypeId != ''">#{contentTypeId},</if>
+			<if test="contentTypeCode != null and contentTypeCode != ''">#{contentTypeCode},</if>
+			<if test="contentTypeName != null and contentTypeName != ''">#{contentTypeName},</if>
+			<if test="contentTypeParentId != null">#{contentTypeParentId},</if>
+			<if test="sort != null and sort != ''">#{sort},</if>
+			<if test="remark != null and remark != ''">#{remark},</if>
+			<if test="createUser != null and createUser != ''">#{createUser},</if>
+			sysdate(),
+			<if test="updateUser != null and updateUser != ''">#{updateUser},</if>
+			sysdate(),
+         </trim>
+    </insert>
+	 
+    <update id="updateCheckContentType" parameterType="CheckContentTypeEntity">
+        UPDATE T_CHECK_CONTENT_TYPE
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="contentTypeCode != null  and contentTypeCode != ''  ">CONTENT_TYPE_CODE = #{contentTypeCode},</if>
+            <if test="contentTypeName != null  and contentTypeName != ''  ">CONTENT_TYPE_NAME = #{contentTypeName},</if>
+            <if test="contentTypeParentId != null  ">CONTENT_TYPE_PARENT_ID = #{contentTypeParentId},</if>
+            <if test="sort != null  ">SORT = #{sort},</if>
+            <if test="remark != null  and remark != ''  ">REMARK = #{remark},</if>
+            <if test="updateUser != null  ">UPDATE_USER = #{updateUser},</if>
+            UPDATE_TIME = sysdate(),
+        </trim>
+        WHERE CONTENT_TYPE_ID = #{contentTypeId}
+    </update>
+
+	<delete id="deleteCheckContentTypeById" parameterType="Long">
+        DELETE FROM T_CHECK_CONTENT_TYPE WHERE CONTENT_TYPE_ID = #{contentTypeId}
+    </delete>
+	
+    <delete id="deleteCheckContentTypeByIds" parameterType="String">
+        DELETE FROM T_CHECK_CONTENT_TYPE WHERE CONTENT_TYPE_ID in 
+        <foreach item="contentTypeId" collection="array" open="(" separator="," close=")">
+            #{contentTypeId}
+        </foreach>
+    </delete>
+
+    <!-- 查询是否存在子类数据 -->
+    <select id="countCheckContentTypeById" resultType="Integer">
+        SELECT COUNT(1) FROM T_CHECK_CONTENT_TYPE WHERE CONTENT_TYPE_PARENT_ID = #{contentTypeId}
+    </select>
+    
+    <!-- 校验分类编码 -->
+    <select id="checkContentTypeCodeUnique" parameterType="String" resultMap="CheckContentTypeResult">
+        <include refid="selectCheckContentTypeVo"/>
+        WHERE CONTENT_TYPE_CODE = #{contentTypeCode}
+    </select>
+</mapper>

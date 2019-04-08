@@ -1,0 +1,191 @@
+package com.jd.project.module.admin.evaluation.entity;
+
+import java.util.Date;
+import java.util.List;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.jd.framework.web.domain.BasisEntity;
+import com.jd.project.module.admin.standard.entity.CheckTableEntity;
+
+/**
+ * 动态运行记录表 T_DYNAMIC
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-29
+ */
+public class DynamicEntity extends BasisEntity {
+	private static final long serialVersionUID = 1L;
+
+	/** 动态运行记录ID */
+	private Long dynamicsId;
+	/** 企业ID */
+	private String companyId;
+	/**
+	 * 检查表ID
+	 */
+	private Long checkTableId;
+	/**
+	 * 动态类别
+	 */
+	private int dynamicType;
+	/** 状态：0 新建 1待审核 2 审核通过 3审核不通过 */
+	private int dynamicStatus;
+	/** 定级结果 */
+	private int selfResult;
+	/** 定级备注 */
+	private String selfRemark;
+	/** 复核结果 */
+	private int reviewResult;
+	/** 复核备注 */
+	private String reviewRemark;
+	/** 创建时间 */
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date createTime;
+	/** 最后更新时间 */
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date updateTime;
+	/** 检查项类 */
+	private CheckTableEntity checkTableEntity;
+
+	/** LS_SYSORG表的code值 */
+	private String orgCode;
+
+	private String content;
+	/** 文件路径 */
+	private List<CompanyChecktableFilesEntity> companyChecktableFilesEntity;
+	
+	public List<CompanyChecktableFilesEntity> getCompanyChecktableFilesEntity() {
+		return companyChecktableFilesEntity;
+	}
+
+	public void setCompanyChecktableFilesEntity(List<CompanyChecktableFilesEntity> companyChecktableFilesEntity) {
+		this.companyChecktableFilesEntity = companyChecktableFilesEntity;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public String getOrgCode() {
+		return orgCode;
+	}
+
+	public void setOrgCode(String orgCode) {
+		this.orgCode = orgCode;
+	}
+
+	public CheckTableEntity getCheckTableEntity() {
+		return checkTableEntity;
+	}
+
+	public void setCheckTableEntity(CheckTableEntity checkTableEntity) {
+		this.checkTableEntity = checkTableEntity;
+	}
+
+	public static long getSerialVersionUID() {
+		return serialVersionUID;
+	}
+
+	public String getCompanyId() {
+		return companyId;
+	}
+
+	public void setCompanyId(String companyId) {
+		this.companyId = companyId;
+	}
+
+	public Long getCheckTableId() {
+		return checkTableId;
+	}
+
+	public void setCheckTableId(Long checkTableId) {
+		this.checkTableId = checkTableId;
+	}
+
+	public int getDynamicType() {
+		return dynamicType;
+	}
+
+	public void setDynamicType(int dynamicType) {
+		this.dynamicType = dynamicType;
+	}
+
+	public void setDynamicsId(Long dynamicsId) {
+		this.dynamicsId = dynamicsId;
+	}
+
+	public Long getDynamicsId() {
+		return dynamicsId;
+	}
+
+	public void setDynamicStatus(int dynamicStatus) {
+		this.dynamicStatus = dynamicStatus;
+	}
+
+	public int getDynamicStatus() {
+		return dynamicStatus;
+	}
+
+	public void setSelfResult(int selfResult) {
+		this.selfResult = selfResult;
+	}
+
+	public int getSelfResult() {
+		return selfResult;
+	}
+
+	public void setSelfRemark(String selfRemark) {
+		this.selfRemark = selfRemark;
+	}
+
+	public String getSelfRemark() {
+		return selfRemark;
+	}
+
+	public void setReviewResult(int reviewResult) {
+		this.reviewResult = reviewResult;
+	}
+
+	public int getReviewResult() {
+		return reviewResult;
+	}
+
+	public void setReviewRemark(String reviewRemark) {
+		this.reviewRemark = reviewRemark;
+	}
+
+	public String getReviewRemark() {
+		return reviewRemark;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
+
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public String toString() {
+		return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).append("dynamicsId", getDynamicsId())
+				.append("checktableId", getCheckTableId()).append("dynamicStatus", getDynamicStatus())
+				.append("selfResult", getSelfResult()).append("selfRemark", getSelfRemark())
+				.append("reviewResult", getReviewResult()).append("reviewRemark", getReviewRemark())
+				.append("createTime", getCreateTime()).append("updateTime", getUpdateTime()).toString();
+	}
+}

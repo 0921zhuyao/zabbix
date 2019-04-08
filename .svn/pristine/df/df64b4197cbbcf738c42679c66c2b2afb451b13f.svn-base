@@ -1,0 +1,373 @@
+package com.jd.project.module.admin.evaluation.service;
+
+import com.jd.common.support.Convert;
+import com.jd.common.utils.OperatorStrUtils;
+import com.jd.common.utils.StringUtils;
+import com.jd.common.utils.security.ShiroUtils;
+import com.jd.framework.web.service.BaseService;
+import com.jd.project.module.admin.evaluation.entity.CompanyChecktableEntity;
+import com.jd.project.module.admin.evaluation.entity.CompanyChecktableFilesEntity;
+import com.jd.project.module.admin.evaluation.entity.DynamicEntity;
+import com.jd.project.module.admin.evaluation.entity.TaskDetailEntity;
+import com.jd.project.module.admin.evaluation.mapper.CompanyChecktableMapper;
+import com.jd.project.module.admin.evaluation.mapper.DynamicMapper;
+import com.jd.project.module.admin.evaluation.mapper.TaskDetailMapper;
+import com.jd.project.module.admin.standard.entity.CheckTableNameEntity;
+import com.jd.project.module.admin.standard.mapper.CheckTableMapper;
+import com.jd.project.module.admin.standard.mapper.CheckTableNameMapper;
+import org.apache.logging.log4j.util.Strings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.*;
+
+/**
+ * 企业自评记录 服务层实现
+ *
+ * @author TrevorPhilips
+ * @date 2018-11-29
+ */
+@Service
+@Transactional(rollbackFor = Exception.class)
+public class CompanyChecktableServiceImpl extends BaseService implements CompanyChecktableService {
+	protected static final Logger logger = LoggerFactory.getLogger(CompanyChecktableServiceImpl.class);
+	@Autowired
+	private CompanyChecktableMapper companyChecktableMapper;
+
+	@Autowired
+	private CheckTableNameMapper checkTableNameMapper;
+
+	@Autowired
+	private CompanyChecktableFilesService companyChecktableFilesService;
+
+	@Autowired
+	private TaskDetailMapper taskDetailMapper;
+
+	@Autowired
+	private DynamicMapper dynamicMapper;
+
+	@Autowired
+	private CheckTableMapper checkTableMapper;
+
+	@Value("${upLoadDir}")
+	private String upLoadDir;
+
+	/**
+	 * 查询企业自评记录信息
+	 * 
+	 * @param checktableId
+	 *            企业自评记录ID
+	 * @return 企业自评记录信息
+	 */
+	@Override
+	public CompanyChecktableEntity selectCompanyChecktableById(Long checktableId) {
+		return companyChecktableMapper.selectCompanyChecktableById(checktableId);
+	}
+
+	/**
+	 * 查询企业自评记录列表
+	 * 
+	 * @param companyChecktable
+	 *            企业自评记录信息
+	 * @return 企业自评记录集合
+	 */
+	@Override
+	public List<CompanyChecktableEntity> selectCompanyChecktableList(CompanyChecktableEntity companyChecktable) {
+		return companyChecktableMapper.selectCompanyChecktableList(companyChecktable);
+	}
+
+	/**
+	 * 带文件的新增或修改企业自评记录
+	 *
+	 * @param companyChecktable
+	 *            type 0 新增 1 修改 企业自评记录信息
+	 * @return 结果
+	 */
+	@Override
+	public int insertOrUpDateCompanyChecktableWithFile(String tempFileId, CompanyChecktableEntity companyChecktable) {
+		try {
+			//添加成功后将文件和答题记录关联起来
+				if(doChange(companyChecktable)>0){
+				if(!Strings.isEmpty(tempFileId) && tempFileId.endsWith(",")){
+					tempFileId=tempFileId.substring(0,tempFileId.length()-1);
+				}
+				String [] FileIds=tempFileId.split(",");
+				Arrays.stream(FileIds).filter(x-> StringUtils.isNotEmpty(x)).forEach(x->{
+					CompanyChecktableFilesEntity cf = new CompanyChecktableFilesEntity();
+					cf.setChecktableFilesId(Long.parseLong(x));
+					/** 结果分类：0 自评 1 复核 2定级 */
+					cf.setChecktableFilesType(companyChecktable.getType());
+					cf.setChecktableId(companyChecktable.getChecktableId());
+					companyChecktableFilesService.updateCompanyChecktableFiles(cf);
+				});
+			};
+		} catch (Exception e) {
+			logger.error("失败文件上传：" + e.getMessage());
+			return 0;
+		}
+		return 1;
+	}
+
+	public int doChange( CompanyChecktableEntity companyChecktable) {
+		return insertCompanyChecktable(companyChecktable);
+	}
+
+	/**
+	 * 新增企业自评记录
+	 * 
+	 * @param companyChecktable
+	 *            企业自评记录信息
+	 * @return 结果
+	 */
+	@Override
+	public int insertCompanyChecktable(CompanyChecktableEntity companyChecktable) {
+		companyChecktable.setCreateUser(ShiroUtils.getUserId());
+		companyChecktable.setUpdateUser(ShiroUtils.getUserId());
+		// 是否企业 0 不是 1 是
+		Long userType = ShiroUtils.getUser().getLsIsEnterprise();
+		int result = 0;
+		// 判断有无主键ID值，没有新增，有则修改
+		if (null != companyChecktable.getChecktableId()) {
+			return companyChecktableMapper.updateCompanyChecktable(companyChecktable);
+		} else {
+			result = companyChecktableMapper.insertCompanyChecktable(companyChecktable);
+			// 当是企业用户时，更改任务详情表T_TASK_DETAIL的状态为自评中，街道则无需改变
+			if (result > 0 && userType == 1) {
+				TaskDetailEntity taskDetail = new TaskDetailEntity();
+				taskDetail.setTaskDetailId(companyChecktable.getTaskDetailId());
+				taskDetail.setChecktableStatus(1);
+				result = taskDetailMapper.updateTaskDetail(taskDetail);
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * 修改企业自评记录
+	 * 
+	 * @param companyChecktable
+	 *            企业自评记录信息
+	 * @return 结果
+	 */
+	@Override
+	public int updateCompanyChecktable(CompanyChecktableEntity companyChecktable) {
+		return companyChecktableMapper.updateCompanyChecktable(companyChecktable);
+	}
+
+	/**
+	 * 删除企业自评记录对象
+	 * 
+	 * @param ids
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
+	@Override
+	public int deleteCompanyChecktableByIds(String ids) {
+		return companyChecktableMapper.deleteCompanyChecktableByIds(Convert.toStrArray(ids));
+	}
+
+	/**
+	 * 查询与企业相关的检查表
+	 * 
+	 * @param enterpriseId
+	 * @return
+	 */
+	@Override
+	public List<CheckTableNameEntity> queryCheckTablesByCompany(String enterpriseId) {
+		return checkTableNameMapper.queryCheckTablesByCompany(enterpriseId);
+	}
+
+	public String getUpLoadDir() {
+		return upLoadDir;
+	}
+
+	public void setUpLoadDir(String upLoadDir) {
+		this.upLoadDir = upLoadDir;
+	}
+
+	/**
+	 * 查询已答检查项
+	 */
+	@Override
+	public Integer findCompanyChecktableByCheckTableId(Map<String, Object> paramsMap) {
+		Integer checktableEntities = companyChecktableMapper.findCompanyChecktableByCheckTableId(paramsMap);
+		return checktableEntities;
+	}
+
+	/**
+	 * 查询企业自评及街道复查信息
+	 */
+	@Override
+	public List<CompanyChecktableEntity> queryCompanyChecktablesByChecktableId(Map<String, Object> paramsMap) {
+		List<CompanyChecktableEntity> checktableEntities = companyChecktableMapper
+				.queryCompanyChecktablesByChecktableId(paramsMap);
+		if (null != checktableEntities && checktableEntities.size() > 1) {
+			checktableEntities.forEach(x -> {
+				// 判断检查类型是自评还是复评
+				if (null != x.getReviewResult()) {
+					x.setType(1);
+				} else {
+					x.setType(0);
+				}
+			});
+			checktableEntities.sort((CompanyChecktableEntity c1, CompanyChecktableEntity c2) -> Long
+					.valueOf(c1.getType()).compareTo(Long.valueOf(c2.getType())));
+
+		} else if (checktableEntities.size() == 1) {
+			CompanyChecktableEntity checktableEntity0 = checktableEntities.get(0);
+			// 如果检查记录表中检查项对应得只有一条时，新建一个空对象补全
+			CompanyChecktableEntity checktableEntity = new CompanyChecktableEntity();
+			checktableEntities.clear();
+			if (null != checktableEntity0.getReviewResult()) {
+				checktableEntity0.setType(1);
+				checktableEntity.setType(0);
+				checktableEntities.add(checktableEntity);
+				checktableEntities.add(checktableEntity0);
+			} else {
+				checktableEntity0.setType(0);
+				checktableEntity.setType(1);
+				checktableEntities.add(checktableEntity0);
+				checktableEntities.add(checktableEntity);
+			}
+		} else {
+			// 如果没有企业自评记录新增自评和复评数据
+			CompanyChecktableEntity checktableSelfEntity = new CompanyChecktableEntity();
+			CompanyChecktableEntity checktableReviewEntity = new CompanyChecktableEntity();
+			checktableSelfEntity.setType(0);
+			checktableReviewEntity.setType(1);
+			checktableEntities.add(checktableSelfEntity);
+			checktableEntities.add(checktableReviewEntity);
+		}
+		return checktableEntities;
+	}
+
+	/**
+	 * 查询已答题数
+	 */
+	@Override
+	public List<CompanyChecktableEntity> selectCompanyChecktablesFlished(Map<String, Object> paramsMap) {
+		return companyChecktableMapper.selectCompanyChecktablesFlished(paramsMap);
+	}
+
+	/**
+	 * 查询当前企业需要自评的检查表的检查项总数量
+	 */
+	@Override
+	public int queryChecktablesCountsByCompanyId(String companyId) {
+		return companyChecktableMapper.queryChecktablesCountsByCompanyId(companyId);
+	}
+
+	/**
+	 * 查询当前企业已完成答题的检查项数量
+	 */
+	@Override
+	public int queryChecktablesCountsAnsweredByCompanyId(Map<String, Object> paramsMap) {
+		return companyChecktableMapper.queryChecktablesCountsAnsweredByCompanyId(paramsMap);
+	}
+
+	/**
+	 * 筛选出其中的不符合项
+	 */
+	@Override
+	public List<CompanyChecktableEntity> queryCompanyChecktablesByCompanyId(String companyId) {
+		return companyChecktableMapper.queryCompanyChecktablesByCompanyId(companyId);
+	}
+
+	/**
+	 * 校验企业自评及街道复评
+	 */
+	@Transactional
+	@Override
+	public int checkCompanyChecktablesSubmit(String companyId) {
+		// 是否企业 0 不是 1 是
+		Long userType = ShiroUtils.getUser().getLsIsEnterprise();
+		// 查询当前企业需要自评的检查表的检查项总数量
+		int counts = queryChecktablesCountsByCompanyId(companyId);
+		// 查询当前企业自评已完成答题的检查项数量，如果是街道用户时，查询的是街道复评已完成的检查项数量
+		// 查询时要区分用户类型
+		Map<String, Object> paramsMap = new HashMap<>();
+		paramsMap.put("companyId", companyId);
+		if (userType == 1) {
+			paramsMap.put("type", userType);
+		}
+		int answeredCount = queryChecktablesCountsAnsweredByCompanyId(paramsMap);
+		// 当企业所属的检查项都答完时，修改自评状态为 2：复评中
+		TaskDetailEntity taskDetail = new TaskDetailEntity();
+		taskDetail.setCompanyId(companyId);
+		if (userType == 1) {
+			taskDetail.setChecktableStatus(2);
+		} else {
+			// 当用户为街道时校验复查的检查项是否已全部完成，没完成提示街道用户继续填写
+			if (counts != answeredCount) {
+				return -1;
+			}
+			// 当街道复评企业所属的检查项都复评完时，修改自评状态为 3：定级中
+			taskDetail.setChecktableStatus(4);
+            taskDetail.setInitLevel(OperatorStrUtils.getEnterpriseGrade(companyId));
+			// 只有街道用户在对某个企业进行复评时，会去校验其中的不符合项，并推到动态运行表T_DYNAMIC中；
+			// 当街道对某个企业所属的检查项都复评完时，筛选出其中的不符合项
+			List<CompanyChecktableEntity> companyChecktablesEntities = queryCompanyChecktablesByCompanyId(companyId);
+			// 判断企业是否存在不符合项
+			if (null != companyChecktablesEntities && companyChecktablesEntities.size() > 0) {
+				// 批量插入动态运行表T_DYNAMIC
+				List<DynamicEntity> dynamicEntities = new ArrayList<>();
+				companyChecktablesEntities.forEach(x -> {
+					DynamicEntity dynamicEntity = new DynamicEntity();
+					dynamicEntity.setCompanyId(x.getCompanyId());
+					dynamicEntity.setCheckTableId(x.getCheckTableId());
+					dynamicEntity.setDynamicType(0);
+					// 判断企业不符合是否已存在于动态运行表中
+					List<DynamicEntity> list = dynamicMapper.selectDynamicList(dynamicEntity);
+					if (null == list || list.size() == 0) {
+						dynamicEntities.add(dynamicEntity);
+					}
+				});
+				if (dynamicEntities.size() > 0) {
+					dynamicMapper.insertDynamicBatch(dynamicEntities);
+				}
+
+			}
+		}
+		int result = taskDetailMapper.updateChecktableStatus(taskDetail);
+		return result;
+	}
+
+	/**
+	 * 查询检查表的检查项完成情况
+	 */
+	@Override
+	public List<CompanyChecktableEntity> queryCheckTableExecutions(Map<String, Object> paramsMap) {
+		return companyChecktableMapper.queryCheckTableExecutions(paramsMap);
+	}
+
+	/**
+	 * 查询答题信息
+	 * 
+	 * @param paramsMap
+	 * @return
+	 */
+	// @Cacheable(value = "companyCheckTable", key =
+	// "'queryCompanyCheckTableByCheckTableNameId'")
+	@Override
+	public List<Map<String, Object>> queryCompanyCheckTableByCheckTableNameId(Map<String, Object> paramsMap) {
+		// 查询与检查表相关的检查项信息
+		List<Map<String, Object>> checkTableEntities = checkTableMapper
+				.selectCheckTableIdsByCheckTableNameId(paramsMap);
+		StringBuilder questions = new StringBuilder();
+		// 查询已答题目
+		if (checkTableEntities.size() > 0) {
+			checkTableEntities.forEach(x -> {
+				questions.append(x.get("checkTableId")).append(",");
+			});
+			// 题目列表放入session用于下一题的查询
+			ShiroUtils.getSession().setAttribute("questions",
+					questions.toString().substring(0, questions.length() - 1));
+		}
+		return checkTableEntities;
+	}
+
+}

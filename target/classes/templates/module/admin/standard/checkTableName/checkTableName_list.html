@@ -1,0 +1,172 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+    <div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 select-info">
+                    <form id="checkTableName-form">
+                        <input type="hidden" name="isDelete" value="0"/>
+                        <div class="select-list">
+                            <ul>
+	                            <li>
+	                                                                                           检查表名称：<input type="text" name="checkTableName"/>
+	                            </li>
+	                            <li>
+                                                                                                检查表类型：<select name="checkTableTypeId">
+                                                <option value="">所有</option>
+                                                <option value="0">通用</option>
+                                                <option value="1">行业</option>
+                                                <option value="2">专项</option>
+                                            </select>
+                                </li>
+	                            <li>
+	                                                                                            行业分类：<select name="industryId" th:with="type=${@dict.selectDictDataByType('industry_code')}">
+			                                    <option value="">所有</option>
+			                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+			                                </select>
+                                </li>
+	                            <li class="select-time">
+	                                <label>创建时间： </label>
+	                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="createTime"/>
+	                                <span>-</span>
+	                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="updateTime"/>
+	                            </li>
+	                            <li>
+	                                <a class="btn btn-primary  btn-sm" onclick="searchGrid()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+	                                <a class="btn btn-warning  btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+	                            </li>
+	                        </ul>
+                        </div>
+                    </form>
+                </div>
+		<div class="btn-group hidden-xs" id="toolbar" role="group">
+			<a class="btn btn-outline btn-sm btn-success " onclick="$.operate.add()" shiro:hasPermission="module:checkTableName:add">
+				<i class="fa fa-plus"></i> 新增
+			</a>
+			<a class="btn btn-outline btn-sm btn-danger " onclick="$.operate.removeAll()" shiro:hasPermission="module:checkTableName:remove">
+				<i class="fa fa-trash-o"></i> 删除
+			</a>
+		</div>
+			
+		<div class="col-sm-12 select-table table-striped">
+			<table id="bootstrap-table" data-mobile-responsive="true"></table>
+		</div>
+	</div>
+    </div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('module:checkTableName:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('module:checkTableName:remove')}]];
+        var listFlag = [[${@permission.hasPermi('module:checkTableName:list')}]];
+        var prefix = ctx + "module/checkTableName"
+        var datas = [
+            {dictValue:"0",dictLabel:"通用",listClass:"primary"},
+            {dictValue:"1",dictLabel:"行业",listClass:"primary"},
+            {dictValue:"2",dictLabel:"专项",listClass:"primary"}
+        ];
+        var industrys = [[${industry}]];
+        var industryDatas = [];
+        /* <![CDATA[ */
+        if(industrys.length > 0){
+        	for(var i = 0; i < industrys.length; i++){
+                industryDatas.push({dictValue:industrys[i].dictValue, dictLabel:industrys[i].dictLabel,listClass:"info"});
+            }	
+        }
+        
+        var specialTreatment = [[${@dict.selectDictDataByType('special_treatment')}]]
+        var specialTreatmentData = [];
+        if(specialTreatment.length > 0){
+        	for(var i = 0; i < specialTreatment.length; i++){
+        		specialTreatmentData.push({dictValue:specialTreatment[i].dictValue, dictLabel:specialTreatment[i].dictLabel,listClass:"warning"});
+        	}
+        }
+        /* ]]> */
+        
+        $(function() {
+            var options = {
+                url: prefix + "/query",
+                createUrl: prefix + "/initAdd",
+                updateUrl: prefix + "/initEdit/{id}",
+                removeUrl: prefix + "/del",
+                id: "checkTableNameId",
+                sortName: "sort",
+                sortOrder: "asc",
+                modalName: "检查",
+                search: false,
+                showExport: false,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'checkTableTypeId', 
+					title : '检查分类',
+					formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(datas, value);
+                    }
+				},
+				{
+					field : 'industryId', 
+					title : '行业分类',
+					formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(industryDatas, value);
+                    }
+				},
+				{
+					field : 'specialCode', 
+					title : '专项分类',
+					formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(specialTreatmentData, value);
+                    }
+				},
+				{
+					field : 'checkTableName', 
+					title : '检查表名称' 
+				},
+				{
+					field : 'sort', 
+					title : '排序号' 
+				},
+				{
+					field : 'remark', 
+					title : '备注' 
+				},
+				
+				{
+					field : 'updateUser', 
+					title : '最后更新人',
+					formatter: function(value, row, index) {
+	                    return $.table.selectUserName(users, value);
+	                }
+				},
+				{
+					field : 'updateTime', 
+					title : '最后更新时间'
+				},
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.checkTableNameId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+		            	actions.push('<a class="btn btn-info btn-xs ' + listFlag + '" href="#" onclick="detail(\'' + row.checkTableNameId + '\')"><i class="fa fa-list-ul"></i>列表</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.checkTableNameId + '\')"><i class="fa fa-remove"></i>删除</a>');
+						return actions.join('');
+		            }
+		        }]
+            };
+            $.table.init(options);
+        });
+        
+        function searchGrid(){
+            $.table.search("checkTableName-form");
+        }
+        
+        function detail(id) {
+            var url = prefix + '/detail/' + id;
+            createMenuItem(url, "检查表详情");
+        }
+    </script>
+</body>
+</html>

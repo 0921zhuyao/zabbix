@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jd.project.module.admin.evaluation.mapper.CompanyChecktableFilesMapper">
+    
+    <resultMap type="CompanyChecktableFilesEntity" id="CompanyChecktableFilesResult">
+        <result property="checktableFilesId"    column="CHECKTABLE_FILES_ID"    />
+        <result property="dynamicsId"    column="DYNAMICS_ID"    />
+        <result property="checktableId"    column="CHECKTABLE_ID"    />
+        <result property="checktableFilesType"    column="CHECKTABLE_FILES_TYPE"    />
+        <result property="filePath"    column="FILE_PATH"    />
+    </resultMap>
+	
+	<sql id="selectCompanyChecktableFilesVo">
+        SELECT CHECKTABLE_FILES_ID, DYNAMICS_ID, CHECKTABLE_ID, CHECKTABLE_FILES_TYPE, FILE_PATH FROM T_COMPANY_CHECKTABLE_FILES
+    </sql>
+	
+    <select id="selectCompanyChecktableFilesList" parameterType="CompanyChecktableFilesEntity" resultMap="CompanyChecktableFilesResult">
+        <include refid="selectCompanyChecktableFilesVo"/>
+        <where>  
+            <if test="checktableFilesId != null and checktableFilesId != ''"> AND CHECKTABLE_FILES_ID = #{checktableFilesId}</if>
+             <if test="dynamicsId != null and dynamicsId != ''"> AND DYNAMICS_ID = #{dynamicsId}</if>
+             <if test="checktableId != null and checktableId != ''"> AND CHECKTABLE_ID = #{checktableId}</if>
+             <if test="checktableFilesType != null"> AND CHECKTABLE_FILES_TYPE = #{checktableFilesType}</if>
+             <if test="filePath != null and filePath != ''"> AND FILE_PATH = #{filePath}</if>
+         </where>
+    </select>
+    
+    <select id="selectCompanyChecktableFilesById" parameterType="Long" resultMap="CompanyChecktableFilesResult">
+        <include refid="selectCompanyChecktableFilesVo"/>
+        WHERE CHECKTABLE_FILES_ID = #{checktableFilesId}
+    </select>
+        
+    <insert id="insertCompanyChecktableFiles" parameterType="CompanyChecktableFilesEntity" useGeneratedKeys="true" keyProperty="checktableFilesId">
+        INSERT INTO T_COMPANY_CHECKTABLE_FILES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="checktableFilesId != null and checktableFilesId != '' ">CHECKTABLE_FILES_ID,</if>
+			<if test="dynamicsId != null and dynamicsId != '' ">DYNAMICS_ID,</if>
+			<if test="checktableId != null and checktableId != '' ">CHECKTABLE_ID,</if>
+			<if test="checktableFilesType != null">CHECKTABLE_FILES_TYPE,</if>
+			<if test="filePath != null and filePath != '' ">FILE_PATH,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="checktableFilesId != null and checktableFilesId != ''">#{checktableFilesId},</if>
+			<if test="dynamicsId != null and dynamicsId != ''">#{dynamicsId},</if>
+			<if test="checktableId != null and checktableId != ''">#{checktableId},</if>
+			<if test="checktableFilesType != null">#{checktableFilesType},</if>
+			<if test="filePath != null and filePath != ''">#{filePath},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateCompanyChecktableFiles" parameterType="CompanyChecktableFilesEntity">
+        UPDATE T_COMPANY_CHECKTABLE_FILES
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="dynamicsId != null  ">DYNAMICS_ID = #{dynamicsId},</if>
+            <if test="checktableId != null  ">CHECKTABLE_ID = #{checktableId},</if>
+            <if test="checktableFilesType != null  ">CHECKTABLE_FILES_TYPE = #{checktableFilesType},</if>
+            <if test="filePath != null  and filePath != ''  ">FILE_PATH = #{filePath},</if>
+        </trim>
+        WHERE CHECKTABLE_FILES_ID = #{checktableFilesId}
+    </update>
+
+	<delete id="deleteCompanyChecktableFilesById" parameterType="Long">
+        DELETE FROM T_COMPANY_CHECKTABLE_FILES WHERE CHECKTABLE_FILES_ID = #{checktableFilesId}
+    </delete>
+	
+    <delete id="deleteCompanyChecktableFilesByIds" parameterType="String">
+        DELETE FROM T_COMPANY_CHECKTABLE_FILES WHERE CHECKTABLE_FILES_ID IN 
+        <foreach item="checktableFilesId" collection="array" open="(" separator="," close=")">
+            #{checktableFilesId}
+        </foreach>
+    </delete>
+    
+</mapper>

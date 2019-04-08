@@ -1,0 +1,107 @@
+package com.jd.project.module.admin.enterprise.service;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.jd.common.support.Convert;
+import com.jd.common.utils.security.ShiroUtils;
+import com.jd.framework.web.service.BaseService;
+import com.jd.project.module.admin.enterprise.entity.LdsEntity;
+import com.jd.project.module.admin.enterprise.mapper.LdsMapper;
+
+/**
+ * 大中小微 服务层实现
+ * 
+ * @author TrevorPhilips
+ * @date 2018-12-20
+ */
+@Service
+@Transactional(rollbackFor = Exception.class)
+public class LdsServiceImpl extends BaseService implements LdsService {
+	@Autowired
+	private LdsMapper ldsMapper;
+
+	/**
+	 * 查询大中小微信息
+	 * 
+	 * @param lmsId
+	 *            大中小微ID
+	 * @return 大中小微信息
+	 */
+	@Override
+	public LdsEntity selectLdsById(Long lmsId) {
+		return ldsMapper.selectLdsById(lmsId);
+	}
+
+	/**
+	 * 查询大中小微列表
+	 * 
+	 * @param lds
+	 *            大中小微信息
+	 * @return 大中小微集合
+	 */
+	@Override
+	public List<LdsEntity> selectLdsList(LdsEntity lds) {
+		return ldsMapper.selectLdsList(lds);
+	}
+
+	/**
+	 * 新增大中小微
+	 * 
+	 * @param lds
+	 *            大中小微信息
+	 * @return 结果
+	 */
+	@Override
+	public int insertLds(LdsEntity lds) {
+		lds.setCreateUser(ShiroUtils.getUserId());
+		lds.setUpdateUser(ShiroUtils.getUserId());
+		return ldsMapper.insertLds(lds);
+	}
+
+	/**
+	 * 修改大中小微
+	 * 
+	 * @param lds
+	 *            大中小微信息
+	 * @return 结果
+	 */
+	@Override
+	public int updateLds(LdsEntity lds) {
+		lds.setUpdateUser(ShiroUtils.getUserId());
+		return ldsMapper.updateLds(lds);
+	}
+
+	/**
+	 * 删除大中小微对象
+	 * 
+	 * @param ids
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
+	@Override
+	public int deleteLdsByIds(String ids) {
+		return ldsMapper.deleteLdsByIds(Convert.toStrArray(ids));
+	}
+
+	/**
+	 * 查询国民经济行业分类和指标名称
+	 */
+	@Override
+	public Map<String, Object> findLdsNationallEconomyByLmsId(Long lmsId) {
+		return ldsMapper.findLdsNationallEconomyByLmsId(lmsId);
+	}
+
+	/**
+	 * 通过国民经济行业分类查找指标
+	 */
+	@Override
+	public List<Map<String, Object>> findLdsByNationallEconomyId(String nationallEconomy) {
+		return ldsMapper.findLdsByNationallEconomyId(nationallEconomy);
+	}
+
+}

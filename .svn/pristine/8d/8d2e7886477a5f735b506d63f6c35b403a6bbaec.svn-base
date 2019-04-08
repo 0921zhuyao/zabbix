@@ -1,0 +1,197 @@
+package com.jd.project.module.admin.standard.entity;
+
+import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.validator.constraints.Length;
+
+import com.jd.framework.web.domain.BaseEntity;
+
+/**
+ * 检查项表 T_CHECK_TABLE
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-21
+ */
+public class CheckTableEntity extends BaseEntity {
+	private static final long serialVersionUID = 1L;
+
+	/** 基础代码编号 */
+	private Long checkTableId;
+	/** 检查内容编码 */
+	@NotEmpty(message = "检查项编码不能为空")
+	@Length(max = 16, message = "检查项编码长度不能大于32字")
+	private String checkTableCode;
+	/** 基础代码编号 */
+	private Long contentTypeId;
+	/** 基础代码编号 */
+	@NotEmpty(message = "检查编id不能为空")
+	private Long checkTableNameId;
+	/** 代码类别编号 */
+	@NotEmpty(message = "检查项内容不能为空")
+	@Length(max = 500, message = "检查项内容长度不能大于500字")
+	private String checkTableTypeContent;
+	/** 检查方法 */
+	@NotEmpty(message = "检查方法不能为空")
+	@Length(max = 250, message = "检查方法长度不能大于250字")
+	private String checkTableType;
+	/** 0 已使用 1 作废 */
+	private Long isUse;
+	/** 排序号 */
+	@NotEmpty(message = "排序号不能为空")
+	private Long sort;
+	/** 0 未删 1 已删 */
+	private Long isDelete;
+
+	private Long createUser;
+
+	private Long updateUser;
+	/** 检查依据id字符串 */
+	private String regulationStr;
+	/** 检查属性json字符串 */
+	private String propJsonStr;
+
+	private String scaleSituation;
+
+	private String enterpriseType;
+
+	/** 是否已答 */
+	private int isAnswered;
+
+	private String remark;
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public int getIsAnswered() {
+		return isAnswered;
+	}
+
+	public void setIsAnswered(int isAnswered) {
+		this.isAnswered = isAnswered;
+	}
+
+	public String getScaleSituation() {
+		return scaleSituation;
+	}
+
+	public void setScaleSituation(String scaleSituation) {
+		this.scaleSituation = scaleSituation;
+	}
+
+	public String getEnterpriseType() {
+		return enterpriseType;
+	}
+
+	public void setEnterpriseType(String enterpriseType) {
+		this.enterpriseType = enterpriseType;
+	}
+
+	public Long getSort() {
+		return sort;
+	}
+
+	public void setSort(Long sort) {
+		this.sort = sort;
+	}
+
+	public String getPropJsonStr() {
+		return propJsonStr;
+	}
+
+	public void setPropJsonStr(String propJsonStr) {
+		this.propJsonStr = propJsonStr;
+	}
+
+	public String getRegulationStr() {
+		return regulationStr;
+	}
+
+	public void setRegulationStr(String regulationStr) {
+		this.regulationStr = regulationStr;
+	}
+
+	public Long getCreateUser() {
+		return createUser;
+	}
+
+	public void setCreateUser(Long createUser) {
+		this.createUser = createUser;
+	}
+
+	public Long getUpdateUser() {
+		return updateUser;
+	}
+
+	public void setUpdateUser(Long updateUser) {
+		this.updateUser = updateUser;
+	}
+
+	public void setCheckTableId(Long checkTableId) {
+		this.checkTableId = checkTableId;
+	}
+
+	public Long getCheckTableId() {
+		return checkTableId;
+	}
+
+	public void setCheckTableCode(String checkTableCode) {
+		this.checkTableCode = checkTableCode;
+	}
+
+	public String getCheckTableCode() {
+		return checkTableCode;
+	}
+
+	public void setContentTypeId(Long contentTypeId) {
+		this.contentTypeId = contentTypeId;
+	}
+
+	public Long getContentTypeId() {
+		return contentTypeId;
+	}
+
+	public void setCheckTableNameId(Long checkTableNameId) {
+		this.checkTableNameId = checkTableNameId;
+	}
+
+	public Long getCheckTableNameId() {
+		return checkTableNameId;
+	}
+
+	public void setCheckTableTypeContent(String checkTableTypeContent) {
+		this.checkTableTypeContent = checkTableTypeContent;
+	}
+
+	public String getCheckTableTypeContent() {
+		return checkTableTypeContent;
+	}
+
+	public void setCheckTableType(String checkTableType) {
+		this.checkTableType = checkTableType;
+	}
+
+	public String getCheckTableType() {
+		return checkTableType;
+	}
+
+	public void setIsUse(Long isUse) {
+		this.isUse = isUse;
+	}
+
+	public Long getIsUse() {
+		return isUse;
+	}
+
+	public void setIsDelete(Long isDelete) {
+		this.isDelete = isDelete;
+	}
+
+	public Long getIsDelete() {
+		return isDelete;
+	}
+}

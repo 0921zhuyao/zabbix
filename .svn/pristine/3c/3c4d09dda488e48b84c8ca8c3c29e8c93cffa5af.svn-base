@@ -1,0 +1,48 @@
+package com.jd.project.module.app.homePage.mapper;
+
+import com.jd.project.module.admin.enterprise.entity.QyjcxxEntity;
+import com.jd.project.module.admin.evaluation.entity.DynamicEntity;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 企业基础 数据层
+ * 
+ * @author xml
+ * @date 2018-11-23
+ */
+public interface HomePageMapper
+{
+	/**
+	 * 
+	 * 描述：查询企业自评汇总信息
+	 * 时间：2018-11-27 15:24:21
+	 * 作者：ji_zhengcheng
+	 * @param map
+	 * @return
+	 */
+	public Map<String,String>  countEntNumber(Map<String,Object> map);
+
+	/**
+	 * 描述：查询通知公告
+	 * 时间：2018-11-28 17点40分
+	 * 作者：memory
+	 * @return
+	 */
+	public Map<String,String>  queryNotice();
+
+	/**
+	 *获取企业不符合项列表，主页只获取3条数据
+	 * @param map
+	 * @return
+	 */
+	public List<DynamicEntity> queryNocomfirmance(Map<String, Object> map);
+
+	/**
+	 * 获取企业列表，且每个企业获取三条不符合项
+	 * @param map
+	 * @return
+	 */
+	public List<Map<String,String>> queryCompany(Map<String, Object> map);
+}

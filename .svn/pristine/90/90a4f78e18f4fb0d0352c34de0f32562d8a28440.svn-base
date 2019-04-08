@@ -1,0 +1,54 @@
+package com.jd.project.module.admin.evaluation.service;
+
+import java.util.List;
+
+import com.jd.project.module.admin.evaluation.entity.DynamicHistoryEntity;
+
+/**
+ * 动态运行历史记录 服务层
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-29
+ */
+public interface DynamicHistoryService {
+	/**
+     * 查询动态运行历史记录信息
+     * 
+     * @param dynamicsHistoryId 动态运行历史记录ID
+     * @return 动态运行历史记录信息
+     */
+	public DynamicHistoryEntity selectDynamicHistoryById(Long dynamicsHistoryId);
+	
+	/**
+     * 查询动态运行历史记录列表
+     * 
+     * @param dynamicHistory 动态运行历史记录信息
+     * @return 动态运行历史记录集合
+     */
+	public List<DynamicHistoryEntity> selectDynamicHistoryList(DynamicHistoryEntity dynamicHistory);
+	
+	/**
+     * 新增动态运行历史记录
+     * 
+     * @param dynamicHistory 动态运行历史记录信息
+     * @return 结果
+     */
+	public int insertDynamicHistory(DynamicHistoryEntity dynamicHistory);
+	
+	/**
+     * 修改动态运行历史记录
+     * 
+     * @param dynamicHistory 动态运行历史记录信息
+     * @return 结果
+     */
+	public int updateDynamicHistory(DynamicHistoryEntity dynamicHistory);
+		
+	/**
+     * 删除动态运行历史记录信息
+     * 
+     * @param ids 需要删除的数据ID
+     * @return 结果
+     */
+	public int deleteDynamicHistoryByIds(String ids);
+	
+}

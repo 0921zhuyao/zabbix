@@ -1,0 +1,69 @@
+package com.jd.project.module.admin.standard.mapper;
+
+import java.util.List;
+
+import com.jd.framework.web.mapper.BaseMapper;
+import com.jd.project.module.admin.standard.entity.CheckTableBaseEntity;
+
+/**
+ * 检查依据 数据层
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-21
+ */
+public interface CheckTableBaseMapper extends BaseMapper<CheckTableBaseEntity> {
+	/**
+	 * 查询检查依据信息
+	 * 
+	 * @param ctbId
+	 *            检查依据ID
+	 * @return 检查依据信息
+	 */
+	public CheckTableBaseEntity selectCheckTableBaseById(Long ctbId);
+
+	/**
+	 * 查询检查依据列表
+	 * 
+	 * @param checkTableBase
+	 *            检查依据信息
+	 * @return 检查依据集合
+	 */
+	public List<CheckTableBaseEntity> selectCheckTableBaseList(CheckTableBaseEntity checkTableBase);
+
+	/**
+	 * 新增检查依据
+	 * 
+	 * @param checkTableBase
+	 *            检查依据信息
+	 * @return 结果
+	 */
+	public int insertCheckTableBase(CheckTableBaseEntity checkTableBase);
+
+	/**
+	 * 修改检查依据
+	 * 
+	 * @param checkTableBase
+	 *            检查依据信息
+	 * @return 结果
+	 */
+	public int updateCheckTableBase(CheckTableBaseEntity checkTableBase);
+
+	/**
+	 * 删除检查依据
+	 * 
+	 * @param ctbId
+	 *            检查依据ID
+	 * @return 结果
+	 */
+	public int deleteCheckTableBaseById(Long ctbId);
+
+	/**
+	 * 批量删除检查依据
+	 * 
+	 * @param ctbIds
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
+	public int deleteCheckTableBaseByIds(String[] ctbIds);
+
+}

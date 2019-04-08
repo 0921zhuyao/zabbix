@@ -1,0 +1,17 @@
+package com.jd.project.module.app.register.mapper;
+
+import com.jd.framework.web.mapper.BaseMapper;
+import com.jd.project.module.app.register.entity.AccidentRegEntity;
+
+/**
+ * @author HFJ
+ * @date 2019/4/1-11:19
+ */
+public interface AccidentRegMapper extends BaseMapper<AccidentRegEntity> {
+
+	/**
+	 * 事故登记插入表
+	 * @param accidentRegEntity
+	 */
+	void insertAllResult(AccidentRegEntity accidentRegEntity);
+}

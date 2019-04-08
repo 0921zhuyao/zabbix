@@ -1,0 +1,102 @@
+package com.jd.project.module.admin.evaluation.controller;
+
+import com.jd.framework.aspectj.lang.annotation.Log;
+import com.jd.framework.aspectj.lang.enums.BusinessType;
+import com.jd.framework.web.controller.BaseController;
+import com.jd.framework.web.domain.Result;
+import com.jd.framework.web.page.TableDataInfo;
+import com.jd.project.module.admin.evaluation.entity.CompanyChecktableFilesEntity;
+import com.jd.project.module.admin.evaluation.service.CompanyChecktableFilesService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+
+/**
+ * 企业自评记录附件 信息操作处理
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-29
+ */
+@Controller
+@RequestMapping("/module/companyChecktableFiles")
+public class CompanyChecktableFilesController extends BaseController {
+	private String prefix = "module/companyChecktableFiles";
+
+	@Autowired
+	private CompanyChecktableFilesService companyChecktableFilesService;
+
+	@RequiresPermissions("module:companyChecktableFiles:view")
+	@GetMapping()
+	public String initList() {
+		return prefix + "/companyChecktableFiles_list";
+	}
+
+	/**
+	 * 查询企业自评记录附件列表
+	 */
+	@RequiresPermissions("module:companyChecktableFiles:list")
+	@PostMapping("/query")
+	@ResponseBody
+	public TableDataInfo query(CompanyChecktableFilesEntity companyChecktableFiles) {
+		startPage();
+		List<CompanyChecktableFilesEntity> list = companyChecktableFilesService
+				.selectCompanyChecktableFilesList(companyChecktableFiles);
+		return getDataTable(list);
+	}
+
+	/**
+	 * 新增企业自评记录附件
+	 */
+	@GetMapping("/initAdd")
+	public String initAdd(ModelMap mmap) {
+		mmap.put("companyChecktableFiles", new CompanyChecktableFilesEntity());
+		return prefix + "/companyChecktableFiles_edit";
+	}
+	/**
+	 * 新增保存企业自评记录
+	 */
+	@Log(title = "企业自评记录", businessType = BusinessType.INSERT)
+	@PostMapping("/addFile")
+	@ResponseBody
+	public Result addFile(MultipartFile file) {
+		return success(companyChecktableFilesService.insertFile(file));
+	}
+
+	/**
+	 * 新增保存企业自评记录附件
+	 */
+	@RequiresPermissions("module:companyChecktableFiles:add")
+	@Log(title = "企业自评记录附件", businessType = BusinessType.INSERT)
+	@PostMapping("/add")
+	@ResponseBody
+	public Result add(CompanyChecktableFilesEntity companyChecktableFiles) {
+		return toAjax(companyChecktableFilesService.insertCompanyChecktableFiles(companyChecktableFiles));
+	}
+
+	/**
+	 * 修改企业自评记录附件
+	 */
+	@GetMapping("/initEdit/{checktableFilesId}")
+	public String initEdit(@PathVariable("checktableFilesId") Long checktableFilesId, ModelMap mmap) {
+		CompanyChecktableFilesEntity companyChecktableFiles = companyChecktableFilesService
+				.selectCompanyChecktableFilesById(checktableFilesId);
+		mmap.put("companyChecktableFiles", companyChecktableFiles);
+		return prefix + "/companyChecktableFiles_edit";
+	}
+
+	/**
+	 * 修改保存企业自评记录附件
+	 */
+	@RequiresPermissions("module:companyChecktableFiles:edit")
+	@Log(title = "企业自评记录附件", businessType = BusinessType.UPDATE)
+	@PostMapping("/edit")
+	@ResponseBody
+	public Result edit(CompanyChecktableFilesEntity companyChecktableFiles) {
+		return toAjax(companyChecktableFilesService.updateCompanyChecktableFiles(companyChecktableFiles));
+	}
+}

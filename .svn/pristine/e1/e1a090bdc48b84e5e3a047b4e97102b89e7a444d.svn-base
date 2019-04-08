@@ -1,0 +1,59 @@
+package com.jd.project.module.admin.enterprise.service;
+
+import java.util.List;
+
+import com.jd.project.module.admin.enterprise.entity.LdsDetailEntity;
+
+/**
+ * 大中小微 服务层
+ * 
+ * @author TrevorPhilips
+ * @date 2018-12-20
+ */
+public interface LdsDetailService {
+	/**
+	 * 查询大中小微信息
+	 * 
+	 * @param ldsDetailId
+	 *            大中小微ID
+	 * @return 大中小微信息
+	 */
+	public LdsDetailEntity selectLdsDetailById(Long ldsDetailId);
+
+	/**
+	 * 查询大中小微列表
+	 * 
+	 * @param ldsDetail
+	 *            大中小微信息
+	 * @return 大中小微集合
+	 */
+	public List<LdsDetailEntity> selectLdsDetailList(LdsDetailEntity ldsDetail);
+
+	/**
+	 * 新增大中小微
+	 * 
+	 * @param ldsDetail
+	 *            大中小微信息
+	 * @return 结果
+	 */
+	public int insertLdsDetail(LdsDetailEntity ldsDetail);
+
+	/**
+	 * 修改大中小微
+	 * 
+	 * @param ldsDetail
+	 *            大中小微信息
+	 * @return 结果
+	 */
+	public int updateLdsDetail(LdsDetailEntity ldsDetail);
+
+	/**
+	 * 删除大中小微信息
+	 * 
+	 * @param ids
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
+	public int deleteLdsDetailByIds(String ids);
+
+}

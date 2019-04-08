@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>企业信息</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <!-- <link rel="stylesheet" href="../css/bootstrap.css">
+    <link rel="stylesheet" href="../css/bootstrap-select.css"> -->
+    <link rel="stylesheet" type="text/css" th:href="@{ /css/app/mui.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{ /css/app/reset.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{ /css/app/mui.picker.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{ /css/app/mui.poppicker.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{ /css/app/register.css}">
+</head>
+<body>
+<!--头部内容-->
+<header id="header" class="mui-bar mui-bar-nav">
+    <span class="action-back" onclick="window.history.back()">
+        <img th:src="@{ /images/return.png}" alt="">
+    </span>
+    <h1 class="mui-title">行政处罚</h1>
+</header>
+<div class="content">
+    <div class="table-box-1">
+        <div class="input-box">
+            <div class="input-list">
+                <span>案件名称:</span>
+                <div class="input">
+                    <input type="text" placeholder="请填写案件名称" id="sancName">
+                </div>
+            </div>
+            <div class="input-list">
+                <span>企业名称:</span>
+                <button class="selectunit" id="unit">请选择单位名称</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-box-1">
+        <div class="input-box">
+            <div class="input-list wid1">
+                <span>受害者姓名:</span>
+                <div class="input input2">
+                    <input type="text" placeholder="请填写受害者姓名" id="victimName">
+                </div>
+            </div>
+            <div class="input-list">
+                <span>立案时间:</span>
+                <button class="selectdate" id="filingTime">请选择日期</button>
+            </div>
+            <div class="input-list">
+                <span>结案时间:</span>
+                <button class="selectdate" id="closeingTime">请选择日期</button>
+            </div>
+            <div class="input-list">
+                <span>案件号:</span>
+                <div class="input input2">
+                    <input type="text" class="input1" placeholder="请填写案件号" id="caseNumber">
+                </div>
+            </div>
+            <div class="input-list">
+                <span>统一社会信用码:</span>
+                <div class="input">
+                    <input type="text" class="input1" placeholder="请填写社会信用码" id="entCode">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="table-box-1">
+        <div class="input-box1">
+            <div class="input-list" id="handleDept">
+                <span>经办科室:</span>
+                <dl class="select">
+                    <dt>请选择科室</dt>
+                    <dd>
+                        <ul>
+                            <li><a>科室一</a></li>
+                            <li><a>科室二</a></li>
+                            <li><a>科室三</a></li>
+                        </ul>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-box-1">
+		<div class="input-box">
+			<div class="input-list">
+				<span>附件上传:</span>
+			</div>
+			<div class="fileUpload">
+				<a href="javascript:;" class="file">
+					<input type="file" name="file" id="file">
+				</a>
+				<p>上传文件
+					<br>
+					<span>( 文件大小不能超过 10M )</span>
+				</p>
+			</div>
+		</div>
+	</div>
+
+    <div class="button">
+    	<form>
+        	<input type="button" id="button" value="登记">
+        </form>
+    </div>
+</div>
+</body>
+<script type="text/javascript" th:src="@{/js/app/jquery-3.2.1.js}"></script>
+<script type="text/javascript" th:src="@{/js/app/mui.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/app/mui.picker.js}"></script>
+<script type="text/javascript" th:src="@{/js/app/mui.poppicker.js}"></script>
+<script type="text/javascript" th:src="@{/js/app/datePicker.js}"></script>
+<!-- <script type="text/javascript" src="../js/bootstrap.js"></script>
+<script type="text/javascript" src="../js/bootstrap-select.js"></script> -->
+<script type="text/javascript">
+	var prefix = "/app/accident";
+    $(document).ready(function() {
+        $(".select").width($(window).width()-100);
+        $(".select dt").width($(window).width()-122);
+        var selectWidth=$(".select").width();
+        var spanw = $(".wid > span").width();
+        $(".select dd").width(selectWidth);
+        $(".select dd ul").width(selectWidth);
+        $(".select dd li").width(selectWidth);
+        $(".input2").each(function(){
+            var width=$(".input-list").width()-
+            $(this).parent(".input-list").find('span').width()-
+            $(this).width(width)
+        })
+        $(".select").each(function(){
+            var s=$(this);
+            var z=parseInt(s.css("z-index"));
+            var dt=$(this).children("dt");
+            var dd=$(this).children("dd");
+            var _show=function(){dd.slideDown(200);dt.addClass("cur");s.css("z-index",z+1);};   //展开效果
+            var _hide=function(){dd.slideUp(200);dt.removeClass("cur");s.css("z-index",z);};    //关闭效果
+            dt.click(function(){dd.is(":hidden")?_show():_hide();});
+            dd.find("a").click(function(){dt.html($(this).html());_hide();});     
+        })  
+    });
+    //mui初始化
+    mui.init({
+        swipeBack: true
+    });
+
+    var calendar = new datePicker();
+    calendar.init({
+        'trigger': '#filingTime', /*按钮选择器，用于触发弹出插件*/
+        'type': 'date',/*模式：date日期；datetime日期时间；time时间；ym年月；*/
+        'minDate':'1900-1-1-1-1-1',/*最小日期*/
+        'maxDate':'2100-12-31-24-24-24',/*最大日期*/
+        'onSubmit':function(){/*确认时触发事件*/
+            var theSelectData=calendar.value;
+            $("#filingTime").text(theSelectData);
+        },
+        'onClose':function(){/*取消时触发事件*/}
+    });
+
+    var calendar2 = new datePicker();
+    calendar2.init({
+        'trigger': '#closeingTime', /*按钮选择器，用于触发弹出插件*/
+        'type': 'date',/*模式：date日期；datetime日期时间；time时间；ym年月；*/
+        'minDate':'1900-1-1-1-1-1',/*最小日期*/
+        'maxDate':'2100-12-31-24-24-24',/*最大日期*/
+        'onSubmit':function(){/*确认时触发事件*/
+            var theSelectData=calendar2.value;
+            $("#closeingTime").text(theSelectData);
+        },
+        'onClose':function(){/*取消时触发事件*/}
+    });
+
+    (function($, doc) {
+			$.init();
+			$.ready(function() {
+				/**
+				 * 获取对象属性的值
+				 * 主要用于过滤三级联动中，可能出现的最低级的数据不存在的情况，实际开发中需要注意这一点；
+				 * @param {Object} obj 对象
+				 * @param {String} param 属性名
+				 */
+				var _getParam = function(obj, param) {
+					return obj[param] || '';
+				};
+
+                var userPicker = new $.PopPicker();
+				userPicker.setData([{
+					value: 'company1',
+					text: '123有限公司'
+				}, {
+					value: 'company2',
+					text: '456有限公司'
+				}, {
+					value: 'company3',
+					text: '789有限公司'
+				}, {
+					value: 'company4',
+					text: '987有限公司'
+				}, {
+					value: 'company5',
+					text: '564有限公司'
+				}, {
+                    value: 'company6',
+                    text: '321有限公司'
+                }
+				]);
+				var showUserPickerButton = doc.getElementById('unit');
+				var userResult = doc.getElementById('unit');
+				showUserPickerButton.addEventListener('tap', function(event) {
+					userPicker.show(function(items) {
+						userResult.innerText = items[0].text;
+					});
+				}, false);
+			});
+		})(mui, document);
+	$("#button").click(function() {
+		var files = $("#file")[0].files;
+		var sancName = $("#sancName").val();
+		var unit = $("#unit").get(0).innerHTML;
+		var victimName = $("#victimName").val();
+		var filingTime = $("#filingTime").get(0).innerHTML;
+		var closeingTime = $("#closeingTime").get(0).innerHTML;
+		var entCode = $("#entCode").val();
+		var caseNumber = $("#caseNumber").val();
+		var handleDept = $("#handleDept").find("dt").get(0).innerHTML;
+		if(typeof sancName == "undefined" || sancName.replace(/\s+/g, "") == ""){
+			mui.toast("请填写案件名称！")
+			return;
+		}
+		if(typeof unit == "undefined" || unit == "请选择单位名称" ){
+			mui.toast("请选择企业单位！")
+			return;
+		}
+		if(typeof victimName == "undefined" || victimName.replace(/\s+/g, "") == ""){
+			mui.toast("请填写受害者姓名！")
+			return;
+		}
+		if(typeof filingTime == "undefined" || filingTime == "请选择日期"){
+			mui.toast("请选择立案时间！")
+			return;
+		}
+		if(typeof closeingTime == "undefined" || closeingTime == "请选择日期"){
+			mui.toast("请选择结案时间！")
+			return;
+		}
+		if(typeof caseNumber == "undefined" || caseNumber.replace(/\s+/g, "") == ""){
+			mui.toast("请填写案件号！")
+			return;
+		}
+		if(typeof entCode == "undefined" || entCode.replace(/\s+/g, "") == ""){
+			mui.toast("请填写社会信用码！")
+			return;
+		}
+		if((handleDept == "请选择科室"?"":handleDept) == ""){
+			mui.toast("请选择科室！")
+			return;
+		}
+		if(files.length == 0){
+			mui.toast("请上传附件！")
+			return;
+		}
+		if(files[0].size > 1024*1024*10){
+			mui.toast("请上传小于10MB的附件！")
+			return;
+		}
+		var formData = new FormData();
+		formData.append("sancName",sancName);
+		formData.append("entId",unit);
+		formData.append("victimName",victimName);
+		formData.append("filingTime",filingTime);
+		formData.append("closeingTime",closeingTime);
+		formData.append("entCode",entCode);
+		formData.append("caseNumber",caseNumber);
+		formData.append("handleDept",handleDept);
+		formData.append("file",$("#file")[0].files[0]);
+		
+		$.ajax({
+	        type: "post",
+	        url: prefix + "/sanctionSub",//这里加上你自己的上传地址
+	        processData: false,//关闭jquery对文件的预处理
+	        data: formData,
+	        dataType: "json",
+	        contentType: false, //必须
+	        cache: false,//上传文件无需缓存
+	        success: function(data) {
+	        	console.log(data)
+	        	if(data.code == 0){
+	                $("#tempFileId").val($("#tempFileId").val()+data.msg+",")
+	                if(data.msg == "登记成功"){
+	                	mui.alert(data.msg);
+	                }
+	        	}else{
+	        	    mui.alert("上传失败");
+	        	}
+	        }
+	    });
+	});
+
+</script>
+</html>

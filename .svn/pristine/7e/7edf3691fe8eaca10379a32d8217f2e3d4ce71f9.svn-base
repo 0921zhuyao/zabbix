@@ -1,0 +1,191 @@
+package com.jd.common.utils;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import javax.annotation.PostConstruct;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.jd.framework.config.ProjectPropertiesConfig;
+import com.jd.project.module.admin.enterprise.mapper.LdsMapper;
+import com.jd.project.module.admin.evaluation.mapper.CompanyChecktableMapper;
+
+@Component
+public class OperatorStrUtils {
+
+	@Autowired
+	private LdsMapper ldsMapper;
+
+	@Autowired
+	private CompanyChecktableMapper companyChecktableMapper;
+
+	public static OperatorStrUtils operatorStrUtils;
+
+	@PostConstruct
+	public void init() {
+		operatorStrUtils = this;
+		operatorStrUtils.ldsMapper = this.ldsMapper;
+		operatorStrUtils.companyChecktableMapper = this.companyChecktableMapper;
+	}
+
+	/**
+	 * 字符串表达式运算
+	 * 
+	 * @param operator
+	 *            要计算的字符串表达式
+	 * @param flag
+	 *            字符串表达式中需要替换的标识
+	 * @param value
+	 *            需要比较的值
+	 * @return
+	 */
+	public static boolean OperatorResult(String operator, String flag, int value) {
+		ScriptEngineManager manager = new ScriptEngineManager();
+		ScriptEngine engine = manager.getEngineByName("js");
+		engine.put(flag, value);
+		Object result = new Object();
+		try {
+			result = engine.eval(operator);
+		} catch (ScriptException e) {
+			e.printStackTrace();
+		}
+		return (boolean) result;
+	}
+
+	/**
+	 * 动态匹配企业的大中小微类型
+	 * 
+	 * @param paramMap
+	 *            pMap.put("X", 30);pMap.put("Y",
+	 *            100);pMap.put("nationallEconomyId", "G58");
+	 *            Z、资产总额；X、从业人员；Y、营业收入；nationallEconomyId：企业关联的国民经济行业分类编码
+	 * @return
+	 */
+	public static int getEnterprisesScale(Map<String, Object> paramMap) {
+		// 通过国民经济行业分类编码查询对应得大中小微计算表达式
+		int type = -1;
+		List<Map<String, Object>> resultList = operatorStrUtils.ldsMapper
+				.queryLdsExpressionByNationallEconomyId(paramMap);
+		if (null != paramMap && paramMap.size() > 0 && resultList.size() > 0) {
+			// 根据指标名称对大中小微表达式进行分组
+			Map<String, List<Map<String, Object>>> ldsDetail = resultList.stream()
+					.collect(Collectors.groupingBy(x -> x.get("indexName").toString()));
+
+			// 存放根据指标分析出的数据结果
+			Map<String, List<Map<Integer, Object>>> indexResult = new HashMap<>();
+			for (String key : paramMap.keySet()) {
+				List<Map<Integer, Object>> operatorResult = new ArrayList<>();
+				if (ldsDetail.containsKey(key)) {
+					List<Map<String, Object>> expressions = ldsDetail.get(key);
+					expressions.forEach(x -> {
+						Map<Integer, Object> operMap = new HashMap<>();
+						boolean flag = OperatorResult(x.get("expression").toString(), key,
+								Integer.valueOf(paramMap.get(key).toString()));
+						operMap.put(Integer.valueOf(x.get("type").toString()), flag);
+						operatorResult.add(operMap);
+					});
+					indexResult.put(key, operatorResult);
+				}
+			}
+
+			// 筛选出每个指标符合条件的大中小微类型
+			List<Map<Integer, Boolean>> finalMap = new ArrayList<>();
+			indexResult.entrySet().forEach(entry -> {
+				List<Map<Integer, Object>> entrys = entry.getValue();
+				Stream.iterate(0, i -> i + 1).limit(entrys.size()).forEach(i -> {
+					entrys.get(i).entrySet().forEach(ent -> {
+						// 只当值为true时，放进集合中
+						if ((boolean) ent.getValue()) {
+							Map<Integer, Boolean> map = new HashMap<>();
+							map.put(ent.getKey(), Boolean.valueOf(ent.getValue().toString()));
+							finalMap.add(map);
+							System.out.println(ent.getKey());
+							System.out.println(entrys.get(i));
+						}
+					});
+
+				});
+			});
+
+			// 筛选出同时满足一个或两个指标的大中小微类型，当是微型并且有两个指标时，只要满足其中一个即可
+			if (finalMap.size() == 1) {
+				for (Entry<Integer, Boolean> entry : finalMap.get(0).entrySet()) {
+					type = entry.getKey();
+				}
+			} else if (finalMap.size() == 2) {
+				int type1 = -1;
+				int type2 = -2;
+				boolean value1 = false;
+				boolean value2 = false;
+				for (Entry<Integer, Boolean> entry : finalMap.get(0).entrySet()) {
+					type1 = entry.getKey();
+					value1 = entry.getValue();
+				}
+				for (Entry<Integer, Boolean> entry : finalMap.get(1).entrySet()) {
+					type2 = entry.getKey();
+					value2 = entry.getValue();
+				}
+				if (type1 != 3 && type2 != 3 && type1 == type2 && value1 && value2) {
+					type = type1;
+				} else if (type1 == 3 || type2 == 3) {
+					type = 3;
+				}
+			}
+			System.out.println(ldsDetail.size());
+		}
+		return type;
+	}
+
+	/**
+	 * 动态匹配企业规模
+	 * 
+	 * @param turnover
+	 *            2000万元以上：0、规模以上；2000万元以下：1、规模以下
+	 * @return
+	 */
+	public static int getEnterprisesScope(int turnover) {
+		int result = -1;
+		if (2000 <= turnover) {
+			result = 1;
+		} else if (2000 > turnover) {
+			result = 0;
+		}
+		return result;
+	}
+
+	/**
+	 * 获取企业定级级别
+	 * 
+	 * @param companyId
+	 * @return
+	 * 小于10为A级
+	 * 10~30为B级
+	 * 大于30为C级
+	 */
+	public static String getEnterpriseGrade(String companyId) {
+		int num = operatorStrUtils.companyChecktableMapper.getEnterpriseGradeByCompanyId(companyId);
+		String level = "";
+		if (0 <= num && ProjectPropertiesConfig.getMinNum() > num) {
+			level = "A";
+		} else if (ProjectPropertiesConfig.getMinNum() <= num && ProjectPropertiesConfig.getMaxNum() > num) {
+			level = "B";
+		} else if (ProjectPropertiesConfig.getMaxNum() <= num) {
+			level = "C";
+		}
+		//当年发生一般及以上生产安全责任事故（含急性中毒事故）的；
+		//一年内受到2次及以上事前安全生产行政处罚的；
+		//存在重大事故隐患，且整改不力的；
+		//直接降为D级
+		return level;
+	}
+}

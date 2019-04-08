@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jd.project.module.admin.enterprise.mapper.DmJnajMapper">
+    
+    <resultMap type="DmJnajEntity" id="DmJnajResult">
+        <result property="id"    column="ID"    />
+        <result property="dmldm"    column="DMLDM"    />
+        <result property="dmxbm"    column="DMXBM"    />
+        <result property="ms"    column="MS"    />
+        <result property="pid"    column="PID"    />
+    </resultMap>
+	
+	<sql id="selectDmJnajVo">
+        SELECT ID, DMLDM, DMXBM, MS, PID FROM t_dm_jnaj
+    </sql>
+	
+    <select id="selectDmJnajList" parameterType="DmJnajEntity" resultMap="DmJnajResult">
+        <include refid="selectDmJnajVo"/>
+        <where>  
+            <if test="id != null and id != ''"> AND ID = #{id}</if>
+             <if test="dmldm != null and dmldm != ''"> AND DMLDM = #{dmldm}</if>
+             <if test="dmxbm != null and dmxbm != ''"> AND DMXBM = #{dmxbm}</if>
+             <if test="ms != null and ms != ''"> AND MS = #{ms}</if>
+             <if test="pid != null and pid != ''"> AND PID = #{pid}</if>
+         </where>
+    </select>
+
+    <select id="selectDmJnajById" parameterType="Long" resultMap="DmJnajResult">
+        <include refid="selectDmJnajVo"/>
+        WHERE ID = #{id}
+    </select>
+
+
+    <select id="selectDmJnajByDmxbm" parameterType="String" resultMap="DmJnajResult">
+        <include refid="selectDmJnajVo"/>
+        WHERE DMLDM = #{value}
+    </select>
+        
+    <insert id="insertDmJnaj" parameterType="DmJnajEntity">
+        INSERT INTO t_dm_jnaj
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != '' ">ID,</if>
+			<if test="dmldm != null and dmldm != '' ">DMLDM,</if>
+			<if test="dmxbm != null and dmxbm != '' ">DMXBM,</if>
+			<if test="ms != null and ms != '' ">MS,</if>
+			<if test="pid != null and pid != '' ">PID,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != ''">#{id},</if>
+			<if test="dmldm != null and dmldm != ''">#{dmldm},</if>
+			<if test="dmxbm != null and dmxbm != ''">#{dmxbm},</if>
+			<if test="ms != null and ms != ''">#{ms},</if>
+			<if test="pid != null and pid != ''">#{pid},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateDmJnaj" parameterType="DmJnajEntity">
+        UPDATE t_dm_jnaj
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="dmldm != null  and dmldm != ''  ">DMLDM = #{dmldm},</if>
+            <if test="dmxbm != null  and dmxbm != ''  ">DMXBM = #{dmxbm},</if>
+            <if test="ms != null  and ms != ''  ">MS = #{ms},</if>
+            <if test="pid != null  and pid != ''  ">PID = #{pid},</if>
+        </trim>
+        WHERE ID = #{id}
+    </update>
+
+	<delete id="deleteDmJnajById" parameterType="Long">
+        DELETE FROM t_dm_jnaj WHERE ID = #{id}
+    </delete>
+	
+    <delete id="deleteDmJnajByIds" parameterType="String">
+        DELETE FROM t_dm_jnaj WHERE ID IN 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

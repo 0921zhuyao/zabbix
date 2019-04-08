@@ -1,0 +1,122 @@
+package com.jd.project.module.admin.enterprise.service;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.validation.BindException;
+
+import com.jd.project.module.admin.enterprise.entity.QyjcxxEntity;
+import com.jd.project.module.admin.enterprise.entity.SpecialTreatmentEntity;
+
+/**
+ * 企业基础 服务层
+ * 
+ * @author xml
+ * @date 2018-11-23
+ */
+public interface QyjcxxService {
+	/**
+	 * 查询企业基础信息
+	 * 
+	 * @param id
+	 *            企业基础ID
+	 * @return 企业基础信息
+	 */
+	public QyjcxxEntity selectqyjcxxById(String id);
+
+	/**
+	 * 查询企业基础列表
+	 * 
+	 * @param qyjcxx
+	 *            企业基础信息
+	 * @return 企业基础集合
+	 */
+	public List<QyjcxxEntity> selectqyjcxxList(QyjcxxEntity qyjcxx);
+
+	/**
+	 * 新增企业基础
+	 * 
+	 * @param qyjcxx
+	 *            企业基础信息
+	 * @return 结果
+	 */
+	public int insertqyjcxx(QyjcxxEntity qyjcxx) throws BindException;
+
+	/**
+	 * 批量新增企业基础
+	 *
+	 * @param qyjcxx
+	 *            企业基础信息
+	 * @return 结果
+	 */
+	public int insertqyjcxxBatch(List<QyjcxxEntity> qyjcxx);
+
+	/**
+	 * 修改企业基础
+	 * 
+	 * @param qyjcxx
+	 *            企业基础信息
+	 * @return 结果
+	 */
+	public int updateqyjcxx(QyjcxxEntity qyjcxx);
+
+	/**
+	 * 手机端修改企业基础
+	 *
+	 * @param qyjcxx
+	 *            企业基础信息
+	 * @return 结果
+	 */
+	public int updateqyjcxxForMobile(QyjcxxEntity qyjcxx);
+
+	/**
+	 * 删除企业基础信息
+	 * 
+	 * @param ids
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
+	public int deleteqyjcxxByIds(String ids);
+
+	/**
+	 * 手机端查询企业基础列表
+	 *
+	 * @param qyjcxx
+	 *            企业基础信息
+	 * @return 企业基础集合
+	 */
+	public List<QyjcxxEntity> selectMobileQyjcxxList(QyjcxxEntity qyjcxx);
+
+	/**
+	 * 查询企业信息需要的字典数据
+	 *
+	 * @return 结果
+	 */
+	public Map dictMapForQyjcxx();
+
+	/**
+	 * 插入前数据库校验
+	 * 
+	 * @param qyjcxx
+	 */
+	public String validator(QyjcxxEntity qyjcxx);
+
+	/**
+	 * 通过companyId查询专项治理编码
+	 * 
+	 * @param enterpriseId
+	 * @return
+	 */
+	public List<SpecialTreatmentEntity> querySpecialTreatmentCodeBycompanyId(String enterpriseId);
+
+	/**
+	 * 查询在任务详情表里没有的企业
+	 * 
+	 * @param qyjcxx
+	 * @return
+	 */
+	public List<QyjcxxEntity> selectCheckTableCompanyList(QyjcxxEntity qyjcxx);
+
+	public List<QyjcxxEntity> getTotalEnt(String orgCode);
+
+}

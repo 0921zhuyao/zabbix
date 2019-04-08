@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jd.project.module.admin.standard.mapper.RegulationMapper">
+    
+    <resultMap type="RegulationEntity" id="RegulationResult">
+        <result property="id"    column="ID"    />
+        <result property="pid"    column="PID"    />
+        <result property="title"    column="TITLE"    />
+        <result property="sort"    column="SORT"    />
+        <result property="content"    column="CONTENT"    />
+        <result property="level"    column="LEVEL"    />
+        <result property="remark"    column="REMARK"    />
+        <result property="crtUser"    column="CREATE_USER"    />
+        <result property="crtTime"    column="CREATE_TIME"    />
+        <result property="updUser"    column="UPDATE_USER"    />
+        <result property="updTime"    column="UPDATE_TIME"    />
+        <result property="isDelete"    column="IS_DELETE"    />
+    </resultMap>
+	
+	<sql id="selectRegulationVo">
+        select ID, PID, TITLE, SORT, CONTENT, LEVEL, REMARK, CREATE_USER, CREATE_TIME, UPDATE_USER, UPDATE_TIME, IS_DELETE from T_REGULATION
+    </sql>
+	
+    <select id="selectRegulationList" parameterType="RegulationEntity" resultMap="RegulationResult">
+        <include refid="selectRegulationVo"/>
+        <where>  
+            <if test="id != null and id != ''"> and ID = #{id}</if>
+             <if test="pid != null"> and PID = #{pid}</if>
+             <if test="title != null and title != ''"> and TITLE like concat('%', #{title}, '%')</if>
+             <if test="sort != null and sort != ''"> and SORT = #{sort}</if>
+             <if test="content != null and content != ''"> and CONTENT like concat('%', #{content}, '%')</if>
+             <if test="level != null and level != ''"> and LEVEL = #{level}</if>
+             <if test="remark != null and remark != ''"> and REMARK = #{remark}</if>
+             <if test="crtUser != null and crtUser != ''"> and CREATE_USER = #{crtUser}</if>
+             <if test="crtTime != null"><!-- 开始时间检索 -->
+                and date_format(CREATE_TIME,'%y%m%d') &gt;= date_format(#{crtTime},'%y%m%d')
+             </if>
+             <if test="updUser != null and updUser != ''"> and UPDATE_USER = #{updUser}</if>
+             <if test="updTime != null"><!-- 结束时间检索 -->
+                and date_format(UPDATE_TIME,'%y%m%d') &lt;= date_format(#{updTime},'%y%m%d')
+             </if>
+             and IS_DELETE = 0
+         </where>
+    </select>
+    
+    <select id="selectRegulationById" parameterType="Long" resultMap="RegulationResult">
+        <include refid="selectRegulationVo"/>
+        where IS_DELETE = 0 AND ID = #{id}
+    </select>
+        
+    <insert id="insertRegulation" parameterType="RegulationEntity">
+        insert into T_REGULATION
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != '' ">ID,</if>
+			<if test="pid != null">PID,</if>
+			<if test="title != null and title != '' ">TITLE,</if>
+			<if test="sort != null and sort != '' ">SORT,</if>
+			<if test="content != null and content != '' ">CONTENT,</if>
+			<if test="level != null and level != '' ">LEVEL,</if>
+			<if test="remark != null and remark != '' ">REMARK,</if>
+			<if test="crtUser != null and crtUser != '' ">CREATE_USER,</if>
+			<if test="updUser != null and updUser != '' ">UPDATE_USER,</if>
+			CREATE_TIME,
+			UPDATE_TIME
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != ''">#{id},</if>
+			<if test="pid != null">#{pid},</if>
+			<if test="title != null and title != ''">#{title},</if>
+			<if test="sort != null and sort != ''">#{sort},</if>
+			<if test="content != null and content != ''">#{content},</if>
+			<if test="level != null and level != ''">#{level},</if>
+			<if test="remark != null and remark != ''">#{remark},</if>
+			<if test="crtUser != null and crtUser != ''">#{crtUser},</if>
+			<if test="updUser != null and updUser != '' ">#{updUser},</if>
+			sysdate(),
+			sysdate()
+         </trim>
+    </insert>
+	 
+    <update id="updateRegulation" parameterType="RegulationEntity">
+        update T_REGULATION
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="pid != null  ">PID = #{pid},</if>
+            <if test="title != null  and title != ''  ">TITLE = #{title},</if>
+            <if test="sort != null  and sort != ''  ">SORT = #{sort},</if>
+            <if test="content != null  and content != ''  ">CONTENT = #{content},</if>
+            <if test="level != null  ">LEVEL = #{level},</if>
+            <if test="remark != null  and remark != ''  ">REMARK = #{remark},</if>
+            <if test="updUser != null  ">UPDATE_USER = #{updUser},</if>
+            UPDATE_TIME = sysdate()
+        </trim>
+        where ID = #{id}
+    </update>
+
+	<update id="deleteRegulationById" parameterType="Long">
+        update T_REGULATION set IS_DELETE = 1 where ID = #{id}
+    </update>
+	
+    <update id="deleteRegulationByIds" parameterType="String">
+        update T_REGULATION set IS_DELETE = 1 where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+    
+    <!-- 查询非父类政策法规信息 -->
+    <select id="selectRegulationListByNotPid" parameterType="RegulationEntity" resultMap="RegulationResult">
+        <include refid="selectRegulationVo"/>
+        <where>  
+            and PID != 0 and IS_DELETE = 0
+         </where>
+    </select>
+    
+    <!-- 查询是否存在子类数据 -->
+    <select id="countRegulationById" resultType="Integer">
+        SELECT COUNT(1) FROM T_REGULATION WHERE IS_DELETE = 0 AND PID = #{regulationId}
+    </select>
+    
+    <!-- 根据检查项ID查询政策法规 -->
+    <select id="queryRegualationByCheckTableId" parameterType="Long" resultMap="RegulationResult">
+    	SELECT r.ID, r.PID, r.TITLE, r.CONTENT FROM T_REGULATION r
+		LEFT JOIN T_CHECK_REGULATION_REF re ON re.FID = r.ID
+		LEFT JOIN T_CHECK_TABLE c ON c.CHECK_TABLE_ID = re.CHECK_TABLE_ID
+		WHERE r.IS_DELETE = 0 AND re.IS_DELETE = 0 AND c.IS_DELETE = 0 AND re.CHECK_TABLE_ID = #{checkTableId}
+    </select>
+</mapper>

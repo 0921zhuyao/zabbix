@@ -1,0 +1,111 @@
+package com.jd.project.module.admin.message.service;
+
+import com.jd.common.constant.Constants;
+import com.jd.common.support.Convert;
+import com.jd.common.utils.StringUtils;
+import com.jd.framework.web.domain.Result;
+import com.jd.framework.web.service.BaseService;
+import com.jd.project.module.admin.message.entity.MsgEntity;
+import com.jd.project.module.admin.message.mapper.MsgMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+/**
+ * 消息配置 服务层实现
+ * 
+ * @author zaq
+ * @date 2018-11-26
+ */
+@Service
+@Transactional(rollbackFor = Exception.class)
+public class MsgServiceImpl extends BaseService implements MsgService {
+
+	@Autowired
+	private MsgMapper msgMapper;
+
+	/**
+     * 查询消息配置信息
+     * 
+     * @param id 消息配置ID
+     * @return 消息配置信息
+     */
+    @Override
+	public MsgEntity selectMsgRefById(Long id) {
+		MsgEntity msg = msgMapper.selectMsgRefById(id);
+		if(msg != null && msg.getStatus() != null && msg.getStatus().equals(Constants.MASSAGE_NOT_READ)){
+			msg.setStatus(Constants.MASSAGE_READED);
+			msgMapper.updateMsgRef(msg);
+		}
+	    return msg;
+	}
+	
+	/**
+     * 查询消息配置列表
+     * 
+     * @param msg 消息配置信息
+     * @return 消息配置集合
+     */
+	@Override
+	public List<MsgEntity> selectMsgRefList(MsgEntity msg) {
+	    return msgMapper.selectMsgRefList(msg);
+	}
+	
+    /**
+     * 新增消息配置
+     * 
+     * @param msg 消息配置信息
+     * @return 结果
+     */
+	@Override
+	public int insertMsgRef(MsgEntity msg) {
+	    return msgMapper.insertMsgRef(msg);
+	}
+
+	@Override
+	public Result sendMessage(String sendId, String receiveId, String content) {
+		if(sendId == null){
+			return Result.error("sendId 不能为空") ;
+		}
+		if(receiveId == null){
+			return Result.error("receiveId 不能为空") ;
+		}
+		if(StringUtils.isEmpty(content)){
+			return Result.error("消息内容不能为空") ;
+		}
+		MsgEntity msgEntity = new MsgEntity();
+		msgEntity.setContent(content);
+		msgEntity.setSendId(sendId);
+		msgEntity.setReceiveId(receiveId);
+		msgEntity.setCrtUser(sendId);
+		msgEntity.setUpdUser(sendId);
+		msgEntity.setStatus(Constants.MASSAGE_NOT_READ);
+		int row = msgMapper.insertMsgRef(msgEntity);
+		return row > 0 ? Result.success() : Result.error("系统消息插入失败");
+	}
+
+	/**
+     * 修改消息配置
+     * 
+     * @param msg 消息配置信息
+     * @return 结果
+     */
+	@Override
+	public int updateMsgRef(MsgEntity msg) {
+	    return msgMapper.updateMsgRef(msg);
+	}
+
+	/**
+     * 删除消息配置对象
+     * 
+     * @param ids 需要删除的数据ID
+     * @return 结果
+     */
+	@Override
+	public int deleteMsgRefByIds(String ids) {
+		return msgMapper.deleteMsgRefByIds(Convert.toStrArray(ids));
+	}
+	
+}

@@ -1,0 +1,15 @@
+package com.jd.project.module.app.register.service;
+
+import com.jd.project.module.app.register.entity.AdministrativeSanctionEntity;
+
+/**
+ * @author HFJ
+ * @date 2019/4/1-11:25
+ */
+public interface AdministrativeService {
+
+    /**
+     * 提交并插入数据
+     */
+    void insertAllResult(AdministrativeSanctionEntity administrativeSanctionEntity);
+}

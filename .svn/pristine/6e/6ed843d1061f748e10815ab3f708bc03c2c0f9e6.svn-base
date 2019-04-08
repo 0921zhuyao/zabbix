@@ -1,0 +1,194 @@
+package com.jd.project.module.admin.evaluation.service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.jd.common.support.Convert;
+import com.jd.common.utils.StringUtils;
+import com.jd.common.utils.security.ShiroUtils;
+import com.jd.framework.web.service.BaseService;
+import com.jd.project.module.admin.enterprise.entity.QyjcxxEntity;
+import com.jd.project.module.admin.evaluation.entity.TaskDetailEntity;
+import com.jd.project.module.admin.evaluation.entity.TaskPlanEntity;
+import com.jd.project.module.admin.evaluation.mapper.TaskDetailMapper;
+import com.jd.project.module.admin.evaluation.mapper.TaskPlanMapper;
+
+/**
+ * 自评计划任务 服务层实现
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-29
+ */
+@Service
+@Transactional(rollbackFor = Exception.class)
+public class TaskPlanServiceImpl extends BaseService implements TaskPlanService {
+	@Autowired
+	private TaskPlanMapper taskPlanMapper;
+
+	@Autowired
+	private TaskDetailMapper taskDetailMapper;
+
+	/**
+	 * 查询自评计划任务信息
+	 * 
+	 * @param planId
+	 *            自评计划任务ID
+	 * @return 自评计划任务信息
+	 */
+	@Override
+	public TaskPlanEntity selectTaskPlanById(Long planId) {
+		return taskPlanMapper.selectTaskPlanById(planId);
+	}
+
+	/**
+	 * 查询自评计划任务列表
+	 * 
+	 * @param taskPlan
+	 *            自评计划任务信息
+	 * @return 自评计划任务集合
+	 */
+	@Override
+	public List<TaskPlanEntity> selectTaskPlanList(TaskPlanEntity taskPlan) {
+		return taskPlanMapper.selectTaskPlanList(taskPlan);
+	}
+
+	/**
+	 * 移动端查询自评计划任务列表
+	 *
+	 * @param taskPlan
+	 *            自评计划任务信息
+	 * @return 自评计划任务集合
+	 */
+	@Override
+	public List<TaskPlanEntity> selectTaskPlanListForMbile(TaskPlanEntity taskPlan) {
+		return taskPlanMapper.selectTaskPlanListForMbile(taskPlan);
+	}
+
+	/**
+	 * 新增自评计划任务
+	 * 
+	 * @param taskPlan
+	 *            自评计划任务信息
+	 * @return 结果
+	 * @throws Exception
+	 */
+	@Override
+	public int insertTaskPlan(TaskPlanEntity taskPlan) throws Exception {
+		int flag = 0;
+		Long userId = ShiroUtils.getUserId();
+		taskPlan.setCreateUser(userId);
+		taskPlan.setUpdateUser(userId);
+		// 插入自评计划任务表T_TASK_PLAN
+		flag += taskPlanMapper.insertTaskPlan(taskPlan);
+		String enterpiseIds = taskPlan.getEnterpriseIds();
+		if (StringUtils.isNotEmpty(enterpiseIds)) {
+			List<TaskDetailEntity> detailEntities = new ArrayList<>();
+			JSONArray jsonArray = JSON.parseArray(enterpiseIds);
+			Stream.iterate(0, i -> i + 1).limit(jsonArray.size()).forEach(i -> {
+				JSONObject jsonObject = jsonArray.getJSONObject(i);
+				TaskDetailEntity detailEntity = new TaskDetailEntity();
+				detailEntity.setCompanyId(jsonObject.getString("id"));
+				detailEntity.setCreateUser(userId);
+				detailEntity.setUpdateUser(userId);
+				detailEntity.setTaskPlanId(taskPlan.getPlanId());
+				detailEntities.add(detailEntity);
+			});
+			// 插入自评计划详情表T_TASK_DETAIL
+			flag += taskDetailMapper.insertTaskDetailBatch(detailEntities);
+		} else {
+			throw new Exception("请选择需要分配计划的企业");
+		}
+		return flag > 1 ? flag : 0;
+	}
+
+	/**
+	 * 修改自评计划任务
+	 * 
+	 * @param taskPlan
+	 *            自评计划任务信息
+	 * @return 结果
+	 */
+	@Override
+	public int updateTaskPlan(TaskPlanEntity taskPlan) {
+		int flag = 0;
+		Long userId = ShiroUtils.getUserId();
+		taskPlan.setUpdateUser(userId);
+		flag += taskPlanMapper.updateTaskPlan(taskPlan);
+		String removeEnterpise = taskPlan.getRemoveEnterprise();
+		String enterpriseIds = taskPlan.getEnterpriseIds();
+		// 删除任务详情表关联的企业信息
+		if (StringUtils.isNotEmpty(removeEnterpise)) {
+			List<QyjcxxEntity> details = JSONArray.parseArray(removeEnterpise, QyjcxxEntity.class);
+			for (QyjcxxEntity qyjcxxEntity : details) {
+				if (StringUtils.isNotNull(qyjcxxEntity.getTaskDetailId())) {
+					taskDetailMapper.deleteTaskDetailById(qyjcxxEntity.getTaskDetailId());
+				}
+			}
+		}
+		// 更新任务详情表关联的企业信息
+		if (StringUtils.isNotEmpty(enterpriseIds)) {
+			List<QyjcxxEntity> details = JSONArray.parseArray(enterpriseIds, QyjcxxEntity.class);
+			for (QyjcxxEntity qyjcxxEntity : details) {
+				// 判断taskDetailId是否为空，不为空则修改原有数据，否则新增一条数据
+				TaskDetailEntity taskDetail = new TaskDetailEntity();
+				taskDetail.setCompanyId(qyjcxxEntity.getId());
+				taskDetail.setUpdateUser(userId);
+				if (StringUtils.isNotNull(qyjcxxEntity.getTaskDetailId())) {
+					taskDetail.setTaskDetailId(qyjcxxEntity.getTaskDetailId());
+					taskDetailMapper.updateTaskDetail(taskDetail);
+				} else {
+					taskDetail.setCreateUser(userId);
+					taskDetail.setTaskPlanId(taskPlan.getPlanId());
+					taskDetailMapper.insertTaskDetail(taskDetail);
+				}
+			}
+		}
+		return flag;
+	}
+
+	/**
+	 * 删除自评计划任务对象
+	 * 
+	 * @param ids
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
+	@Override
+	public int deleteTaskPlanByIds(String ids) {
+		String[] taskPlanIds = Convert.toStrArray(ids);
+		taskDetailMapper.deleteTaskDetailByTaskPlanId(taskPlanIds);
+		return taskPlanMapper.deleteTaskPlanByIds(taskPlanIds);
+	}
+
+	/**
+	 * 查询企业关联信息
+	 * 
+	 * @param planId
+	 * @return
+	 */
+	@Override
+	public List<QyjcxxEntity> selectQyjcxxsByTaskDetailId(Long planId) {
+		return taskPlanMapper.selectQyjcxxsByTaskDetailId(planId);
+	}
+
+	/**
+	 * 审核自评计划任务
+	 * 
+	 * @param taskPlan
+	 * @return
+	 */
+	@Override
+	public int updateTaskPlanAuditeStutas(TaskPlanEntity taskPlan) {
+		taskPlan.setUpdateUser(ShiroUtils.getUserId());
+		return taskPlanMapper.updateTaskPlanAuditeStatus(taskPlan);
+	}
+
+}

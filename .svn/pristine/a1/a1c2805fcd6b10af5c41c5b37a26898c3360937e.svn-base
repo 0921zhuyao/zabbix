@@ -1,0 +1,112 @@
+package com.jd.common.utils.WebServiceUtils;
+
+import java.util.List;
+
+import org.apache.cxf.endpoint.Client;
+import org.apache.cxf.jaxws.endpoint.dynamic.JaxWsDynamicClientFactory;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.jd.project.module.admin.enterprise.entity.SysuserEntity;
+import com.jd.project.module.ws.InterfaceAddress;
+
+@SuppressWarnings({ "all", "unchecked" })
+public class CxfUtils {
+
+	private static Client instance = null;
+
+	public static Client getInstance() {
+		if (instance == null) {
+			return createClient();
+		}
+		return instance;
+	}
+
+	private synchronized static Client createClient() {
+		if (instance == null) {
+			JaxWsDynamicClientFactory clientFactory = JaxWsDynamicClientFactory.newInstance();
+			instance = clientFactory.createClient(InterfaceAddress.getLsUrl());
+		}
+		return instance;
+	}
+
+	// cxf调用webservice服务代码
+	private static Object[] getResult(String method, String... param) throws Exception {
+		return getInstance().invoke(method, param);
+	}
+
+	// cxf调用webservice服务代码
+	private static Object[] getResult(String method, Integer... param) throws Exception {
+		return getInstance().invoke(method, param);
+	}
+
+	// 获取一组
+	public static List<JSONObject> getListResult(String method, String... param) throws Exception {
+		Object[] object = getResult(method, param);
+		return (List<JSONObject>) JSON.parse(object[0].toString());
+	}
+
+	// 获取一组
+	public static JSONObject getOneResult(String method, String... param) throws Exception {
+		Object[] object = getResult(method, param);
+		return JSON.parseObject(object[0].toString());
+	}
+
+	// 获取一组
+	public static JSONObject getOneResult(String method, Integer... param) throws Exception {
+		Object[] object = getResult(method, param);
+		return JSON.parseObject(object[0].toString());
+	}
+
+	// 获取一组
+	public static List<JSONObject> getListResult(String method, Integer... param) throws Exception {
+		Object[] object = getResult(method, param);
+		return (List<JSONObject>) JSON.parse(object[0].toString());
+	}
+
+	// 获取一组
+	@SuppressWarnings("unchecked")
+	public static List<JSONObject> getListResult(String method) throws Exception {
+		Object[] object = getResult(method, "");
+		return (List<JSONObject>) JSON.parse(object[0].toString());
+	}
+
+	// 获取单个
+	public static JSONObject getObjResult(String method, String... param) throws Exception {
+		List<JSONObject> ls = getListResult(method, param);
+		if (ls.size() > 0) {
+			return ls.get(0);
+		} else {
+			return null;
+		}
+	}
+
+	// 获取单个
+	public static JSONObject getObjResult(String method) throws Exception {
+		List<JSONObject> ls = getListResult(method, "");
+		if (ls.size() > 0) {
+			return ls.get(0);
+		} else {
+			return null;
+		}
+	}
+
+	public static String getLsJSONStr(String method, Integer... param) throws Exception {
+		Object[] object = getResult(method, param);
+		return object[0].toString();
+	}
+
+	/**
+	 * 根据用户名称查询莱斯用户详情
+	 * 
+	 * @param userName
+	 * @return
+	 * @throws Exception
+	 */
+	public static SysuserEntity getLsUserByUserName(String userName) throws Exception {
+		Object[] objects = getResult(InterfaceAddress.getQueryYhxxByUsername(), userName);
+		String jsonStr = objects[0].toString();
+		List<SysuserEntity> sysuserEntity = JSON.parseArray(jsonStr, SysuserEntity.class);
+		return sysuserEntity.size() > 0 ? sysuserEntity.get(0) : new SysuserEntity();
+	}
+}

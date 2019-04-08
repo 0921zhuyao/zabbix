@@ -1,0 +1,87 @@
+package com.jd.project.module.app.homePage.service;
+
+import java.util.List;
+import java.util.Map;
+
+import com.jd.project.module.admin.enterprise.entity.QyjcxxEntity;
+import com.jd.project.module.admin.evaluation.entity.DynamicEntity;
+import com.jd.project.module.admin.message.entity.NoticeEntity;
+import com.jd.project.module.admin.message.mapper.MsgMapper;
+import com.jd.project.module.admin.message.mapper.NoticeMapper;
+import com.jd.project.module.admin.standard.service.CheckTableService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.jd.project.module.app.homePage.mapper.HomePageMapper;
+
+/**
+ * 检查内容分类 服务层实现
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-21
+ */
+@Service
+@Transactional(rollbackFor = Exception.class)
+public class HomePageServiceImpl implements HomePageService {
+	
+	@Autowired
+	HomePageMapper homePageMapper;
+
+	@Autowired
+	private CheckTableService checkTableService;
+	
+	/**
+	 * 
+	 * 描述：查询企业自评汇总信息
+	 * 时间：2018-11-27 15:24:21
+	 * 作者：ji_zhengcheng
+	 * @param map
+	 * @return
+	 */
+	@Override
+	public Map<String, String> countEntNumber(Map<String, Object> map) {
+		return homePageMapper.countEntNumber(map);
+	}
+
+	/**
+	 *获取企业不符合项列表，主页只获取3条数据
+	 * @param map
+	 * @return
+	 */
+	@Override
+	public List<DynamicEntity> queryNocomfirmance(Map<String, Object> map) {
+		return homePageMapper.queryNocomfirmance(map);
+	}
+
+	/**
+	 * 获取企业列表，且每个企业获取三条不符合项
+	 * @param map
+	 * @return
+	 */
+	@Override
+	public List<Map<String, String>> queryCompany(Map<String, Object> map) {
+//		List<QyjcxxEntity> list = homePageMapper.queryCompany(map);
+//		for(QyjcxxEntity item :list){
+//			map.put("companyId",item.getId());
+//			List<DynamicEntity> dylist = queryNocomfirmance(map);
+//			for(DynamicEntity dynamic:dylist){
+//				dynamic.setCheckTableEntity(checkTableService.selectCheckTableById(dynamic.getCheckTableId()));
+//			};
+//			item.setDyList(dylist);
+//		}
+//		return list;
+		return homePageMapper.queryCompany(map);
+	}
+
+	@Override
+	public List<DynamicEntity> queryDynamic(Map<String, Object> map) {
+		List<DynamicEntity> list = queryNocomfirmance(map);
+		for(DynamicEntity dynamic:list){
+			dynamic.setCheckTableEntity(checkTableService.selectCheckTableById(dynamic.getCheckTableId()));
+		}
+		return list;
+	}
+
+
+}

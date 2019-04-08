@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>企业信息</title>
+<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<!-- <link rel="stylesheet" href="@{ /css/app/bootstrap.css">
+    <link rel="stylesheet" href="@{ /css/app/bootstrap-select.css"> -->
+<link rel="stylesheet" type="text/css" th:href="@{ /css/app/mui.min.css}">
+<link rel="stylesheet" type="text/css" th:href="@{ /css/app/reset.css}">
+<link rel="stylesheet" type="text/css" th:href="@{ /css/app/mui.picker.css}">
+<link rel="stylesheet" type="text/css" th:href="@{ /css/app/mui.poppicker.css}">
+<link rel="stylesheet" type="text/css" th:href="@{ /css/app/register.css}">
+</head>
+<body>
+	<!--头部内容-->
+	<header id="header" class="mui-bar mui-bar-nav">
+		<span class="action-back" onclick="window.history.back()">
+			<img th:src="@{ /images/return.png}" alt="">
+		</span>
+		<h1 class="mui-title">事故登记</h1>
+	</header>
+	<div class="content">
+		<div class="table-box-1">
+			<div class="input-box">
+				<div class="input-list">
+					<span>事故发生日期:</span>
+					<button class="selectdate" id='timePicker'>请选择日期</button>
+				</div>
+				<div class="input-list wid">
+					<span>事故发生单位:</span>
+					<button class="selectunit" id="unit">请选择单位名称</button>
+				</div>
+			</div>
+		</div>
+
+		<div class="table-box-1">
+			<div class="input-box">
+				<div class="input-list wid1">
+					<span>受害者姓名:</span>
+					<div class="input input2">
+						<input type="text" placeholder="受害者姓名" id="name">
+					</div>
+				</div>
+				<div class="input-list wid">
+					<span>年龄:</span>
+					<div class="input input2">
+						<input type="text" class="input1" placeholder="年龄" id="age">
+					</div>
+				</div>
+				<div class="input-list wid">
+					<span>死亡人数:</span>
+					<div class="input input2">
+						<input type="text" class="input1" placeholder="0" id="deadNumber">
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="table-box-1">
+			<div class="input-box1">
+				<div class="input-list" id="sex">
+					<span>性别:</span>
+					<dl class="select">
+						<dt>请选择</dt>
+						<dd>
+							<ul>
+								<li><a>男</a></li>
+								<li><a>女</a></li>
+							</ul>
+						</dd>
+					</dl>
+				</div>
+				<div class="input-list" id="workType">
+					<span>工种:</span>
+					<dl class="select">
+						<dt>请选择</dt>
+						<dd>
+							<ul>
+								<li><a>轻松工种</a></li>
+								<li><a>一般工种</a></li>
+								<li><a>危险工种</a></li>
+							</ul>
+						</dd>
+					</dl>
+				</div>
+				<div class="input-list" id="accidentType">
+					<span>事故分类:</span>
+					<dl class="select">
+						<dt>请选择</dt>
+						<dd>
+							<ul>
+								<li><a>0</a></li>
+								<li><a>1</a></li>
+								<li><a>2</a></li>
+							</ul>
+						</dd>
+					</dl>
+				</div>
+				<div class="input-list" id="administrationType">
+					<span>管理分类:</span>
+					<dl class="select">
+						<dt>请选择</dt>
+						<dd>
+							<ul>
+								<li><a>1</a></li>
+								<li><a>2</a></li>
+								<li><a>2</a></li>
+							</ul>
+						</dd>
+					</dl>
+				</div>
+			</div>
+		</div>
+
+		<div class="table-box-1">
+			<div class="input-box">
+				<div class="input-list">
+					<span>所属街道:</span>
+					<button class="selectstreet" id='street'>请选择所属街道</button>
+				</div>
+			</div>
+		</div>
+
+		<div class="table-box-1">
+			<div class="input-box">
+				<div class="input-list">
+					<span>行政处罚:</span>
+				</div>
+				<div class="textarea">
+					<textarea name="sanction" id="sanction" cols="10" rows="5" placeholder="请输入内容"></textarea>
+				</div>
+			</div>
+		</div>
+		<div class="table-box-1">
+			<div class="input-box">
+				<div class="input-list">
+					<span>追究刑责:</span>
+				</div>
+				<div class="textarea">
+					<textarea name="responsibility" id="responsibility" cols="10" rows="5" placeholder="请输入内容"></textarea>
+				</div>
+			</div>
+		</div>
+
+		<div class="table-box-1">
+			<div class="input-box">
+				<div class="input-list">
+					<span>附件上传:</span>
+				</div>
+				<div class="fileUpload">
+					<a href="javascript:;" class="file">
+						<input type="file" name="file" id="file">
+					</a>
+					<p>
+						上传文件
+						<br>
+						<span>( 文件大小不能超过 10M )</span>
+					</p>
+				</div>
+			</div>
+		</div>
+		<div class="button">
+			<form>
+				<input type="button" id="sub" value="登记">
+			</form>
+		</div>
+	</div>
+</body>
+<script type="text/javascript" th:src="@{ /js/app/jquery-3.2.1.js}"></script>
+<script type="text/javascript" th:src="@{ /js/app/mui.min.js}"></script>
+<script type="text/javascript" th:src="@{ /js/app/mui.picker.js}"></script>
+<script type="text/javascript" th:src="@{ /js/app/mui.poppicker.js}"></script>
+<script type="text/javascript" th:src="@{ /js/app/datePicker.js}"></script>
+<script type="text/javascript" th:src="@{ /js/app/city.data-3.js}"></script>
+<!-- <script type="text/javascript" src="@{ /js/bootstrap.js"></script>
+<script type="text/javascript" src="@{ /js/bootstrap-select.js"></script> -->
+<script type="text/javascript">
+	var prefix = "/app/accident";
+	$(document).ready(function() {
+		$(".select").width($(window).width() - 100);
+		$(".select dt").width($(window).width() - 122);
+		var selectWidth = $(".select").width();
+		var spanw = $(".wid > span").width();
+		$(".select dd").width(selectWidth);
+		$(".select dd ul").width(selectWidth);
+		$(".select dd li").width(selectWidth);
+		$(".input2").each(function() {
+			var width = $(".input-list").width() - $(this).parent(".input-list").find('span').width() - $(this).width(width)
+		})
+		$(".select").each(function() {
+			var s = $(this);
+			var z = parseInt(s.css("z-index"));
+			var dt = $(this).children("dt");
+			var dd = $(this).children("dd");
+			var _show = function() {
+				dd.slideDown(200);
+				dt.addClass("cur");
+				s.css("z-index", z + 1);
+			}; //展开效果
+			var _hide = function() {
+				dd.slideUp(200);
+				dt.removeClass("cur");
+				s.css("z-index", z);
+			}; //关闭效果
+			dt.click(function() {
+				dd.is(":hidden") ? _show() : _hide();
+			});
+			dd.find("a").click(function() {
+				dt.html($(this).html());
+				_hide();
+			});
+		})
+	});
+	//mui初始化
+	mui.init({
+		swipeBack : true
+	});
+
+	var calendar = new datePicker();
+	calendar.init({
+		'trigger' : '#timePicker', /*按钮选择器，用于触发弹出插件*/
+		'type' : 'date',/*模式：date日期；datetime日期时间；time时间；ym年月；*/
+		'minDate' : '1900-1-1-1-1-1',/*最小日期*/
+		'maxDate' : '2100-12-31-24-24-24',/*最大日期*/
+		'onSubmit' : function() {/*确认时触发事件*/
+			var theSelectData = calendar.value;
+			$("#timePicker").text(theSelectData);
+		},
+		'onClose' : function() {/*取消时触发事件*/
+		}
+	});
+	(function($, doc) {
+		$.init();
+		$.ready(function() {
+			/**
+			 * 获取对象属性的值
+			 * 主要用于过滤三级联动中，可能出现的最低级的数据不存在的情况，实际开发中需要注意这一点；
+			 * @param {Object} obj 对象
+			 * @param {String} param 属性名
+			 */
+			var _getParam = function(obj, param) {
+				return obj[param] || '';
+			};
+
+			var userPicker = new $.PopPicker();
+			userPicker.setData([ {
+				value : 'company1',
+				text : '123有限公司'
+			}, {
+				value : 'company2',
+				text : '456有限公司'
+			}, {
+				value : 'company3',
+				text : '789有限公司'
+			}, {
+				value : 'company4',
+				text : '987有限公司'
+			}, {
+				value : 'company5',
+				text : '564有限公司'
+			}, {
+				value : 'company6',
+				text : '321有限公司'
+			} ]);
+			var showUserPickerButton = doc.getElementById('unit');
+			var userResult = doc.getElementById('unit');
+			showUserPickerButton.addEventListener('tap', function(event) {
+				userPicker.show(function(items) {
+					userResult.innerText = items[0].text;
+					//userResult.innerText = _getParam(items[0], 'text') + " " + _getParam(items[1], 'text') + " " + _getParam(items[2], 'text');
+				});
+			}, false);
+
+			var cityPicker = new $.PopPicker({
+				layer : 3
+			});
+			cityPicker.setData(cityData3);
+			var showCityPickerButton = doc.getElementById('street');
+			var cityResult = doc.getElementById('street');
+			showCityPickerButton.addEventListener('tap', function(event) {
+				cityPicker.show(function(items) {
+					cityResult.innerText = _getParam(items[0], 'text') + " " + _getParam(items[1], 'text') + " " + _getParam(items[2], 'text');
+				});
+			}, false);
+
+		});
+	})(mui, document);
+
+	$("#sub").click(function() {
+		var files = $("#file")[0].files;//[0].length
+		var timePicker = $("#timePicker").val();
+		var unit = $("#unit").get(0).innerHTML;
+		var name = $("#name").val();
+		var age = $("#age").val();
+		var deadNumber = $("#deadNumber").val();
+		var sex = $("#sex").find("dt").get(0).innerHTML;
+		var accidentType = $("#accidentType").find("dt").get(0).innerHTML;
+		var administrationType = $("#administrationType").find("dt").get(0).innerHTML;
+		var workType = $("#workType").find("dt").get(0).innerHTML;
+		var street = $("#street").get(0).innerHTML;
+		var sanction = $("#sanction").val();
+		var responsibility = $("#responsibility").val();
+		if(typeof timePicker == "undefined" || timePicker == ""){
+			mui.toast("请选择事故发生日期！")
+			return;
+		}
+		if(typeof unit == "undefined" || unit == "请选择单位名称" ){
+			mui.toast("请选择事故发生单位！")
+			return;
+		}
+		if(typeof name == "undefined" || name.replace(/\s+/g, "") == ""){
+			mui.toast("请填写受害者姓名！")
+			return;
+		}
+		if(typeof age == "undefined" || age.replace(/\s+/g, "") == ""){
+			mui.toast("请填写年龄！")
+			return;
+		}
+		if(typeof deadNumber == "undefined" || deadNumber.replace(/\s+/g, "") == ""){
+			mui.toast("请填写死亡人数！")
+			return;
+		}
+		if((sex == "请选择"?"":sex) == ""){
+			mui.toast("请选择性别！")
+			return;
+		}
+		if((workType == "请选择"?"":workType) == ""){
+			mui.toast("请选择工种！")
+			return;
+		}
+		if((accidentType == "请选择"?"":accidentType) == ""){
+			mui.toast("请选择事故分类！")	
+			return;
+		}
+		if((administrationType == "请选择"?"":administrationType) == ""){
+			mui.toast("请选择管理分类！")
+			return;
+		}
+		if(typeof street == "undefined" || street == "请选择所属街道"){
+			mui.toast("请选择所属街道！")
+			return;
+		}
+		if(sanction.replace(/\s+/g, "") == ""){
+			mui.toast("请填写行政处罚！")
+			return;
+		}
+		if(responsibility.replace(/\s+/g, "") == ""){
+			mui.toast("请填写追究刑责！")
+			return;
+		}
+		if(files.length == 0){
+			mui.toast("请上传附件！")
+			return;
+		}
+		if(files[0].size > 1024*1024*10){
+			mui.toast("请上传小于10MB的附件！")
+			return;
+		}
+		var formData = new FormData();
+		formData.append("happenDate",timePicker);
+		formData.append("entId",unit);
+		formData.append("name",name);
+		formData.append("age",age);
+		formData.append("deadNum",deadNumber);
+		formData.append("sex",sex);
+		formData.append("accidentType",accidentType);
+		formData.append("manageType",administrationType);
+		formData.append("job",workType);
+		formData.append("belongStreet",street);
+		formData.append("sanction",sanction);
+		formData.append("responsibility",responsibility);
+		formData.append("file",$("#file")[0].files[0]);
+		
+		$.ajax({
+	        type: "post",
+	        url: prefix + "/accidentSub",//这里加上你自己的上传地址
+	        processData: false,//关闭jquery对文件的预处理
+	        data: formData,
+	        dataType: "json",
+	        contentType: false, //必须
+	        cache: false,//上传文件无需缓存
+	        success: function(data) {
+	        	console.log(data)
+	        	if(data.code == 0){
+	                $("#tempFileId").val($("#tempFileId").val()+data.msg+",")
+	                if(data.msg == "登记成功"){
+	                	mui.alert(data.msg);
+	                }
+	        	}else{
+	        	    mui.alert("上传失败");
+	        	}
+	        }
+	    });
+	});
+</script>
+</html>

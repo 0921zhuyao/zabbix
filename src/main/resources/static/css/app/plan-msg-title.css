@@ -1,0 +1,117 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #f8f8fb;
+}
+
+#header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 45px;
+    background: #333333;
+    width: 100%;
+    overflow: hidden;
+}
+
+.action-back {
+    float: left;
+}
+
+.action-back img {
+    width: 11px;
+    margin: 14px 0 0 17px;
+}
+
+.mui-title {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 44px;
+    position: absolute;
+    display: block;
+    width: 70%;
+    margin: 0 -10px;
+    padding: 0;
+    text-align: center;
+    white-space: nowrap;
+    color: #fff;
+    right: 40px;
+    left: 40px;
+    display: inline-block;
+    overflow: hidden;
+    width: auto;
+    margin: 0;
+    text-overflow: ellipsis;
+}
+
+.submit-btn {
+    float: right;
+    height: 45px;
+    line-height: 48px;
+    margin-right: 18px;
+    font-size: 15px;
+    text-decoration: underline;
+    color: #fff;
+}
+
+.content {
+    margin-top: 45px;
+    background: white;
+    height: 174px;
+}
+
+.start-date,
+.end-date {
+    height: 30px;
+    line-height: 30px;
+    padding: 0 17px;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.start-date span,
+.end-date span,
+.date-title span {
+    display: inline-block;
+    width: 25%;
+}
+
+.start-date input,
+.end-date input,
+.date-title input {
+    background: #fff8f8;
+    width: 71%;
+    padding-left: 4%;
+    height: 30px;
+    line-height: 30px;
+    margin-top: 17px;
+    font-size: 14px;
+    /*margin-left: 4px;*/
+}
+
+.end-date {
+    margin: 25px 0 21px 0;
+}
+
+.date-title {
+    /*width: 100%;*/
+    height: 40px;
+    line-height: 40px;
+    padding: 0 17px 14px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.search-btn {
+    width: 86%;
+    margin: 7px 5%;
+    height: 36px;
+    background: url("../images/search_icon.png") no-repeat 50% 7px;
+    background-size: 22px;
+    background-color: #e2e0e0;
+    border-radius: 20px;
+    padding-left: 4%;
+}

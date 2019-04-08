@@ -1,0 +1,83 @@
+package com.jd.project.module.admin.standard.mapper;
+
+import java.util.List;
+
+import com.jd.framework.web.mapper.BaseMapper;
+import com.jd.project.module.admin.standard.entity.CheckContentTypeEntity;
+
+/**
+ * 检查内容分类 数据层
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-21
+ */
+public interface CheckContentTypeMapper extends BaseMapper<CheckContentTypeEntity> {
+	/**
+	 * 查询检查内容分类信息
+	 * 
+	 * @param contentTypeId
+	 *            检查内容分类ID
+	 * @return 检查内容分类信息
+	 */
+	public CheckContentTypeEntity selectCheckContentTypeById(Long contentTypeId);
+
+	/**
+	 * 查询检查内容分类列表
+	 * 
+	 * @param checkContentType
+	 *            检查内容分类信息
+	 * @return 检查内容分类集合
+	 */
+	public List<CheckContentTypeEntity> selectCheckContentTypeList(CheckContentTypeEntity checkContentType);
+
+	/**
+	 * 新增检查内容分类
+	 * 
+	 * @param checkContentType
+	 *            检查内容分类信息
+	 * @return 结果
+	 */
+	public int insertCheckContentType(CheckContentTypeEntity checkContentType);
+
+	/**
+	 * 修改检查内容分类
+	 * 
+	 * @param checkContentType
+	 *            检查内容分类信息
+	 * @return 结果
+	 */
+	public int updateCheckContentType(CheckContentTypeEntity checkContentType);
+
+	/**
+	 * 删除检查内容分类
+	 * 
+	 * @param contentTypeId
+	 *            检查内容分类ID
+	 * @return 结果
+	 */
+	public int deleteCheckContentTypeById(Long contentTypeId);
+
+	/**
+	 * 批量删除检查内容分类
+	 * 
+	 * @param contentTypeIds
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
+	public int deleteCheckContentTypeByIds(String[] contentTypeIds);
+
+	/**
+	 * 查询是否存在子类数据
+	 * @param contentTypeId
+	 * @return
+	 */
+	public int countCheckContentTypeById(Long contentTypeId);
+
+	/**
+	 * 校验分类编码
+	 * @param contentTypeCode
+	 * @return
+	 */
+	public CheckContentTypeEntity checkContentTypeCodeUnique(String contentTypeCode);
+
+}

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jd.project.module.companyChecktables.mapper.CompanyChecktablesMapper">
+    
+    <resultMap type="CompanyChecktablesEntity" id="CompanyChecktablesResult">
+        <result property="checktablesId"    column="CHECKTABLES_ID"    />
+        <result property="companyId"    column="COMPANY_ID"    />
+        <result property="checkTableNameId"    column="CHECK_TABLE_NAME_ID"    />
+        <result property="createUser"    column="CREATE_USER"    />
+        <result property="createTime"    column="CREATE_TIME"    />
+        <result property="updateUser"    column="UPDATE_USER"    />
+        <result property="updateTime"    column="UPDATE_TIME"    />
+    </resultMap>
+	
+	<sql id="selectCompanyChecktablesVo">
+        SELECT CHECKTABLES_ID, COMPANY_ID, CHECK_TABLE_NAME_ID, CREATE_USER, CREATE_TIME, UPDATE_USER, UPDATE_TIME FROM T_COMPANY_CHECKTABLES
+    </sql>
+	
+    <select id="selectCompanyChecktablesList" parameterType="CompanyChecktablesEntity" resultMap="CompanyChecktablesResult">
+        <include refid="selectCompanyChecktablesVo"/>
+        <where>  
+            <if test="checktablesId != null and checktablesId != ''"> AND CHECKTABLES_ID = #{checktablesId}</if>
+             <if test="companyId != null and companyId != ''"> AND COMPANY_ID = #{companyId}</if>
+             <if test="checkTableNameId != null and checkTableNameId != ''"> AND CHECK_TABLE_NAME_ID = #{checkTableNameId}</if>
+             <if test="createUser != null and createUser != ''"> AND CREATE_USER = #{createUser}</if>
+             <if test="createTime != null and createTime != ''"> AND CREATE_TIME = #{createTime}</if>
+             <if test="updateUser != null and updateUser != ''"> AND UPDATE_USER = #{updateUser}</if>
+             <if test="updateTime != null and updateTime != ''"> AND UPDATE_TIME = #{updateTime}</if>
+         </where>
+    </select>
+    
+    <select id="selectCompanyChecktablesById" parameterType="Long" resultMap="CompanyChecktablesResult">
+        <include refid="selectCompanyChecktablesVo"/>
+        WHERE CHECKTABLES_ID = #{checktablesId}
+    </select>
+        
+    <insert id="insertCompanyChecktables" parameterType="CompanyChecktablesEntity">
+        INSERT INTO T_COMPANY_CHECKTABLES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="checktablesId != null and checktablesId != '' ">CHECKTABLES_ID,</if>
+			<if test="companyId != null and companyId != '' ">COMPANY_ID,</if>
+			<if test="checkTableNameId != null and checkTableNameId != '' ">CHECK_TABLE_NAME_ID,</if>
+			<if test="createUser != null and createUser != '' ">CREATE_USER,</if>
+			<if test="createTime != null and createTime != '' ">CREATE_TIME,</if>
+			<if test="updateUser != null and updateUser != '' ">UPDATE_USER,</if>
+			<if test="updateTime != null and updateTime != '' ">UPDATE_TIME,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="checktablesId != null and checktablesId != ''">#{checktablesId},</if>
+			<if test="companyId != null and companyId != ''">#{companyId},</if>
+			<if test="checkTableNameId != null and checkTableNameId != ''">#{checkTableNameId},</if>
+			<if test="createUser != null and createUser != ''">#{createUser},</if>
+			<if test="createTime != null and createTime != ''">#{createTime},</if>
+			<if test="updateUser != null and updateUser != ''">#{updateUser},</if>
+			<if test="updateTime != null and updateTime != ''">#{updateTime},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateCompanyChecktables" parameterType="CompanyChecktablesEntity">
+        UPDATE T_COMPANY_CHECKTABLES
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="companyId != null  AND companyId != ''  ">COMPANY_ID = #{companyId},</if>
+            <if test="checkTableNameId != null  ">CHECK_TABLE_NAME_ID = #{checkTableNameId},</if>
+            <if test="createUser != null  ">CREATE_USER = #{createUser},</if>
+            <if test="createTime != null  ">CREATE_TIME = #{createTime},</if>
+            <if test="updateUser != null  ">UPDATE_USER = #{updateUser},</if>
+            <if test="updateTime != null  ">UPDATE_TIME = #{updateTime},</if>
+        </trim>
+        WHERE CHECKTABLES_ID = #{checktablesId}
+    </update>
+
+	<delete id="deleteCompanyChecktablesById" parameterType="Long">
+        DELETE FROM T_COMPANY_CHECKTABLES WHERE CHECKTABLES_ID = #{checktablesId}
+    </delete>
+	
+    <delete id="deleteCompanyChecktablesByIds" parameterType="String">
+        DELETE FROM T_COMPANY_CHECKTABLES WHERE CHECKTABLES_ID IN 
+        <foreach item="checktablesId" collection="array" open="(" separator="," close=")">
+            #{checktablesId}
+        </foreach>
+    </delete>
+    
+</mapper>

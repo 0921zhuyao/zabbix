@@ -1,0 +1,73 @@
+package com.jd.project.module.app.homePage.entity;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+import com.jd.framework.web.domain.BasisEntity;
+import java.util.Date;
+    
+/**
+ * 企业不符合项统计表 T_DYNAMIC_CENSUS
+ * 
+ * @author TrevorPhilips
+ * @date 2019-01-23
+ */
+public class DynamicCensusEntity extends BasisEntity {
+	private static final long serialVersionUID = 1L;
+	
+	/** 主键 */
+	private Long id;
+	/** 公司ID */
+	private String companyId;
+	/** 初始化不符合项数量 */
+	private Long dynamicNumber;
+	/** 执法检查不符合项 */
+	private Long dynamicChecket;
+	/** 创建时间 */
+	private Date createTime;
+
+	public void setid(Long id) {
+		this.id = id;
+	}
+
+	public Long getid() {
+		return id;
+	}
+	public void setCompanyId(String companyId) {
+		this.companyId = companyId;
+	}
+
+	public String getCompanyId() {
+		return companyId;
+	}
+	public void setDynamicNumber(Long dynamicNumber) {
+		this.dynamicNumber = dynamicNumber;
+	}
+
+	public Long getDynamicNumber() {
+		return dynamicNumber;
+	}
+	public void setDynamicChecket(Long dynamicChecket) {
+		this.dynamicChecket = dynamicChecket;
+	}
+
+	public Long getDynamicChecket() {
+		return dynamicChecket;
+	}
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+    public String toString() {
+        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
+            .append("id", getid())
+            .append("companyId", getCompanyId())
+            .append("dynamicNumber", getDynamicNumber())
+            .append("dynamicChecket", getDynamicChecket())
+            .append("createTime", getCreateTime())
+            .toString();
+    }
+}

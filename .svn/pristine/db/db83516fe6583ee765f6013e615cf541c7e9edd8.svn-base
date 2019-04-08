@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" type="text/css" href="../css/reset.css">
+    <link rel="stylesheet" type="text/css" href="../css/Organization.css">
+    <link rel="stylesheet" type="text/css" href="../css/Co_info.css">
+</head>
+<body>
+<link rel="stylesheet" href="../css/reform.css">
+<!--头部内容-->
+<header id="header" class="mui-bar mui-bar-nav">
+	    <span class="action-back" onclick="window.history.back()">
+	        <img src="../images/return.png" alt="">
+	    </span>
+    <h1 class="mui-title">动态运行</h1>
+</header>
+<div class="content">
+    <div class="content_main">
+        <div class="content-line">
+            <div class="info_list">
+                <img src="../images/pic1.png" alt="">
+                <div class="list_left">
+                    <p class="list_title">南京江宁申江有限公司</p>
+                    <p class="omg list_address">地址：南京市江宁区马田路萨古哈街道3栋2层3栋2层</p>
+                </div>
+                <button class="finish">已处理</button>
+            </div>
+            <div class="hide_content">
+                <ul>
+                    <li>
+                        <p class="omg">1、是否已配备一名以上专职安全生产管…</p>
+                        <button>待审核</button>
+                    </li>
+                    <li>
+                        <p class="omg">2、是否已配备一名以上专职安全生产管…</p>
+                        <button>待审核</button>
+                    </li>
+                    <li>
+                        <p class="omg">3、是否已配备一名以上专职安全生产管…</p>
+                        <button>待审核</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="content-line">
+            <div class="info_list">
+                <img src="../images/pic2.png" alt="">
+                <div class="list_left">
+                    <p class="list_title">南京江宁申江有限公司</p>
+                    <p class="omg list_address">地址：南京市江宁区马田路萨古哈街道3栋2层3栋2层</p>
+                </div>
+                <button class="finish">已处理</button>
+            </div>
+            <div class="hide_content">
+                <ul>
+                    <li>
+                        <p class="omg">1、是否已配备一名以上专职安全生产管…</p>
+                        <button>待审核</button>
+                    </li>
+                    <li>
+                        <p class="omg">2、是否已配备一名以上专职安全生产管…</p>
+                        <button>待审核</button>
+                    </li>
+                    <li>
+                        <p class="omg">3、是否已配备一名以上专职安全生产管…</p>
+                        <button>待审核</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="content-line">
+            <div class="info_list">
+                <img src="../images/pic3.png" alt="">
+                <div class="list_left">
+                    <p class="list_title">南京江宁申江有限公司</p>
+                    <p class="omg list_address">地址：南京市江宁区马田路萨古哈街道3栋2层3栋2层</p>
+                </div>
+                <button class="wait">待审评</button>
+            </div>
+            <div class="hide_content">
+                <ul>
+                    <li>
+                        <p class="omg">1、是否已配备一名以上专职安全生产管…</p>
+                        <button>待审核</button>
+                    </li>
+                    <li>
+                        <p class="omg">2、是否已配备一名以上专职安全生产管…</p>
+                        <button>待审核</button>
+                    </li>
+                    <li>
+                        <p class="omg">3、是否已配备一名以上专职安全生产管…</p>
+                        <button>待审核</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="content-line">
+            <div class="info_list">
+                <img src="../images/pic4.png" alt="">
+                <div class="list_left">
+                    <p class="list_title">南京江宁申江有限公司</p>
+                    <p class="omg list_address">地址：南京市江宁区马田路萨古哈街道3栋2层3栋2层</p>
+                </div>
+                <button class="no-finish">待处理</button>
+                <div class="dot"></div>
+            </div>
+            <div class="hide_content">
+                <ul>
+                    <li>
+                        <p class="omg">1、是否已配备一名以上专职安全生产管…</p>
+                        <button>待审核</button>
+                    </li>
+                    <li>
+                        <p class="omg">2、是否已配备一名以上专职安全生产管…</p>
+                        <button>待审核</button>
+                    </li>
+                    <li>
+                        <p class="omg">3、是否已配备一名以上专职安全生产管…</p>
+                        <button>待审核</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="content-line">
+            <div class="info_list">
+                <img src="../images/pic5.png" alt="">
+                <div class="list_left">
+                    <p class="list_title">南京江宁申江有限公司</p>
+                    <p class="omg list_address">地址：南京市江宁区马田路萨古哈街道3栋2层3栋2层</p>
+                </div>
+                <button class="finish">已处理</button>
+            </div>
+            <div class="hide_content">
+                <ul>
+                    <li>
+                        <p class="omg">1、是否已配备一名以上专职安全生产管…</p>
+                        <button>待审核</button>
+                    </li>
+                    <li>
+                        <p class="omg">2、是否已配备一名以上专职安全生产管…</p>
+                        <button>待审核</button>
+                    </li>
+                    <li>
+                        <p class="omg">3、是否已配备一名以上专职安全生产管…</p>
+                        <button>待审核</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="content-line">
+            <div class="info_list">
+                <img src="../images/pic6.png" alt="">
+                <div class="list_left">
+                    <p class="list_title">南京江宁申江有限公司</p>
+                    <p class="omg list_address">地址：南京市江宁区马田路萨古哈街道3栋2层3栋2层</p>
+                </div>
+                <button class="no-finish">待处理</button>
+                <div class="dot"></div>
+            </div>
+            <div class="hide_content">
+                <ul>
+                    <li>
+                        <p class="omg">1、是否已配备一名以上专职安全生产管…</p>
+                        <button>待审核</button>
+                    </li>
+                    <li>
+                        <p class="omg">2、是否已配备一名以上专职安全生产管…</p>
+                        <button>待审核</button>
+                    </li>
+                    <li>
+                        <p class="omg">3、是否已配备一名以上专职安全生产管…</p>
+                        <button>待审核</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="../js/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $(".hide_content li").click(function () {
+            window.location="answer.html"
+        })
+        $(".info_list").click(function() {
+            $(this).siblings(".hide_content").slideToggle();
+        });
+    });
+</script>
+</html>

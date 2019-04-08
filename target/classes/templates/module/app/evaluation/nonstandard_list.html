@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" type="text/css" th:href="@{ /css/app/mui.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{ /css/app/reset.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{ /css/app/Nonstandard.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{ /css/app/mui.picker.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{ /css/app/mui.poppicker.css}">
+</head>
+<body>
+	<div class="mui-content wrappers">
+		<div  id="pullrefresh" class="mui-scroll-wrapper main selected" >
+			<div class="mui-scroll " style="transform: translate3d(0px, 0px, 0px) translateZ(0px); top: -8%;">
+				<ul id="OA_task_1" class="mui-table-view" style="margin-top: 45px;">
+
+				</ul>
+			</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript" th:src="@{ /js/app/jquery-3.0.0.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/app/mui.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/app/nonstandard_list.js}"></script>
+<script th:src="@{/js/app/mui.picker.js}"></script>
+<script th:src="@{/js/app/mui.poppicker.js}"></script>
+<script th:inline="javascript">
+mui.init({
+	gestureConfig:{tap: true,swipe:true,drag:true,hold:true,release:false},
+	pullRefresh : {container:"#pullrefresh",//下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
+		up : {
+            style:'circle',//必选，下拉刷新样式，目前支持原生5+ ‘circle’ 样式
+            color:'#2BD009', //可选，默认“#2BD009” 下拉刷新控件颜色
+            height:'50px',//可选,默认50px.下拉刷新控件的高度,
+            range:'100px', //可选 默认100px,控件可下拉拖拽的范围
+            offset:'0px', //可选 默认0px,下拉刷新控件的起始位置
+            auto: false,//可选,默认false.首次加载自动上拉刷新一次
+			height:'50px',//可选.默认50.触发上拉加载拖动距离
+			callback :pullfresh //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+		},
+		down : {
+			auto:false,
+			offset:'0px', //可选 默认0px,下拉刷新控件的起始位置
+			callback :pullfreshdown //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+		}
+	}
+});
+    $(function(){
+        getCnd();
+        listDatail();
+    });
+    initDynamic({
+        "listUrl":"",
+        "searchDom":$("#searchText"),
+        "htmlTextDom":$("#OA_task_1"),
+        "companyId":[[${companyId}]],
+    });
+
+	/**
+	 * 下拉
+	 */
+	function pullfreshdown() {
+		dynamic.pageNum=1;
+        mui('#pullrefresh').pullRefresh().refresh(true);
+        getCnd();
+		listDatail();
+	}
+	/**
+	 * 上拉
+	 */
+	function pullfresh() {
+		dynamic.searchNextPage();
+	}
+</script>
+</html>

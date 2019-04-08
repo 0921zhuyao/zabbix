@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>Title</title>
+</head>
+<link rel="stylesheet" href="../css/result.css">
+<body>
+<!--头部内容-->
+<header id="header" class="mui-bar mui-bar-nav">
+    <span class="action-back" onclick="window.history.back()">
+        <img src="../images/return.png" alt="">
+    </span>
+    <h1 class="mui-title">企业自评</h1>
+    <span class="submit-btn">提交</span>
+</header>
+<div class="banner">
+    <span class="banner-text1">已 答</span>
+    <span class="banner-num">8</span>
+    <span class="banner-text2">道 / 17 道</span>
+</div>
+<ul class="list">
+    <li><span>1</span></li>
+    <li><span>2</span></li>
+    <li><span>3</span></li>
+    <li><span>4</span></li>
+    <li><span>5</span></li>
+    <li><span>6</span></li>
+    <li><span class="right">7</span></li>
+    <li><span class="right">8</span></li>
+    <li><span>9</span></li>
+    <li><span>10</span></li>
+    <li><span class="right">11</span></li>
+    <li><span class="right">12</span></li>
+    <li><span class="right">13</span></li>
+    <li><span class="right">14</span></li>
+    <li><span class="right">15</span></li>
+    <li><span class="right">16</span></li>
+    <li><span class="right">17</span></li>
+</ul>
+<button onclick="window.location='answer.html'">开 始</button>
+</body>
+<script src="../js/jquery-3.0.0.min.js"></script>
+<script>
+    $("li").click(function () {
+        window.location='answer.html'
+    })
+    var height=$(window).height();
+    $(".banner").height(height*230/667)
+    console.log($(".banner").height())
+</script>
+</html>

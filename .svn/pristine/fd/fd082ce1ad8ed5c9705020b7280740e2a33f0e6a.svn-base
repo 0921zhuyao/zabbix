@@ -1,0 +1,94 @@
+package com.jd.project.module.admin.enterprise.mapper;
+
+import java.util.List;
+import java.util.Map;
+
+import com.jd.framework.web.mapper.BaseMapper;
+import com.jd.project.module.admin.enterprise.entity.LdsEntity;
+
+/**
+ * 大中小微 数据层
+ * 
+ * @author TrevorPhilips
+ * @date 2018-12-20
+ */
+public interface LdsMapper extends BaseMapper<LdsEntity> {
+	/**
+	 * 查询大中小微信息
+	 * 
+	 * @param lmsId
+	 *            大中小微ID
+	 * @return 大中小微信息
+	 */
+	public LdsEntity selectLdsById(Long lmsId);
+
+	/**
+	 * 查询大中小微列表
+	 * 
+	 * @param lds
+	 *            大中小微信息
+	 * @return 大中小微集合
+	 */
+	public List<LdsEntity> selectLdsList(LdsEntity lds);
+
+	/**
+	 * 新增大中小微
+	 * 
+	 * @param lds
+	 *            大中小微信息
+	 * @return 结果
+	 */
+	public int insertLds(LdsEntity lds);
+
+	/**
+	 * 修改大中小微
+	 * 
+	 * @param lds
+	 *            大中小微信息
+	 * @return 结果
+	 */
+	public int updateLds(LdsEntity lds);
+
+	/**
+	 * 删除大中小微
+	 * 
+	 * @param lmsId
+	 *            大中小微ID
+	 * @return 结果
+	 */
+	public int deleteLdsById(Long lmsId);
+
+	/**
+	 * 批量删除大中小微
+	 * 
+	 * @param lmsIds
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
+	public int deleteLdsByIds(String[] lmsIds);
+
+	/**
+	 * 查询国民经济行业分类和指标名称
+	 * 
+	 * @param lmsId
+	 * @return
+	 */
+	public Map<String, Object> findLdsNationallEconomyByLmsId(Long lmsId);
+
+	/**
+	 * 通过国民经济行业分类编码查询对应得大中小微计算表达式
+	 * 
+	 * @param paramMap
+	 * @return
+	 */
+	public List<Map<String, Object>> queryLdsExpressionByNationallEconomyId(Map<String, Object> paramMap);
+
+	/**
+	 * 通过国民经济行业分类查找指标
+	 * 
+	 * @param nationallEconomy
+	 * @return
+	 */
+	public List<Map<String, Object>> findLdsByNationallEconomyId(String nationallEconomy);
+
+}

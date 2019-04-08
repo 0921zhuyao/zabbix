@@ -1,0 +1,102 @@
+package com.jd.project.module.admin.standard.mapper;
+
+import java.util.List;
+import java.util.Map;
+
+import com.jd.framework.web.mapper.BaseMapper;
+import com.jd.project.module.admin.standard.entity.CheckRegulationRefEntity;
+import com.jd.project.module.admin.standard.entity.CheckTableEntity;
+
+/**
+ * 检查项 数据层
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-21
+ */
+public interface CheckTableMapper extends BaseMapper<CheckTableEntity> {
+	/**
+	 * 查询检查项信息
+	 * 
+	 * @param checkTableId
+	 *            检查项ID
+	 * @return 检查项信息
+	 */
+	public CheckTableEntity selectCheckTableById(Long checkTableId);
+
+	/**
+	 * 查询检查项列表
+	 * 
+	 * @param checkTable
+	 *            检查项信息
+	 * @return 检查项集合
+	 */
+	public List<CheckTableEntity> selectCheckTableList(CheckTableEntity checkTable);
+
+	/**
+	 * 新增检查项
+	 * 
+	 * @param checkTable
+	 *            检查项信息
+	 * @return 结果
+	 */
+	public int insertCheckTable(CheckTableEntity checkTable);
+
+	/**
+	 * 修改检查项
+	 * 
+	 * @param checkTable
+	 *            检查项信息
+	 * @return 结果
+	 */
+	public int updateCheckTable(CheckTableEntity checkTable);
+
+	/**
+	 * 删除检查项
+	 * 
+	 * @param checkTableId
+	 *            检查项ID
+	 * @return 结果
+	 */
+	public int deleteCheckTableById(Long checkTableId);
+
+	/**
+	 * 批量删除检查项
+	 * 
+	 * @param checkTableIds
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
+	public int deleteCheckTableByIds(String[] checkTableIds);
+
+	/**
+	 * 查询检查项
+	 * 
+	 * @param checkTableNameId
+	 * @return
+	 */
+	public int countCheckTableByCheckTableNameId(Long checkTableNameId);
+
+	/**
+	 * 批量插入检查项与检查依据的关联关系
+	 * 
+	 * @param reList
+	 */
+	public int insertCheckRegulations(List<CheckRegulationRefEntity> reList);
+
+	/**
+	 * 校验检查项编码
+	 * 
+	 * @param checkTableCode
+	 * @return
+	 */
+	public CheckTableEntity checkCheckTableCodeUnique(String checkTableCode);
+
+	/**
+	 * 查询检查表的检查项
+	 * 
+	 * @param paramsMap
+	 * @return
+	 */
+	public List<Map<String, Object>> selectCheckTableIdsByCheckTableNameId(Map<String, Object> paramsMap);
+
+}

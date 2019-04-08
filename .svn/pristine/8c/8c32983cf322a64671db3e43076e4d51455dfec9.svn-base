@@ -1,0 +1,127 @@
+package com.jd.project.module.admin.standard.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.jd.common.support.Convert;
+import com.jd.common.utils.StringUtils;
+import com.jd.common.utils.security.ShiroUtils;
+import com.jd.framework.web.service.BaseService;
+import com.jd.project.module.admin.standard.entity.CheckTableNameEntity;
+import com.jd.project.module.admin.standard.mapper.CheckTableMapper;
+import com.jd.project.module.admin.standard.mapper.CheckTableNameMapper;
+
+/**
+ * 检查 服务层实现
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-21
+ */
+@Service
+@Transactional(rollbackFor = Exception.class)
+public class CheckTableNameServiceImpl extends BaseService implements CheckTableNameService {
+	@Autowired
+	private CheckTableNameMapper checkTableNameMapper;
+
+	@Autowired
+	private CheckTableMapper checkTableMapper;
+
+	/**
+	 * 查询检查信息
+	 * 
+	 * @param checkTableNameId
+	 *            检查ID
+	 * @return 检查信息
+	 */
+	@Override
+	public CheckTableNameEntity selectCheckTableNameById(Long checkTableNameId) {
+		return checkTableNameMapper.selectCheckTableNameById(checkTableNameId);
+	}
+
+	/**
+	 * 查询检查列表
+	 * 
+	 * @param checkTableName
+	 *            检查信息
+	 * @return 检查集合
+	 */
+	@Override
+	public List<CheckTableNameEntity> selectCheckTableNameList(CheckTableNameEntity checkTableName) {
+		return checkTableNameMapper.selectCheckTableNameList(checkTableName);
+	}
+
+	/**
+	 * 新增检查
+	 * 
+	 * @param checkTableName
+	 *            检查信息
+	 * @return 结果
+	 */
+	@Override
+	public int insertCheckTableName(CheckTableNameEntity checkTableName) {
+		checkTableName.setCreateBy(ShiroUtils.getLoginName());
+		checkTableName.setCreateUser(ShiroUtils.getUserId());
+		checkTableName.setUpdateBy(ShiroUtils.getLoginName());
+		checkTableName.setUpdateUser(ShiroUtils.getUserId());
+		return checkTableNameMapper.insertCheckTableName(checkTableName);
+	}
+
+	/**
+	 * 修改检查
+	 * 
+	 * @param checkTableName
+	 *            检查信息
+	 * @return 结果
+	 */
+	@Override
+	public int updateCheckTableName(CheckTableNameEntity checkTableName) {
+		checkTableName.setUpdateBy(ShiroUtils.getLoginName());
+		checkTableName.setUpdateUser(ShiroUtils.getUserId());
+		return checkTableNameMapper.updateCheckTableName(checkTableName);
+	}
+
+	/**
+	 * 删除检查对象
+	 * 
+	 * @param ids
+	 *            需要删除的数据ID
+	 * @return 结果
+	 * @throws Exception
+	 */
+	@Override
+	public int deleteCheckTableNameByIds(String ids) throws Exception {
+		Long[] checkTableNameIds = Convert.toLongArray(ids);
+		for (Long checkTableNameId : checkTableNameIds) {
+			CheckTableNameEntity checkTableName = selectCheckTableNameById(checkTableNameId);
+			if (checkTableMapper.countCheckTableByCheckTableNameId(checkTableNameId) > 0) {
+				throw new Exception(String.format("%1$s已分配,不能删除", checkTableName.getCheckTableName()));
+			}
+		}
+		return checkTableNameMapper.deleteCheckTableNameByIds(Convert.toStrArray(ids));
+	}
+
+	@Override
+	public List<CheckTableNameEntity> selectCheckTableNameAll() {
+
+		return checkTableNameMapper.selectCheckTableNameAll();
+	}
+
+	/**
+	 * 校验检查表名称
+	 */
+	@Override
+	public boolean checkCheckTableNameUnique(CheckTableNameEntity tableName) {
+		Long checkTableId = StringUtils.isNull(tableName.getCheckTableNameId()) ? -1L : tableName.getCheckTableNameId();
+		CheckTableNameEntity checkTableName = checkTableNameMapper
+				.checkCheckTableNameUnique(tableName.getCheckTableName());
+		if (StringUtils.isNotNull(checkTableName)
+				&& checkTableName.getCheckTableNameId().longValue() != checkTableId.longValue()) {
+			return false;
+		}
+		return true;
+	}
+
+}

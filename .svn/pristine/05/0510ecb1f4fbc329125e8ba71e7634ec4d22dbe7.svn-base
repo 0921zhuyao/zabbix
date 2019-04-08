@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jd.project.module.admin.evaluation.mapper.DynamicHistoryMapper">
+    
+    <resultMap type="DynamicHistoryEntity" id="DynamicHistoryResult">
+        <result property="dynamicsHistoryId"    column="DYNAMICS_HISTORY_ID"    />
+        <result property="checktableId"    column="CHECK_TABLE_ID"    />
+        <result property="dynamicStatus"    column="DYNAMIC_STATUS"    />
+        <result property="selfResult"    column="SELF_RESULT"    />
+        <result property="selfRemark"    column="SELF_REMARK"    />
+        <result property="reviewResult"    column="REVIEW_RESULT"    />
+        <result property="reviewRemark"    column="REVIEW_REMARK"    />
+        <result property="createTime"    column="CREATE_TIME"    />
+        <result property="updateTime"    column="UPDATE_TIME"    />
+        <result property="companyId"    column="COMPANY_ID"   />
+    </resultMap>
+	
+	<sql id="selectDynamicHistoryVo">
+        SELECT DYNAMICS_HISTORY_ID,COMPANY_ID, CHECK_TABLE_ID, DYNAMIC_STATUS, SELF_RESULT, SELF_REMARK, REVIEW_RESULT, REVIEW_REMARK, CREATE_TIME, UPDATE_TIME FROM T_DYNAMIC_HISTORY
+    </sql>
+	
+    <select id="selectDynamicHistoryList" parameterType="DynamicHistoryEntity" resultMap="DynamicHistoryResult">
+        <include refid="selectDynamicHistoryVo"/>
+        <where>  
+            <if test="dynamicsHistoryId != null and dynamicsHistoryId != ''"> AND DYNAMICS_HISTORY_ID = #{dynamicsHistoryId}</if>
+             <if test="checktableId != null and checktableId != ''"> AND CHECK_TABLE_ID = #{checktableId}</if>
+             <if test="dynamicStatus != null and dynamicStatus != ''"> AND DYNAMIC_STATUS = #{dynamicStatus}</if>
+             <if test="selfResult != null and selfResult != ''"> AND SELF_RESULT = #{selfResult}</if>
+             <if test="selfRemark != null and selfRemark != ''"> AND SELF_REMARK = #{selfRemark}</if>
+             <if test="reviewResult != null and reviewResult != ''"> AND REVIEW_RESULT = #{reviewResult}</if>
+             <if test="reviewRemark != null and reviewRemark != ''"> AND REVIEW_REMARK = #{reviewRemark}</if>
+             <if test="createTime != null and createTime != ''"> AND CREATE_TIME = #{createTime}</if>
+             <if test="updateTime != null and updateTime != ''"> AND UPDATE_TIME = #{updateTime}</if>
+             <if test="companyId != null and companyId != ''"> AND COMPANY_ID = #{companyId}</if>
+         </where>
+    </select>
+    
+    <select id="selectDynamicHistoryById" parameterType="Long" resultMap="DynamicHistoryResult">
+        <include refid="selectDynamicHistoryVo"/>
+        WHERE DYNAMICS_HISTORY_ID = #{dynamicsHistoryId}
+    </select>
+        
+    <insert id="insertDynamicHistory" parameterType="DynamicHistoryEntity">
+        INSERT INTO T_DYNAMIC_HISTORY
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="dynamicsHistoryId != null and dynamicsHistoryId != '' ">DYNAMICS_HISTORY_ID,</if>
+			<if test="checktableId != null and checktableId != '' ">CHECK_TABLE_ID,</if>
+			<if test="dynamicStatus != null and dynamicStatus != '' ">DYNAMIC_STATUS,</if>
+			<if test="selfResult != null and selfResult != '' ">SELF_RESULT,</if>
+			<if test="selfRemark != null and selfRemark != '' ">SELF_REMARK,</if>
+			<if test="reviewResult != null and reviewResult != '' ">REVIEW_RESULT,</if>
+			<if test="reviewRemark != null and reviewRemark != '' ">REVIEW_REMARK,</if>
+			<if test="createTime != null and createTime != '' ">CREATE_TIME,</if>
+			<if test="updateTime != null and updateTime != '' ">UPDATE_TIME,</if>
+            <if test="companyId != null and companyId != ''"> COMPANY_ID,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="dynamicsHistoryId != null and dynamicsHistoryId != ''">#{dynamicsHistoryId},</if>
+			<if test="checktableId != null and checktableId != ''">#{checktableId},</if>
+			<if test="dynamicStatus != null and dynamicStatus != ''">#{dynamicStatus},</if>
+			<if test="selfResult != null and selfResult != ''">#{selfResult},</if>
+			<if test="selfRemark != null and selfRemark != ''">#{selfRemark},</if>
+			<if test="reviewResult != null and reviewResult != ''">#{reviewResult},</if>
+			<if test="reviewRemark != null and reviewRemark != ''">#{reviewRemark},</if>
+			<if test="createTime != null and createTime != ''">#{createTime},</if>
+			<if test="updateTime != null and updateTime != ''">#{updateTime},</if>
+            <if test="companyId != null and companyId != ''"> COMPANY_ID,</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateDynamicHistory" parameterType="DynamicHistoryEntity">
+        UPDATE T_DYNAMIC_HISTORY
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="checktableId != null  ">CHECK_TABLE_ID = #{checktableId},</if>
+            <if test="dynamicStatus != null  ">DYNAMIC_STATUS = #{dynamicStatus},</if>
+            <if test="selfResult != null  ">SELF_RESULT = #{selfResult},</if>
+            <if test="selfRemark != null  AND selfRemark != ''  ">SELF_REMARK = #{selfRemark},</if>
+            <if test="reviewResult != null  ">REVIEW_RESULT = #{reviewResult},</if>
+            <if test="reviewRemark != null  AND reviewRemark != ''  ">REVIEW_REMARK = #{reviewRemark},</if>
+            <if test="createTime != null  ">CREATE_TIME = #{createTime},</if>
+            <if test="updateTime != null  ">UPDATE_TIME = #{updateTime},</if>
+            <if test="companyId != null and companyId != ''">COMPANY_ID = #{companyId},</if>
+        </trim>
+        WHERE DYNAMICS_HISTORY_ID = #{dynamicsHistoryId}
+    </update>
+
+	<delete id="deleteDynamicHistoryById" parameterType="Long">
+        DELETE FROM T_DYNAMIC_HISTORY WHERE DYNAMICS_HISTORY_ID = #{dynamicsHistoryId}
+    </delete>
+	
+    <delete id="deleteDynamicHistoryByIds" parameterType="String">
+        DELETE FROM T_DYNAMIC_HISTORY WHERE DYNAMICS_HISTORY_ID IN 
+        <foreach item="dynamicsHistoryId" collection="array" open="(" separator="," close=")">
+            #{dynamicsHistoryId}
+        </foreach>
+    </delete>
+    
+</mapper>

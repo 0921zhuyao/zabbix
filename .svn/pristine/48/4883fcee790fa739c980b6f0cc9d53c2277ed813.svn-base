@@ -1,0 +1,117 @@
+package com.jd.project.module.admin.enterprise.mapper;
+
+import java.util.List;
+
+import com.jd.project.module.admin.enterprise.entity.QyjcxxEntity;
+
+/**
+ * 企业基础 数据层
+ * 
+ * @author xml
+ * @date 2018-11-23
+ */
+public interface QyjcxxMapper {
+	/**
+	 * 查询企业基础信息
+	 * 
+	 * @param id
+	 *            企业基础ID
+	 * @return 企业基础信息
+	 */
+	public QyjcxxEntity selectqyjcxxById(String id);
+
+	/**
+	 * 查询企业基础列表
+	 * 
+	 * @param qyjcxx
+	 *            企业基础信息
+	 * @return 企业基础集合
+	 */
+	public List<QyjcxxEntity> selectqyjcxxList(QyjcxxEntity qyjcxx);
+
+	/**
+	 * 新增企业基础
+	 * 
+	 * @param qyjcxx
+	 *            企业基础信息
+	 * @return 结果
+	 */
+	public int insertqyjcxx(QyjcxxEntity qyjcxx);
+
+	/**
+	 * 批量新增企业基础
+	 *
+	 * @param qyjcxx
+	 *            企业基础信息
+	 * @return 结果
+	 */
+	public int insertqyjcxxBatch(List<QyjcxxEntity> qyjcxx);
+
+	/**
+	 * 修改企业基础
+	 * 
+	 * @param qyjcxx
+	 *            企业基础信息
+	 * @return 结果
+	 */
+	public int updateqyjcxx(QyjcxxEntity qyjcxx);
+
+	/**
+	 * 手机端修改企业基础
+	 *
+	 * @param qyjcxx
+	 *            企业基础信息
+	 * @return 结果
+	 */
+	public int updateqyjcxxForMobile(QyjcxxEntity qyjcxx);
+
+	/**
+	 * 删除企业基础
+	 * 
+	 * @param id
+	 *            企业基础ID
+	 * @return 结果
+	 */
+	public int deleteqyjcxxById(String id);
+
+	/**
+	 * 批量删除企业基础
+	 * 
+	 * @param ids
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
+	public int deleteqyjcxxByIds(String[] ids);
+
+	/**
+	 * 数据重复性校验
+	 *
+	 * @param qx
+	 *            qx封装所有需要验证的字段，以or的形式精选
+	 * @return 结果
+	 */
+	public int validatorByCnd(QyjcxxEntity qx);
+
+	/**
+	 * 手机端查询企业基础列表
+	 *
+	 * @param qyjcxx
+	 *            企业基础信息
+	 * @return 企业基础集合
+	 */
+	public List<QyjcxxEntity> selectMobileQyjcxxList(QyjcxxEntity qyjcxx);
+
+	/**
+	 * 查询在任务详情表里没有的企业
+	 * 
+	 * @param qyjcxx
+	 * @return
+	 */
+	public List<QyjcxxEntity> selectCheckTableCompanyList(QyjcxxEntity qyjcxx);
+
+	/**
+	 * 根据主管部门获取改部门下所有企业
+	 */
+	public List<QyjcxxEntity> getTotalEnt(String orgCode);
+
+}

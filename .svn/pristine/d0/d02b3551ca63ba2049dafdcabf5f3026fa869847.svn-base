@@ -1,0 +1,102 @@
+package com.jd.project.module.admin.enterprise.entity;
+
+import java.util.Date;
+
+import com.jd.framework.web.domain.BasisEntity;
+    
+/**
+ * 企业专项治理表 T_SPECIAL_TREATMENT
+ * 
+ * @author TrevorPhilips
+ * @date 2018-12-04
+ */
+public class SpecialTreatmentEntity extends BasisEntity {
+	private static final long serialVersionUID = 1L;
+	
+	/**  */
+	private Long id;
+	/** 企业ID */
+	private String companyId;
+	/** 专项治理编码
+            可参照码表中的专项治理表列表 */
+	private Long code;
+	/** 备注 */
+	private String remark;
+	/**  */
+	private Long createUser;
+	/**  */
+	private Date createTime;
+	/** 最后更新人 */
+	private Long updateUser;
+	/**  */
+	private Date updateTime;
+	/** 0 未删 1 已删 */
+	private Long isDelete;
+	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Long getCode() {
+		return code;
+	}
+
+	public void setCode(Long code) {
+		this.code = code;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public void setCompanyId(String companyId) {
+		this.companyId = companyId;
+	}
+
+	public String getCompanyId() {
+		return companyId;
+	}
+	public void setCreateUser(Long createUser) {
+		this.createUser = createUser;
+	}
+
+	public Long getCreateUser() {
+		return createUser;
+	}
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+	public void setUpdateUser(Long updateUser) {
+		this.updateUser = updateUser;
+	}
+
+	public Long getUpdateUser() {
+		return updateUser;
+	}
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
+
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+	public void setIsDelete(Long isDelete) {
+		this.isDelete = isDelete;
+	}
+
+	public Long getIsDelete() {
+		return isDelete;
+	}
+}

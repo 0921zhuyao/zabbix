@@ -1,0 +1,66 @@
+package com.jd.project.module.admin.evaluation.entity;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+import com.jd.framework.web.domain.BasisEntity;
+
+/**
+ * 企业自评记录附件表 T_COMPANY_CHECKTABLE_FILES
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-29
+ */
+public class CompanyChecktableFilesEntity extends BasisEntity {
+	private static final long serialVersionUID = 1L;
+
+	/** 企业自评记录附件ID */
+	private Long checktableFilesId;
+	/** 动态运行记录ID */
+	private Long dynamicsId;
+	/** 企业自评记录ID */
+	private Long checktableId;
+	/** 结果分类：0 自评 1 复核 2定级 */
+	private Integer checktableFilesType;
+	/** 文件地址 */
+	private String filePath;
+
+	public void setChecktableFilesId(Long checktableFilesId) {
+		this.checktableFilesId = checktableFilesId;
+	}
+
+	public Long getChecktableFilesId() {
+		return checktableFilesId;
+	}
+
+	public void setDynamicsId(Long dynamicsId) {
+		this.dynamicsId = dynamicsId;
+	}
+
+	public Long getDynamicsId() {
+		return dynamicsId;
+	}
+
+	public void setChecktableId(Long checktableId) {
+		this.checktableId = checktableId;
+	}
+
+	public Long getChecktableId() {
+		return checktableId;
+	}
+
+	public void setChecktableFilesType(Integer checktableFilesType) {
+		this.checktableFilesType = checktableFilesType;
+	}
+
+	public Integer getChecktableFilesType() {
+		return checktableFilesType;
+	}
+
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
+	}
+
+	public String getFilePath() {
+		return filePath;
+	}
+}

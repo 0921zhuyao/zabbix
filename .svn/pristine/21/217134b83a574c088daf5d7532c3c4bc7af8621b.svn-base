@@ -1,0 +1,74 @@
+package com.jd.project.module.admin.standard.service;
+
+import java.util.List;
+
+import com.jd.project.module.admin.standard.entity.CheckContentTypeEntity;
+
+/**
+ * 检查内容分类 服务层
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-21
+ */
+public interface CheckContentTypeService {
+	/**
+	 * 查询检查内容分类信息
+	 * 
+	 * @param contentTypeId
+	 *            检查内容分类ID
+	 * @return 检查内容分类信息
+	 */
+	public CheckContentTypeEntity selectCheckContentTypeById(Long contentTypeId);
+
+	/**
+	 * 查询检查内容分类列表
+	 * 
+	 * @param checkContentType
+	 *            检查内容分类信息
+	 * @return 检查内容分类集合
+	 */
+	public List<CheckContentTypeEntity> selectCheckContentTypeList(CheckContentTypeEntity checkContentType);
+
+	/**
+	 * 新增检查内容分类
+	 * 
+	 * @param checkContentType
+	 *            检查内容分类信息
+	 * @return 结果
+	 */
+	public int insertCheckContentType(CheckContentTypeEntity checkContentType);
+
+	/**
+	 * 修改检查内容分类
+	 * 
+	 * @param checkContentType
+	 *            检查内容分类信息
+	 * @return 结果
+	 */
+	public int updateCheckContentType(CheckContentTypeEntity checkContentType);
+
+	/**
+	 * 删除检查内容分类信息
+	 * 
+	 * @param ids
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
+	public int deleteCheckContentTypeByIds(String ids) throws Exception;
+
+	/**
+	 * 根据id查询子数据
+	 *
+	 * @param id
+	 *            父节点ID
+	 * @return CheckContentTypeEntity
+	 */
+	public List<CheckContentTypeEntity> selectCheckContentTypeByParent(Long id);
+
+	/**
+	 * 校验分类编码
+	 * @param checkContentType
+	 * @return
+	 */
+	public boolean checkContentTypeCodeUnique(CheckContentTypeEntity checkContentType);
+}

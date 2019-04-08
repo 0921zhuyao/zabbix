@@ -1,0 +1,56 @@
+package com.jd.project.module.app.lsUser.service;
+
+import com.jd.framework.web.domain.Result;
+import com.jd.project.module.app.lsUser.entity.LsUserEntity;
+import com.jd.project.module.app.lsUser.entity.LsUserModel;
+
+import java.util.List;
+
+/**
+ * 系统用户 服务层
+ * 
+ * @author zaq
+ * @date 2018-12-03
+ */
+public interface LsUserService {
+	/**
+     * 查询系统用户信息
+     * 
+     * @param userId 系统用户ID
+     * @return 系统用户信息
+     */
+	LsUserModel selectById(String userId);
+	
+	/**
+     * 查询系统用户列表
+     * 
+     * @param user 系统用户信息
+     * @return 系统用户集合
+     */
+	List<LsUserEntity> selectList(LsUserEntity user);
+	
+	/**
+     * 新增系统用户
+     * 
+     * @param user 系统用户信息
+     * @return 结果
+     */
+	int insert(LsUserEntity user);
+	
+	/**
+     * 修改系统用户
+     * 
+     * @param user 系统用户信息
+     * @return 结果
+     */
+	int update(LsUserEntity user);
+		
+	/**
+     * 删除系统用户信息
+     * 
+     * @param ids 需要删除的数据ID
+     * @return 结果
+     */
+	int deleteByIds(String ids);
+	
+}

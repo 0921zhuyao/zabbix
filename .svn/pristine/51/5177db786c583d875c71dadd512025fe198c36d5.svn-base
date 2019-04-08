@@ -1,0 +1,92 @@
+package com.jd.project.module.admin.standard.mapper;
+
+import java.util.List;
+
+import com.jd.framework.web.mapper.BaseMapper;
+import com.jd.project.module.admin.standard.entity.CheckTableNameEntity;
+
+/**
+ * 检查 数据层
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-21
+ */
+public interface CheckTableNameMapper extends BaseMapper<CheckTableNameEntity> {
+	/**
+	 * 查询检查信息
+	 * 
+	 * @param checkTableNameId
+	 *            检查ID
+	 * @return 检查信息
+	 */
+	public CheckTableNameEntity selectCheckTableNameById(Long checkTableNameId);
+
+	/**
+	 * 查询检查列表
+	 * 
+	 * @param checkTableName
+	 *            检查信息
+	 * @return 检查集合
+	 */
+	public List<CheckTableNameEntity> selectCheckTableNameList(CheckTableNameEntity checkTableName);
+
+	/**
+	 * 新增检查
+	 * 
+	 * @param checkTableName
+	 *            检查信息
+	 * @return 结果
+	 */
+	public int insertCheckTableName(CheckTableNameEntity checkTableName);
+
+	/**
+	 * 修改检查
+	 * 
+	 * @param checkTableName
+	 *            检查信息
+	 * @return 结果
+	 */
+	public int updateCheckTableName(CheckTableNameEntity checkTableName);
+
+	/**
+	 * 删除检查
+	 * 
+	 * @param checkTableNameId
+	 *            检查ID
+	 * @return 结果
+	 */
+	public int deleteCheckTableNameById(Long checkTableNameId);
+
+	/**
+	 * 批量删除检查
+	 * 
+	 * @param checkTableNameIds
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
+	public int deleteCheckTableNameByIds(String[] checkTableNameIds);
+
+	/**
+	 * 查询检查表详情
+	 * 
+	 * @return
+	 */
+	public List<CheckTableNameEntity> selectCheckTableNameAll();
+
+	/**
+	 * 校验检查表名称
+	 * 
+	 * @param checkTableName
+	 * @return
+	 */
+	public CheckTableNameEntity checkCheckTableNameUnique(String checkTableName);
+
+	/**
+	 * 查询与企业相关的检查表
+	 * 
+	 * @param enterpriseId
+	 * @return
+	 */
+	public List<CheckTableNameEntity> queryCheckTablesByCompany(String enterpriseId);
+
+}

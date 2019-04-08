@@ -1,0 +1,85 @@
+package com.jd.project.module.admin.standard.mapper;
+
+import java.util.List;
+
+import com.jd.framework.web.mapper.BaseMapper;
+import com.jd.project.module.admin.standard.entity.CheckTablePropEntity;
+
+/**
+ * 检查检查属性 数据层
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-21
+ */
+public interface CheckTablePropMapper extends BaseMapper<CheckTablePropEntity> {
+	/**
+	 * 查询检查检查属性信息
+	 * 
+	 * @param propId
+	 *            检查检查属性ID
+	 * @return 检查检查属性信息
+	 */
+	public CheckTablePropEntity selectCheckTablePropById(Long propId);
+
+	/**
+	 * 查询检查检查属性列表
+	 * 
+	 * @param checkTableProp
+	 *            检查检查属性信息
+	 * @return 检查检查属性集合
+	 */
+	public List<CheckTablePropEntity> selectCheckTablePropList(CheckTablePropEntity checkTableProp);
+
+	/**
+	 * 新增检查检查属性
+	 * 
+	 * @param checkTableProp
+	 *            检查检查属性信息
+	 * @return 结果
+	 */
+	public int insertCheckTableProp(CheckTablePropEntity checkTableProp);
+
+	/**
+	 * 修改检查检查属性
+	 * 
+	 * @param checkTableProp
+	 *            检查检查属性信息
+	 * @return 结果
+	 */
+	public int updateCheckTableProp(CheckTablePropEntity checkTableProp);
+
+	/**
+	 * 删除检查检查属性
+	 * 
+	 * @param propId
+	 *            检查检查属性ID
+	 * @return 结果
+	 */
+	public int deleteCheckTablePropById(Long propId);
+
+	/**
+	 * 批量删除检查检查属性
+	 * 
+	 * @param propIds
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
+	public int deleteCheckTablePropByIds(String[] propIds);
+
+	/**
+	 * 批量新增检查属性
+	 * 
+	 * @param propList
+	 * @return
+	 */
+	public int insertCheckTableProps(List<CheckTablePropEntity> propList);
+
+	/**
+	 * 删除原有关联关系
+	 * 
+	 * @param checkTableId
+	 * @return
+	 */
+	public int deletCheckTablePropByCheckTableId(Long checkTableId);
+
+}

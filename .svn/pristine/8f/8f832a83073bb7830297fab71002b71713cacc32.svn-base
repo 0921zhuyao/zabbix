@@ -1,0 +1,265 @@
+package com.jd.project.module.admin.enterprise.service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.jd.common.exception.base.QyjcxxException;
+import com.jd.common.support.Convert;
+import com.jd.common.utils.IdWorker;
+import com.jd.common.utils.StringUtils;
+import com.jd.common.utils.security.ShiroUtils;
+import com.jd.project.module.admin.enterprise.entity.QyjcxxEntity;
+import com.jd.project.module.admin.enterprise.entity.SpecialTreatmentEntity;
+import com.jd.project.module.admin.enterprise.mapper.QyjcxxMapper;
+import com.jd.project.module.admin.enterprise.mapper.SpecialTreatmentMapper;
+import com.jd.project.system.dict.domain.DictData;
+import com.jd.project.system.dict.service.IDictDataService;
+
+/**
+ * 企业基础 服务层实现
+ * 
+ * @author xml
+ * @date 2018-11-23
+ */
+@Service
+@Transactional(rollbackFor = Exception.class)
+@PropertySource(value = { "classpath:application.yml" })
+@ConfigurationProperties(prefix = "dict")
+public class QyjcxxServiceImpl implements QyjcxxService {
+	// 获取application.yml中dict下的qyjcxxDict的配置
+	private String[] qyjcxxDict;
+
+	@Autowired
+	private QyjcxxMapper qyjcxxMapper;
+	@Autowired
+	private IDictDataService iDictDataService;
+
+	@Autowired
+	private SpecialTreatmentMapper specialTreatmentMapper;
+
+	/**
+	 * 查询企业基础信息
+	 * 
+	 * @param id
+	 *            企业基础ID
+	 * @return 企业基础信息
+	 */
+	@Override
+	public QyjcxxEntity selectqyjcxxById(String id) {
+		return qyjcxxMapper.selectqyjcxxById(id);
+	}
+
+	/**
+	 * 查询企业基础列表
+	 * 
+	 * @param qyjcxx
+	 *            企业基础信息
+	 * @return 企业基础集合
+	 */
+	@Override
+	public List<QyjcxxEntity> selectqyjcxxList(QyjcxxEntity qyjcxx) {
+		return qyjcxxMapper.selectqyjcxxList(qyjcxx);
+	}
+
+	/**
+	 * 新增企业基础
+	 * 
+	 * @param qyjcxx
+	 *            企业基础信息
+	 * @return 结果
+	 */
+	@Override
+	public int insertqyjcxx(QyjcxxEntity qyjcxx) {
+		createID(qyjcxx);
+		String msg = validator(qyjcxx);
+		if (msg != null) {
+			throw new QyjcxxException(msg);
+		}
+		return qyjcxxMapper.insertqyjcxx(qyjcxx);
+	}
+
+	@Override
+	public int insertqyjcxxBatch(List<QyjcxxEntity> qyjcxx) {
+		int i=qyjcxxMapper.insertqyjcxxBatch(qyjcxx);
+		if(i!=qyjcxx.size()){
+			throw new QyjcxxException("批量插入有误");
+		}
+		return 1;
+	}
+
+	/**
+	 * 修改企业基础
+	 * 
+	 * @param qyjcxx
+	 *            企业基础信息
+	 * @return 结果
+	 */
+	@Override
+	public int updateqyjcxx(QyjcxxEntity qyjcxx) {
+		return qyjcxxMapper.updateqyjcxx(qyjcxx);
+	}
+
+	/**
+	 * 手机端修改企业基础
+	 *
+	 * @param qyjcxx
+	 *            企业基础信息
+	 * @return 结果
+	 */
+	@Override
+	public int updateqyjcxxForMobile(QyjcxxEntity qyjcxx) {
+		int flag = 0;
+		String msg = validator(qyjcxx);
+		if (msg != null) {
+			throw new QyjcxxException(msg);
+		}
+		flag = qyjcxxMapper.updateqyjcxxForMobile(qyjcxx);
+		String specialTreatmentStr = qyjcxx.getSpecialTreatmentStr();
+		if (StringUtils.isNotEmpty(specialTreatmentStr)) {
+			Long userId = ShiroUtils.getUserId();
+			List<SpecialTreatmentEntity> list = new ArrayList<>();
+			String[] str = specialTreatmentStr.split(",");
+			for (String string : str) {
+				SpecialTreatmentEntity entity = new SpecialTreatmentEntity();
+				entity.setCompanyId(qyjcxx.getId());
+				entity.setCode(Long.valueOf(string));
+				entity.setCreateUser(userId);
+				entity.setUpdateUser(userId);
+				list.add(entity);
+			}
+			specialTreatmentMapper.deleteSpecialTreatmentByCompanyId(qyjcxx.getId());
+			flag = specialTreatmentMapper.insertSpecialTreatmentBatch(list);
+		} else {
+			specialTreatmentMapper.deleteSpecialTreatmentByCompanyId(qyjcxx.getId());
+		}
+		return flag;
+	}
+
+	/**
+	 * 删除企业基础对象
+	 * 
+	 * @param ids
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
+	@Override
+	@Transactional
+	public int deleteqyjcxxByIds(String ids) {
+		return qyjcxxMapper.deleteqyjcxxByIds(Convert.toStrArray(ids));
+	}
+
+	/**
+	 * qyjcxx表主键是32位uuid
+	 * 
+	 * @param qyjcxx
+	 */
+	private void createID(QyjcxxEntity qyjcxx) {
+		qyjcxx.setId(IdWorker.get32UUID());
+	}
+
+	/**
+	 * 插入前数据库校验
+	 * 
+	 * @param qyjcxx
+	 */
+	@Override
+	public String validator(QyjcxxEntity qyjcxx) {
+		QyjcxxEntity qx = new QyjcxxEntity();
+		// 有id代表是更新，重复校验需要过滤自己本身
+		if (!StringUtils.isEmpty(qyjcxx.getId())) {
+			qx.setId(qyjcxx.getId());
+		}
+		int i = 0;
+		if (StringUtils.isNotEmpty(qyjcxx.getScjydwqc())) {
+			qx.setScjydwqc(qyjcxx.getScjydwqc());
+			i = qyjcxxMapper.validatorByCnd(qx);
+			if (i > 0) {
+				return "企业名称重复";
+			}
+			qx.setScjydwqc("");
+		}
+		/*if (StringUtils.isNotEmpty(qyjcxx.getTyshxydm())) {
+			qx.setTyshxydm(qyjcxx.getTyshxydm());
+			i = qyjcxxMapper.validatorByCnd(qx);
+			if (i > 0) {
+				return "统一社会信用代码重复";
+			}
+			qx.setTyshxydm("");
+		}*/
+		return null;
+	}
+
+	/**
+	 * 企业基础信息有关的字典查询
+	 * 
+	 * @param
+	 */
+	public Map<String, Object> dictMapForQyjcxx() {
+		Map<String, Object> map = new HashMap<>();
+		List<DictData> dictDatas = iDictDataService.selectDictDataListByType(qyjcxxDict);
+		if (dictDatas != null && dictDatas.size() != 0) {
+			for (String type : qyjcxxDict) {
+				map.put(type,
+						dictDatas.stream().filter(x -> type.equals(x.getDictType())).collect(Collectors.toList()));
+			}
+		}
+		return map;
+	}
+
+	/**
+	 * 用于spring将配置文件的值注入qyjcxxDict字段
+	 * 
+	 * @param
+	 */
+	public void setQyjcxxDict(String[] qyjcxxDict) {
+		this.qyjcxxDict = qyjcxxDict;
+	}
+
+	/**
+	 * 手机端查询企业基础列表
+	 *
+	 * @param qyjcxx
+	 *            企业基础信息
+	 * @return 企业基础集合
+	 */
+	@Override
+	public List<QyjcxxEntity> selectMobileQyjcxxList(QyjcxxEntity qyjcxx) {
+		return qyjcxxMapper.selectMobileQyjcxxList(qyjcxx);
+	}
+
+	/**
+	 * 通过companyId查询专项治理编码
+	 * 
+	 * @param enterpriseId
+	 * @return
+	 */
+	@Override
+	public List<SpecialTreatmentEntity> querySpecialTreatmentCodeBycompanyId(String enterpriseId) {
+		return specialTreatmentMapper.querySpecialTreatmentCodeBycompanyId(enterpriseId);
+	}
+
+	/**
+	 * 查询在任务详情表里没有的企业
+	 */
+	@Override
+	public List<QyjcxxEntity> selectCheckTableCompanyList(QyjcxxEntity qyjcxx) {
+		List<QyjcxxEntity> qyjcxxEntities = qyjcxxMapper.selectCheckTableCompanyList(qyjcxx);
+		return qyjcxxEntities;
+	}
+
+	/**
+	 * 查询部门下所有的企业
+	 */
+	public List<QyjcxxEntity> getTotalEnt(String orgCode){
+		return  qyjcxxMapper.getTotalEnt(orgCode);
+	}
+}

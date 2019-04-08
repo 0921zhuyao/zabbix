@@ -1,0 +1,107 @@
+package com.jd.project.module.admin.enterprise.controller;
+
+
+import com.jd.project.module.admin.enterprise.entity.DmJnajEntity;
+import com.jd.project.module.admin.enterprise.service.DmJnajService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import com.jd.framework.aspectj.lang.annotation.Log;
+import com.jd.framework.aspectj.lang.enums.BusinessType;
+import com.jd.framework.web.controller.BaseController;
+import com.jd.framework.web.page.TableDataInfo;
+import com.jd.framework.web.domain.Result;
+
+import java.util.List;
+
+/**
+ * 所在地区 信息操作处理
+ * 
+ * @author TrevorPhilips
+ * @date 2019-01-04
+ */
+@Controller
+@RequestMapping("/module/dmJnaj")
+public class DmJnajController extends BaseController{
+    private String prefix = "module/dmJnaj";
+	
+	@Autowired
+	private DmJnajService dmJnajService;
+	
+	@RequiresPermissions("module:dmJnaj:view")
+	@GetMapping()
+	public String initList() {
+	    return prefix + "/dmJnaj_list";
+	}
+	
+	/**
+	 * 查询所在地区列表
+	 */
+	@RequiresPermissions("module:dmJnaj:list")
+	@PostMapping("/query")
+	@ResponseBody
+	public TableDataInfo query(DmJnajEntity dmJnaj) {
+		startPage();
+        List<DmJnajEntity> list = dmJnajService.selectDmJnajList(dmJnaj);
+		return getDataTable(list);
+	}
+	
+	/**
+	 * 新增所在地区
+	 */
+	@GetMapping("/initAdd")
+	public String initAdd(ModelMap mmap) {
+	    mmap.put("dmJnaj",new DmJnajEntity());
+	    return prefix + "/dmJnaj_edit";
+	}
+	
+	/**
+	 * 新增保存所在地区
+	 */
+	@RequiresPermissions("module:dmJnaj:add")
+	@Log(title = "所在地区", businessType = BusinessType.INSERT)
+	@PostMapping("/add")
+	@ResponseBody
+	public Result add(DmJnajEntity dmJnaj) {		
+		return toAjax(dmJnajService.insertDmJnaj(dmJnaj));
+	}
+
+	/**
+	 * 修改所在地区
+	 */
+	@GetMapping("/initEdit/{id}")
+	public String initEdit(@PathVariable("id") Long id, ModelMap mmap) {
+		DmJnajEntity dmJnaj = dmJnajService.selectDmJnajById(id);
+		mmap.put("dmJnaj", dmJnaj);
+	    return prefix + "/dmJnaj_edit";
+	}
+	
+	/**
+	 * 修改保存所在地区
+	 */
+	@RequiresPermissions("module:dmJnaj:edit")
+	@Log(title = "所在地区", businessType = BusinessType.UPDATE)
+	@PostMapping("/edit")
+	@ResponseBody
+	public Result edit(DmJnajEntity dmJnaj) {		
+		return toAjax(dmJnajService.updateDmJnaj(dmJnaj));
+	}
+	
+	/**
+	 * 删除所在地区
+	 */
+	@RequiresPermissions("module:dmJnaj:remove")
+	@Log(title = "所在地区", businessType = BusinessType.DELETE)
+	@PostMapping( "/del")
+	@ResponseBody
+	public Result del(String ids) {		
+		return toAjax(dmJnajService.deleteDmJnajByIds(ids));
+	}
+	
+}

@@ -1,0 +1,67 @@
+package com.jd.project.module.admin.enterprise.entity;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+import com.jd.framework.web.domain.BasisEntity;
+import java.util.Date;
+
+/**
+ * 经济类型表 t_dm_jnaj_jjlx
+ * 
+ * @author TrevorPhilips
+ * @date 2019-01-04
+ */
+public class DmJnajJjlxEntity extends BasisEntity {
+	private static final long serialVersionUID = 1L;
+	
+	/** 主键 */
+	private Long id;
+	/** 代码项编码 */
+	private String dmx;
+	/** 代码类编码 */
+	private String dml;
+	/** 描述 */
+	private String mc;
+	/** 父类ID */
+	private String pid;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getDmx() {
+		return dmx;
+	}
+
+	public void setDmx(String dmx) {
+		this.dmx = dmx;
+	}
+
+	public String getDml() {
+		return dml;
+	}
+
+	public void setDml(String dml) {
+		this.dml = dml;
+	}
+
+	public String getMc() {
+		return mc;
+	}
+
+	public void setMc(String mc) {
+		this.mc = mc;
+	}
+
+	public String getPid() {
+		return pid;
+	}
+
+	public void setPid(String pid) {
+		this.pid = pid;
+	}
+}

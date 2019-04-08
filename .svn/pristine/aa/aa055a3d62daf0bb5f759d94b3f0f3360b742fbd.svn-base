@@ -1,0 +1,105 @@
+package com.jd.project.module.admin.evaluation.controller;
+
+import java.util.List;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import com.jd.framework.aspectj.lang.annotation.Log;
+import com.jd.framework.aspectj.lang.enums.BusinessType;
+import com.jd.framework.web.controller.BaseController;
+import com.jd.framework.web.page.TableDataInfo;
+import com.jd.project.module.admin.evaluation.entity.CompanyChecktableEntity;
+import com.jd.project.module.admin.evaluation.service.CompanyChecktableService;
+import com.jd.framework.web.domain.Result;
+
+/**
+ * 企业自评记录 信息操作处理
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-29
+ */
+@Controller
+@RequestMapping("/module/companyChecktable")
+public class CompanyChecktableController extends BaseController{
+    private String prefix = "module/companyChecktable";
+	
+	@Autowired
+	private CompanyChecktableService companyChecktableService;
+	
+	@RequiresPermissions("module:companyChecktable:view")
+	@GetMapping()
+	public String initList() {
+	    return prefix + "/companyChecktable_list";
+	}
+	
+	/**
+	 * 查询企业自评记录列表
+	 */
+	@RequiresPermissions("module:companyChecktable:list")
+	@PostMapping("/query")
+	@ResponseBody
+	public TableDataInfo query(CompanyChecktableEntity companyChecktable) {
+		startPage();
+        List<CompanyChecktableEntity> list = companyChecktableService.selectCompanyChecktableList(companyChecktable);
+		return getDataTable(list);
+	}
+	
+	/**
+	 * 新增企业自评记录
+	 */
+	@GetMapping("/initAdd")
+	public String initAdd(ModelMap mmap) {
+	    mmap.put("companyChecktable",new CompanyChecktableEntity());
+	    return prefix + "/companyChecktable_edit";
+	}
+	
+	/**
+	 * 新增保存企业自评记录
+	 */
+	@RequiresPermissions("module:companyChecktable:add")
+	@Log(title = "企业自评记录", businessType = BusinessType.INSERT)
+	@PostMapping("/add")
+	@ResponseBody
+	public Result add(CompanyChecktableEntity companyChecktable) {		
+		return toAjax(companyChecktableService.insertCompanyChecktable(companyChecktable));
+	}
+
+	/**
+	 * 修改企业自评记录
+	 */
+	@GetMapping("/initEdit/{checktableId}")
+	public String initEdit(@PathVariable("checktableId") Long checktableId, ModelMap mmap) {
+		CompanyChecktableEntity companyChecktable = companyChecktableService.selectCompanyChecktableById(checktableId);
+		mmap.put("companyChecktable", companyChecktable);
+	    return prefix + "/companyChecktable_edit";
+	}
+	
+	/**
+	 * 修改保存企业自评记录
+	 */
+	@RequiresPermissions("module:companyChecktable:edit")
+	@Log(title = "企业自评记录", businessType = BusinessType.UPDATE)
+	@PostMapping("/edit")
+	@ResponseBody
+	public Result edit(CompanyChecktableEntity companyChecktable) {		
+		return toAjax(companyChecktableService.updateCompanyChecktable(companyChecktable));
+	}
+	
+	/**
+	 * 删除企业自评记录
+	 */
+	@RequiresPermissions("module:companyChecktable:remove")
+	@Log(title = "企业自评记录", businessType = BusinessType.DELETE)
+	@PostMapping( "/del")
+	@ResponseBody
+	public Result del(String ids) {		
+		return toAjax(companyChecktableService.deleteCompanyChecktableByIds(ids));
+	}
+	
+}

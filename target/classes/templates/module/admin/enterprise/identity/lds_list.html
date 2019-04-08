@@ -1,0 +1,163 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+    <div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 select-info">
+                    <form id="lds-form">
+                        <div class="select-list">
+                            <ul>
+                            	<li>
+                            		国民经济行业分类：<select id="nationallEconomyId" name="nationallEconomyId" class="selectpicker bla bla bli" data-live-search="true" data-live-search-placeholder="搜索" data-actions-box="true">
+								                        <option value="">所有</option>
+								                        <option th:each="industry:${@nationallEconomyServiceImpl.selectNationallEconomyList(null)}" th:value="${industry.nationallEconomyId}" th:text="${industry.nationallEconomyName}"></option>
+								                    </select>
+                            	</li>
+                                <li style="margin-left: -25px;">
+                                                                        指标名称：<select name="indexName">
+                                                <option value="">所有</option>
+                                                <option value="X">从业人员（X）</option>
+                                                <option value="Y">营业收入（Y）</option>
+                                                <option value="Z">资产总额（Z）</option>
+                                            </select>
+                                </li>
+                                <li class="select-time">
+                                    <label>创建时间： </label>
+                                    <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="createTime"/>
+                                    <span>-</span>
+                                    <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="updateTime"/>
+                                </li>
+                                <li>
+                                    <a class="btn btn-primary  btn-sm" onclick="searchGrid()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                    <a class="btn btn-warning  btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </form>
+                </div>
+		<div class="btn-group hidden-xs" id="toolbar" role="group">
+			<a class="btn btn-outline btn-sm btn-success " onclick="$.operate.add()" shiro:hasPermission="module:lds:add">
+				<i class="fa fa-plus"></i> 新增
+			</a>
+			<a class="btn btn-outline btn-sm btn-danger " onclick="$.operate.removeAll()" shiro:hasPermission="module:lds:remove">
+				<i class="fa fa-trash-o"></i> 删除
+			</a>
+		</div>
+			
+		<div class="col-sm-12 select-table table-striped">
+			<table id="bootstrap-table" data-mobile-responsive="true"></table>
+		</div>
+	</div>
+    </div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('module:lds:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('module:lds:remove')}]];
+        var listFlag = [[${@permission.hasPermi('module:lds:list')}]];
+        var prefix = ctx + "module/lds"
+
+        /* <![CDATA[ */
+        var nationallEconomy = [[${@nationallEconomyServiceImpl.selectNationallEconomyList(null)}]]
+        var nationallEconomyData = [];
+        if(nationallEconomy.length > 0){
+        	for(var i = 0; i < nationallEconomy.length; i++){
+        		nationallEconomyData.push({dictValue:nationallEconomy[i].nationallEconomyId, dictLabel:nationallEconomy[i].nationallEconomyName,listClass:"primary"});
+        	}
+        }
+        
+        var indexNames = [
+        	{dictValue: 'X', dictLabel: '从业人员',listClass:"info"},
+        	{dictValue: 'Y', dictLabel: '营业收入',listClass:"info"},
+        	{dictValue: 'Z', dictLabel: '资产总额',listClass:"info"}
+        ];
+        /* ]]> */
+        
+        $(function() {
+            var options = {
+                url: prefix + "/query",
+                createUrl: prefix + "/initAdd",
+                updateUrl: prefix + "/initEdit/{id}",
+                removeUrl: prefix + "/del",
+                modalName: "大中小微",
+                id: "lmsId",
+                search: false,
+                showExport: false,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'nationallEconomyId', 
+					title : '国民经济行业名称',
+					formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(nationallEconomyData, value);
+                    }
+				},
+				{
+					field : 'indexName', 
+					title : '指标名称',
+					formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(indexNames, value);
+                    }
+				},
+				{
+					field : 'uint', 
+					title : '计量单位' 
+				},
+				{
+					field : 'createUser', 
+					title : '创建人',
+					formatter: function(value, row, index) {
+	                    return $.table.selectUserName(users, value);
+	                }
+				},
+				{
+					field : 'createTime', 
+					title : '创建时间' 
+				},
+				{
+					field : 'updateUser', 
+					title : '最后更新人',
+					formatter: function(value, row, index) {
+	                    return $.table.selectUserName(users, value);
+	                }
+				},
+				{
+					field : 'updateTime', 
+					title : '最后更新时间' 
+				},
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.lmsId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+		            	actions.push('<a class="btn btn-info btn-xs ' + listFlag + '" href="#" onclick="detail(\'' + row.lmsId + '\')"><i class="fa fa-list-ul"></i>列表</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.lmsId + '\')"><i class="fa fa-remove"></i>删除</a>');
+						return actions.join('');
+		            }
+		        }]
+            };
+            $.table.init(options);
+        });
+        
+        function searchGrid(){
+            $.table.search("lds-form");
+        }
+        
+        function detail(id) {
+            var url = prefix + '/detail/' + id;
+            createMenuItem(url, "大中小微列表");
+        }
+        
+        $(function(){
+        	$('.selectpicker').selectpicker({
+	            'noneSelectedText' : '请选择',//默认显示内容
+	            'deselectAllText': '全不选',
+	            'selectAllText': '全选'
+	        });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,520 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jd.project.module.admin.enterprise.mapper.QyjcxxMapper">
+
+    <resultMap type="QyjcxxEntity" id="qyjcxxResult">
+        <result column="id" property="id"/>
+        <result column="scjydwqc" property="scjydwqc"/>
+        <result column="scjydwzchlx" property="scjydwzchlx"/>
+        <result column="tyshxydm" property="tyshxydm"/>
+        <result column="dwlxr" property="dwlxr"/>
+        <result column="dwdh" property="dwdh"/>
+        <result column="lxrsj" property="lxrsj"/>
+        <result column="fddbr" property="fddbr"/>
+        <result column="frdh" property="frdh"/>
+        <result column="scjydz" property="scjydz"/>
+        <result column="jjlx" property="jjlx"/>
+        <result column="hylb" property="hylb"/>
+        <result column="jglb" property="jglb"/>
+        <result column="szdq" property="szdq"/>
+        <result column="zgbm" property="zgbm"/>
+        <result column="jd" property="jd"/>
+        <result column="wd" property="wd"/>
+        <result column="yyzz" property="yyzz"/>
+        <result column="zyywsr" property="zyywsr"/>
+        <result column="cyrysl" property="cyrysl"/>
+        <result column="qygm" property="qygm"/>
+        <result column="qyjyzt" property="qyjyzt"/>
+        <result column="cmcm" property="cmcm"/>
+        <result column="zt" property="zt"/>
+        <result column="shyj" property="shyj"/>
+        <result column="ywagjg" property="ywagjg"/>
+        <result column="ywzzagry" property="ywzzagry"/>
+        <result column="ywjzagry" property="ywjzagry"/>
+        <result column="gmqk" property="gmqk"/>
+        <result column="ywaqzj" property="ywaqzj"/>
+        <result column="ywtzzyry" property="ywtzzyry"/>
+        <result column="ywzcaqgcs" property="ywzcaqgcs"/>
+        <result column="ywtzsbaqcs" property="ywtzsbaqcs"/>
+        <result column="bzhdbdj" property="bzhdbdj"/>
+        <result column="ywzdwxy" property="ywzdwxy"/>
+        <result column="ywaqscdjxk" property="ywaqscdjxk"/>
+        <result column="ywwhpsy" property="ywwhpsy"/>
+        <result column="ywzxzl" property="ywzxzl"/>
+        <result column="gxsj" property="gxsj"/>
+        <result property="orgName"  column="ORGNAME"/>
+        <result property="orgCode"  column="ORGCODE"/>
+        <result property="grade"  column="grade"/>
+        <result column="qygmqk" property="qygmqk"/>
+    </resultMap>
+
+    <sql id="selectqyjcxxVo">
+       SELECT id, scjydwqc, scjydwzchlx, tyshxydm, dwlxr, dwdh, lxrsj, fddbr, frdh,gmqk, scjydz, jjlx, hylb, jglb, szdq, zgbm, jd, wd, yyzz, zyywsr, cyrysl, qygm, qyjyzt, cmcm, zt, shyj, ywagjg, ywzzagry, ywjzagry, ywaqzj, ywtzzyry, ywzcaqgcs, ywtzsbaqcs, bzhdbdj, ywzdwxy, ywaqscdjxk, ywwhpsy, ywzxzl, gxsj ,grade,qygmqk FROM qyxx_zc
+    </sql>
+
+	<sql id="selectqyjcxxAndTaskDetailVo">
+		SELECT ID, scjydwqc, JC, QYBM,BZ FROM LS_JB_QYJCXX
+	</sql>
+
+    <select id="selectMobileQyjcxxList" parameterType="QyjcxxEntity" resultMap="qyjcxxResult">
+        select q.id, scjydwqc, scjydz from qyxx_zc q
+        <if test="szdq != null and szdq != ''"> LEFT JOIN t_dm_jnaj s on q.szdq=s.dmxbm and s.dmldm='SZDQ' </if>
+        <where>
+            <if test="id != null and id != ''"> AND id = #{id}</if>
+            <if test="scjydwqc != null and scjydwqc != ''"> AND scjydwqc like  concat('%',#{scjydwqc},'%')</if>
+            <if test="scjydwzchlx != null and scjydwzchlx != ''"> AND scjydwzchlx = #{scjydwzchlx}</if>
+            <if test="tyshxydm != null and tyshxydm != ''"> AND tyshxydm = #{tyshxydm}</if>
+            <if test="dwlxr != null and dwlxr != ''"> AND dwlxr = #{dwlxr}</if>
+            <if test="dwdh != null and dwdh != ''"> AND dwdh = #{dwdh}</if>
+            <if test="lxrsj != null and lxrsj != ''"> AND lxrsj = #{lxrsj}</if>
+            <if test="fddbr != null and fddbr != ''"> AND fddbr = #{fddbr}</if>
+            <if test="frdh != null and frdh != ''"> AND frdh = #{frdh}</if>
+            <if test="scjydz != null and scjydz != ''"> AND scjydz = #{scjydz}</if>
+            <if test="jjlx != null and jjlx != ''"> AND jjlx = #{jjlx}</if>
+            <if test="hylb != null and hylb != ''"> AND hylb = #{hylb}</if>
+            <if test="jglb != null and jglb != ''"> AND jglb = #{jglb}</if>
+            <if test="szdq != null and szdq != ''"> AND szdq = #{szdq}</if>
+            <if test="zgbm != null and zgbm != ''"> AND zgbm = #{zgbm}</if>
+            <if test="jd != null and jd != ''"> AND jd = #{jd}</if>
+            <if test="wd != null and wd != ''"> AND wd = #{wd}</if>
+            <if test="yyzz != null and yyzz != ''"> AND yyzz = #{yyzz}</if>
+            <if test="zyywsr != null and zyywsr != ''"> AND zyywsr = #{zyywsr}</if>
+            <if test="cyrysl != null and cyrysl != ''"> AND cyrysl = #{cyrysl}</if>
+            <if test="qygm != null and qygm != ''"> AND qygm = #{qygm}</if>
+            <if test="qyjyzt != null and qyjyzt != ''"> AND qyjyzt = #{qyjyzt}</if>
+            <if test="cmcm != null and cmcm != ''"> AND cmcm = #{cmcm}</if>
+            <if test="zt != null and zt != ''"> AND zt = #{zt}</if>
+            <if test="shyj != null and shyj != ''"> AND shyj = #{shyj}</if>
+            <if test="ywagjg != null"> AND ywagjg = #{ywagjg}</if>
+            <if test="ywzzagry != null"> AND ywzzagry = #{ywzzagry}</if>
+            <if test="ywjzagry != null"> AND ywjzagry = #{ywjzagry}</if>
+            <if test="ywaqzj != null"> AND ywaqzj = #{ywaqzj}</if>
+            <if test="ywtzzyry != null"> AND ywtzzyry = #{ywtzzyry}</if>
+            <if test="ywzcaqgcs != null"> AND ywzcaqgcs = #{ywzcaqgcs}</if>
+            <if test="ywtzsbaqcs != null"> AND ywtzsbaqcs = #{ywtzsbaqcs}</if>
+            <if test="bzhdbdj != null"> AND bzhdbdj = #{bzhdbdj}</if>
+            <if test="ywzdwxy != null"> AND ywzdwxy = #{ywzdwxy}</if>
+            <if test="ywaqscdjxk != null"> AND ywaqscdjxk = #{ywaqscdjxk}</if>
+            <if test="ywwhpsy != null"> AND ywwhpsy = #{ywwhpsy}</if>
+            <if test="ywzxzl != null"> AND ywzxzl = #{ywzxzl}</if>
+            <if test="gxsj != null"> AND gxsj = #{gxsj}</if>
+            <if test="grade != null"> AND grade = #{grade}</if>
+            <if test="orgIds != null and orgIds != ''">
+                AND zgbm in
+                <foreach collection ="orgIds" item="item" index= "index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <select id="validatorByCnd" parameterType="QyjcxxEntity" resultType="java.lang.Integer">
+        select count(1) from qyxx_zc
+        <where>
+            <if test="id != null and id != ''"> and ID != #{id}</if>
+            <if test="scjydwqc != null and scjydwqc != ''"> and scjydwqc = #{scjydwqc}</if>
+            <if test="tyshxydm != null and tyshxydm != ''"> and tyshxydm = #{tyshxydm}</if>
+        </where>
+    </select>
+
+    <select id="selectqyjcxxList" parameterType="QyjcxxEntity" resultMap="qyjcxxResult">
+        select id, scjydwqc, scjydwzchlx, tyshxydm, fddbr, frdh from qyxx_zc j
+        <where>
+            <if test="id != null and id != ''"> AND id = #{id}</if>
+            <if test="scjydwqc != null and scjydwqc != ''"> AND scjydwqc like  concat('%',#{scjydwqc},'%')</if>
+            <if test="scjydwzchlx != null and scjydwzchlx != ''"> AND scjydwzchlx = #{scjydwzchlx}</if>
+            <if test="tyshxydm != null and tyshxydm != ''"> AND tyshxydm = #{tyshxydm}</if>
+            <if test="dwlxr != null and dwlxr != ''"> AND dwlxr = #{dwlxr}</if>
+            <if test="dwdh != null and dwdh != ''"> AND dwdh = #{dwdh}</if>
+            <if test="lxrsj != null and lxrsj != ''"> AND lxrsj = #{lxrsj}</if>
+            <if test="fddbr != null and fddbr != ''"> AND fddbr = #{fddbr}</if>
+            <if test="frdh != null and frdh != ''"> AND frdh = #{frdh}</if>
+            <if test="scjydz != null and scjydz != ''"> AND scjydz = #{scjydz}</if>
+            <if test="jjlx != null and jjlx != ''"> AND jjlx = #{jjlx}</if>
+            <if test="hylb != null and hylb != ''"> AND hylb = #{hylb}</if>
+            <if test="jglb != null and jglb != ''"> AND jglb = #{jglb}</if>
+            <if test="szdq != null and szdq != ''"> AND szdq = #{szdq}</if>
+            <if test="zgbm != null and zgbm != ''"> AND zgbm = #{zgbm}</if>
+            <if test="jd != null and jd != ''"> AND jd = #{jd}</if>
+            <if test="wd != null and wd != ''"> AND wd = #{wd}</if>
+            <if test="yyzz != null and yyzz != ''"> AND yyzz = #{yyzz}</if>
+            <if test="zyywsr != null and zyywsr != ''"> AND zyywsr = #{zyywsr}</if>
+            <if test="cyrysl != null and cyrysl != ''"> AND cyrysl = #{cyrysl}</if>
+            <if test="qygm != null and qygm != ''"> AND qygm = #{qygm}</if>
+            <if test="qyjyzt != null and qyjyzt != ''"> AND qyjyzt = #{qyjyzt}</if>
+            <if test="cmcm != null and cmcm != ''"> AND cmcm = #{cmcm}</if>
+            <if test="zt != null and zt != ''"> AND zt = #{zt}</if>
+            <if test="shyj != null and shyj != ''"> AND shyj = #{shyj}</if>
+            <if test="ywagjg != null"> AND ywagjg = #{ywagjg}</if>
+            <if test="ywzzagry != null"> AND ywzzagry = #{ywzzagry}</if>
+            <if test="ywjzagry != null"> AND ywjzagry = #{ywjzagry}</if>
+            <if test="ywaqzj != null"> AND ywaqzj = #{ywaqzj}</if>
+            <if test="ywtzzyry != null"> AND ywtzzyry = #{ywtzzyry}</if>
+            <if test="ywzcaqgcs != null"> AND ywzcaqgcs = #{ywzcaqgcs}</if>
+            <if test="ywtzsbaqcs != null"> AND ywtzsbaqcs = #{ywtzsbaqcs}</if>
+            <if test="bzhdbdj != null"> AND bzhdbdj = #{bzhdbdj}</if>
+            <if test="ywzdwxy != null"> AND ywzdwxy = #{ywzdwxy}</if>
+            <if test="ywaqscdjxk != null"> AND ywaqscdjxk = #{ywaqscdjxk}</if>
+            <if test="ywwhpsy != null"> AND ywwhpsy = #{ywwhpsy}</if>
+            <if test="ywzxzl != null"> AND ywzxzl = #{ywzxzl}</if>
+            <if test="gxsj != null"> AND gxsj = #{gxsj}</if>
+            <if test="grade != null"> AND grade = #{grade}</if>
+            <if test="gmqk != null"> AND gmqk = #{gmqk}</if>
+            <if test="qygmqk != null"> AND qygmqk = #{qygmqk}</if>
+            <if test="orgIds != null and orgIds != ''">
+                AND zgbm in
+                <foreach collection ="orgIds" item="item" index= "index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <select id="selectqyjcxxById" parameterType="String" resultMap="qyjcxxResult">
+        <include refid="selectqyjcxxVo"/>
+        where ID = #{id}
+    </select>
+
+    <insert id="insertqyjcxx" parameterType="QyjcxxEntity">
+        insert into qyxx_zc
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != '' ">id,</if>
+            <if test="scjydwqc != null and scjydwqc != '' ">scjydwqc,</if>
+            <if test="scjydwzchlx != null and scjydwzchlx != '' ">scjydwzchlx,</if>
+            <if test="tyshxydm != null and tyshxydm != '' ">tyshxydm,</if>
+            <if test="dwlxr != null and dwlxr != '' ">dwlxr,</if>
+            <if test="dwdh != null and dwdh != '' ">dwdh,</if>
+            <if test="lxrsj != null and lxrsj != '' ">lxrsj,</if>
+            <if test="fddbr != null and fddbr != '' ">fddbr,</if>
+            <if test="frdh != null and frdh != '' ">frdh,</if>
+            <if test="scjydz != null and scjydz != '' ">scjydz,</if>
+            <if test="jjlx != null and jjlx != '' ">jjlx,</if>
+            <if test="hylb != null and hylb != '' ">hylb,</if>
+            <if test="jglb != null and jglb != '' ">jglb,</if>
+            <if test="szdq != null and szdq != '' ">szdq,</if>
+            <if test="zgbm != null and zgbm != '' ">zgbm,</if>
+            <if test="jd != null and jd != '' ">jd,</if>
+            <if test="wd != null and wd != '' ">wd,</if>
+            <if test="yyzz != null and yyzz != '' ">yyzz,</if>
+            <if test="zyywsr != null and zyywsr != '' ">zyywsr,</if>
+            <if test="cyrysl != null and cyrysl != '' ">cyrysl,</if>
+            <if test="qygm != null and qygm != '' ">qygm,</if>
+            <if test="qyjyzt != null and qyjyzt != '' ">qyjyzt,</if>
+            <if test="cmcm != null and cmcm != '' ">cmcm,</if>
+            <if test="zt != null and zt != '' ">zt,</if>
+            <if test="shyj != null and shyj != '' ">shyj,</if>
+            <if test="ywagjg != null">ywagjg,</if>
+            <if test="ywzzagry != null">ywzzagry,</if>
+            <if test="ywjzagry != null">  ywjzagry,</if>
+            <if test="ywaqzj != null">  ywaqzj,</if>
+            <if test="ywtzzyry != null">  ywtzzyry,</if>
+            <if test="ywzcaqgcs != null">  ywzcaqgcs,</if>
+            <if test="ywtzsbaqcs != null">  ywtzsbaqcs,</if>
+            <if test="bzhdbdj != null">  bzhdbdj,</if>
+            <if test="ywzdwxy != null">  ywzdwxy,</if>
+            <if test="ywaqscdjxk != null">ywaqscdjxk,</if>
+            <if test="ywwhpsy != null">ywwhpsy,</if>
+            <if test="ywzxzl != null">ywzxzl,</if>
+            <if test="gxsj != null">gxsj,</if>
+            <if test="grade != null">grade,</if>
+            <if test="qygmqk != null">qygmqk,</if>
+            <if test="gmqk != null">gmqk,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != ''">#{id},</if>
+            <if test="scjydwqc != null and scjydwqc != ''">#{scjydwqc},</if>
+            <if test="scjydwzchlx != null and scjydwzchlx != ''">#{scjydwzchlx},</if>
+            <if test="tyshxydm != null and tyshxydm != ''">#{tyshxydm},</if>
+            <if test="dwlxr != null and dwlxr != ''">#{dwlxr},</if>
+            <if test="dwdh != null and dwdh != ''">#{dwdh},</if>
+            <if test="lxrsj != null and lxrsj != ''">#{lxrsj},</if>
+            <if test="fddbr != null and fddbr != ''">#{fddbr},</if>
+            <if test="frdh != null and frdh != ''">#{frdh},</if>
+            <if test="scjydz != null and scjydz != ''">#{scjydz},</if>
+            <if test="jjlx != null and jjlx != ''">#{jjlx},</if>
+            <if test="hylb != null and hylb != ''">#{hylb},</if>
+            <if test="jglb != null and jglb != ''">#{jglb},</if>
+            <if test="szdq != null and szdq != ''">#{szdq},</if>
+            <if test="zgbm != null and zgbm != ''">#{zgbm},</if>
+            <if test="jd != null and jd != ''">#{jd},</if>
+            <if test="wd != null and wd != ''">#{wd},</if>
+            <if test="yyzz != null and yyzz != ''">#{yyzz},</if>
+            <if test="zyywsr != null and zyywsr != ''">#{zyywsr},</if>
+            <if test="cyrysl != null and cyrysl != ''">#{cyrysl},</if>
+            <if test="qygm != null and qygm != ''">#{qygm},</if>
+            <if test="qyjyzt != null and qyjyzt != ''">#{qyjyzt},</if>
+            <if test="cmcm != null and cmcm != ''">#{cmcm},</if>
+            <if test="zt != null and zt != ''">#{zt},</if>
+            <if test="shyj != null and shyj != ''">#{shyj},</if>
+            <if test="ywagjg != null">   #{ywagjg},</if>
+            <if test="ywzzagry != null">  #{ywzzagry},</if>
+            <if test="ywjzagry != null">  #{ywjzagry},</if>
+            <if test="ywaqzj != null"> #{ywaqzj},</if>
+            <if test="ywtzzyry != null">  #{ywtzzyry},</if>
+            <if test="ywzcaqgcs != null">   #{ywzcaqgcs},</if>
+            <if test="ywtzsbaqcs != null">   #{ywtzsbaqcs},</if>
+            <if test="bzhdbdj != null"> #{bzhdbdj},</if>
+            <if test="ywzdwxy != null">  #{ywzdwxy},</if>
+            <if test="ywaqscdjxk != null">   #{ywaqscdjxk},</if>
+            <if test="ywwhpsy != null">  #{ywwhpsy},</if>
+            <if test="ywzxzl != null">  #{ywzxzl},</if>
+            <if test="gxsj != null">   #{gxsj},</if>
+            <if test="grade != null">   #{grade},</if>
+            <if test="qygmqk != null">#{qygmqk},</if>
+            <if test="gmqk != null">#{gmqk},</if>
+        </trim>
+    </insert>
+
+    <insert id="insertqyjcxxBatch" parameterType="java.util.List">
+        insert into qyxx_zc(
+            id,
+            scjydwqc,
+            scjydwzchlx,
+            tyshxydm,
+            dwlxr,
+            dwdh,
+            lxrsj,
+            fddbr,
+            frdh,
+            scjydz,
+            jjlx,
+            hylb,
+            jglb,
+            szdq,
+            zgbm,
+            jd,
+            wd,
+            yyzz,
+            zyywsr,
+            cyrysl,
+            qygm,
+            qyjyzt,
+            cmcm,
+            zt,
+            shyj,
+            ywagjg,
+            ywzzagry,
+            ywjzagry,
+            ywaqzj,
+            ywtzzyry,
+            ywzcaqgcs,
+            ywtzsbaqcs,
+            bzhdbdj,
+            ywzdwxy,
+            ywaqscdjxk,
+            ywwhpsy,
+            ywzxzl,
+            gxsj,
+            grade,
+            qygmqk,
+            gmqk
+        )
+        values
+        <foreach collection ="list" item="i" index= "index" separator =",">
+            (#{i.id},
+                #{i.scjydwqc},
+                #{i.scjydwzchlx},
+                #{i.tyshxydm},
+                #{i.dwlxr},
+                #{i.dwdh},
+                #{i.lxrsj},
+                #{i.fddbr},
+                #{i.frdh},
+                #{i.scjydz},
+                #{i.jjlx},
+                #{i.hylb},
+                #{i.jglb},
+                #{i.szdq},
+                #{i.zgbm},
+                #{i.jd},
+                #{i.wd},
+                #{i.yyzz},
+                #{i.zyywsr},
+                #{i.cyrysl},
+                #{i.qygm},
+                #{i.qyjyzt},
+                #{i.cmcm},
+                #{i.zt},
+                #{i.shyj},
+                #{i.ywagjg},
+                #{i.ywzzagry},
+                #{i.ywjzagry},
+                #{i.ywaqzj},
+                #{i.ywtzzyry},
+                #{i.ywzcaqgcs},
+                #{i.ywtzsbaqcs},
+                #{i.bzhdbdj},
+                #{i.ywzdwxy},
+                #{i.ywaqscdjxk},
+                #{i.ywwhpsy},
+                #{i.ywzxzl},
+                #{i.gxsj},
+                #{i.grade},
+                #{i.qygmqk},
+                #{i.gmqk})
+        </foreach >
+    </insert>
+
+
+    <update id="updateqyjcxxForMobile" parameterType="QyjcxxEntity">
+        update qyxx_zc
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="scjydwqc != null  and scjydwqc != ''  ">scjydwqc = #{scjydwqc},</if>
+            TYSHXYDM = #{tyshxydm},
+            SCJYDZ = #{scjydz},
+            zyywsr = #{zyywsr},
+            CYRYSL = #{cyrysl},
+            QYJYZT = #{qyjyzt},
+            GMQK = #{gmqk},
+            QYGM = #{qygm},
+            hylb = #{hylb},
+            jglb = #{jglb}
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <update id="updateqyjcxx" parameterType="QyjcxxEntity">
+        update qyxx_zc SET
+            <if test="scjydwqc != null and scjydwqc != '' ">scjydwqc = #{scjydwqc},</if>
+            scjydwzchlx = #{scjydwzchlx},
+            tyshxydm = #{tyshxydm},
+            dwlxr = #{dwlxr},
+            dwdh = #{dwdh},
+            lxrsj = #{lxrsj},
+            fddbr = #{fddbr},
+            frdh = #{frdh},
+            scjydz = #{scjydz},
+            jjlx = #{jjlx},
+            hylb = #{hylb},
+            jglb = #{jglb},
+            szdq = #{szdq},
+            zgbm = #{zgbm},
+            jd = #{jd},
+            wd = #{wd},
+            yyzz = #{yyzz},
+            zyywsr = #{zyywsr},
+            cyrysl = #{cyrysl},
+            qygm = #{qygm},
+            qyjyzt = #{qyjyzt},
+            cmcm = #{cmcm},
+            zt = #{zt},
+            shyj = #{shyj},
+            ywagjg = #{ywagjg},
+            ywzzagry = #{ywzzagry},
+            ywjzagry = #{ywjzagry},
+            ywaqzj = #{ywaqzj},
+            ywtzzyry = #{ywtzzyry},
+            ywzcaqgcs = #{ywzcaqgcs},
+            ywtzsbaqcs = #{ywtzsbaqcs},
+            bzhdbdj = #{bzhdbdj},
+            ywzdwxy = #{ywzdwxy},
+            ywaqscdjxk = #{ywaqscdjxk},
+            ywwhpsy = #{ywwhpsy},
+            ywzxzl = #{ywzxzl},
+            gxsj = #{gxsj}
+            grade = #{grade}
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteqyjcxxById" parameterType="String">
+        delete from LS_JB_QYJCXX where ID = #{id}
+    </delete>
+
+    <delete id="deleteqyjcxxByIds" parameterType="String">
+        delete from T_SPECIAL_TREATMENT where COMPANY_ID in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>;
+        delete from T_COMPANY_CHECKTABLE_FILES
+        where
+        CHECKTABLE_ID in (select CHECKTABLE_ID FROM T_COMPANY_CHECKTABLE WHERE COMPANY_ID in
+            <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+            </foreach>
+        )
+        or
+        DYNAMICS_ID in(select DYNAMICS_ID FROM T_DYNAMIC WHERE COMPANY_ID in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        );
+        delete from T_DYNAMIC where COMPANY_ID in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>;
+        delete from T_COMPANY_CHECKTABLE  where COMPANY_ID in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>;
+        update sys_user SET ls_enterprise_id=null where ls_enterprise_id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>;
+        delete from qyxx_zc where ID in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+	<!-- 查询不存在于任务详情表的企业信息 -->
+	<select id="selectCheckTableCompanyList" parameterType="QyjcxxEntity" resultMap="qyjcxxResult">
+		SELECT j.id, j.scjydwqc, j.fddbr, j.frdh  FROM qyxx_zc j
+		<where>
+            j.id NOT IN (SELECT COMPANY_ID FROM T_TASK_DETAIL WHERE IS_DELETE = 0)
+            <if test="scjydwqc != null and scjydwqc != ''"> AND scjydwqc like  concat('%',#{scjydwqc},'%')</if>
+            <if test="scjydwzchlx != null and scjydwzchlx != ''"> AND scjydwzchlx = #{scjydwzchlx}</if>
+            <if test="tyshxydm != null and tyshxydm != ''"> AND tyshxydm = #{tyshxydm}</if>
+            <if test="dwlxr != null and dwlxr != ''"> AND dwlxr = #{dwlxr}</if>
+            <if test="dwdh != null and dwdh != ''"> AND dwdh = #{dwdh}</if>
+            <if test="lxrsj != null and lxrsj != ''"> AND lxrsj = #{lxrsj}</if>
+            <if test="fddbr != null and fddbr != ''"> AND fddbr = #{fddbr}</if>
+            <if test="frdh != null and frdh != ''"> AND frdh = #{frdh}</if>
+            <if test="scjydz != null and scjydz != ''"> AND scjydz = #{scjydz}</if>
+            <if test="jjlx != null and jjlx != ''"> AND jjlx = #{jjlx}</if>
+            <if test="hylb != null and hylb != ''"> AND hylb = #{hylb}</if>
+            <if test="jglb != null and jglb != ''"> AND jglb = #{jglb}</if>
+            <if test="szdq != null and szdq != ''"> AND szdq = #{szdq}</if>
+            <if test="zgbm != null and zgbm != ''"> AND zgbm = #{zgbm}</if>
+            <if test="jd != null and jd != ''"> AND jd = #{jd}</if>
+            <if test="wd != null and wd != ''"> AND wd = #{wd}</if>
+            <if test="yyzz != null and yyzz != ''"> AND yyzz = #{yyzz}</if>
+            <if test="zyywsr != null and zyywsr != ''"> AND zyywsr = #{zyywsr}</if>
+            <if test="cyrysl != null and cyrysl != ''"> AND cyrysl = #{cyrysl}</if>
+            <if test="qygm != null and qygm != ''"> AND qygm = #{qygm}</if>
+            <if test="qyjyzt != null and qyjyzt != ''"> AND qyjyzt = #{qyjyzt}</if>
+            <if test="cmcm != null and cmcm != ''"> AND cmcm = #{cmcm}</if>
+            <if test="zt != null and zt != ''"> AND zt = #{zt}</if>
+            <if test="shyj != null and shyj != ''"> AND shyj = #{shyj}</if>
+            <if test="ywagjg != null"> AND ywagjg = #{ywagjg}</if>
+            <if test="ywzzagry != null"> AND ywzzagry = #{ywzzagry}</if>
+            <if test="ywjzagry != null"> AND ywjzagry = #{ywjzagry}</if>
+            <if test="ywaqzj != null"> AND ywaqzj = #{ywaqzj}</if>
+            <if test="ywtzzyry != null"> AND ywtzzyry = #{ywtzzyry}</if>
+            <if test="ywzcaqgcs != null"> AND ywzcaqgcs = #{ywzcaqgcs}</if>
+            <if test="ywtzsbaqcs != null"> AND ywtzsbaqcs = #{ywtzsbaqcs}</if>
+            <if test="bzhdbdj != null"> AND bzhdbdj = #{bzhdbdj}</if>
+            <if test="ywzdwxy != null"> AND ywzdwxy = #{ywzdwxy}</if>
+            <if test="ywaqscdjxk != null"> AND ywaqscdjxk = #{ywaqscdjxk}</if>
+            <if test="ywwhpsy != null"> AND ywwhpsy = #{ywwhpsy}</if>
+            <if test="ywzxzl != null"> AND ywzxzl = #{ywzxzl}</if>
+            <if test="gxsj != null"> AND gxsj = #{gxsj}</if>
+            <if test="grade != null"> AND grade = #{grade}</if>
+            <if test="orgIds != null and orgIds != ''">
+                AND zgbm in
+                <foreach collection ="orgIds" item="item" index= "index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+	</select>
+
+    <select id="getTotalEnt" parameterType="String" resultMap="qyjcxxResult">
+		SELECT id, scjydwqc, scjydwzchlx, tyshxydm, dwlxr, dwdh, lxrsj, fddbr, frdh,gmqk, scjydz, jjlx, hylb, jglb, szdq, zgbm, jd, wd, yyzz, zyywsr, cyrysl, qygm, qyjyzt, cmcm, zt, shyj, ywagjg, ywzzagry, ywjzagry, ywaqzj, ywtzzyry, ywzcaqgcs, ywtzsbaqcs, bzhdbdj, ywzdwxy, ywaqscdjxk, ywwhpsy, ywzxzl, gxsj ,grade,qygmqk
+		FROM qyxx_zc a
+		inner join LS_SYSORG b on a.zgbm = b.ORGID
+		WHERE b.ORG_CODE like CONCAT(#{orgCode}, '%')
+	</select>
+
+</mapper>

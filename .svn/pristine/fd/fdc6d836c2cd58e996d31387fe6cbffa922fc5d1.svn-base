@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jd.project.module.app.homePage.mapper.DynamicCensusMapper">
+    
+    <resultMap type="DynamicCensusEntity" id="DynamicCensusResult">
+        <result property="id"    column="ID"    />
+        <result property="companyId"    column="COMPANY_ID"    />
+        <result property="dynamicNumber"    column="DYNAMIC_NUMBER"    />
+        <result property="dynamicChecket"    column="DYNAMIC_CHECKET"    />
+        <result property="createTime"    column="CREATE_TIME"    />
+    </resultMap>
+	
+	<sql id="selectDynamicCensusVo">
+        SELECT ID, COMPANY_ID, DYNAMIC_NUMBER, DYNAMIC_CHECKET, CREATE_TIME FROM T_DYNAMIC_CENSUS
+    </sql>
+
+    <select id="selectDynamicCensus" parameterType="int" resultMap="DynamicCensusResult">
+        <include refid="selectDynamicCensusVo"/>
+        <where>
+            month (CREATE_TIME) = #{currentMonth}
+        </where>
+    </select>
+	
+    <select id="selectDynamicCensusList" parameterType="DynamicCensusEntity" resultMap="DynamicCensusResult">
+        <include refid="selectDynamicCensusVo"/>
+        <where>  
+            <if test="id != null and id != ''"> AND ID = #{id}</if>
+             <if test="companyId != null and companyId != ''"> AND COMPANY_ID = #{companyId}</if>
+             <if test="dynamicNumber != null and dynamicNumber != ''"> AND DYNAMIC_NUMBER = #{dynamicNumber}</if>
+             <if test="dynamicChecket != null and dynamicChecket != ''"> AND DYNAMIC_CHECKET = #{dynamicChecket}</if>
+             <if test="createTime != null and createTime != ''"> AND CREATE_TIME = #{createTime}</if>
+         </where>
+    </select>
+    
+    <select id="selectDynamicCensusById" parameterType="Long" resultMap="DynamicCensusResult">
+        <include refid="selectDynamicCensusVo"/>
+        WHERE ID = #{id}
+    </select>
+        
+    <insert id="insertDynamicCensus" parameterType="DynamicCensusEntity">
+        INSERT INTO T_DYNAMIC_CENSUS
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != '' ">ID,</if>
+			<if test="companyId != null and companyId != '' ">COMPANY_ID,</if>
+			<if test="dynamicNumber != null and dynamicNumber != '' ">DYNAMIC_NUMBER,</if>
+			<if test="dynamicChecket != null and dynamicChecket != '' ">DYNAMIC_CHECKET,</if>
+			<if test="createTime != null and createTime != '' ">CREATE_TIME,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != ''">#{id},</if>
+			<if test="companyId != null and companyId != ''">#{companyId},</if>
+			<if test="dynamicNumber != null and dynamicNumber != ''">#{dynamicNumber},</if>
+			<if test="dynamicChecket != null and dynamicChecket != ''">#{dynamicChecket},</if>
+			<if test="createTime != null and createTime != ''">#{createTime},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateDynamicCensus" parameterType="DynamicCensusEntity">
+        UPDATE T_DYNAMIC_CENSUS
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="companyId != null  and companyId != ''  ">COMPANY_ID = #{companyId},</if>
+            <if test="dynamicNumber != null  ">DYNAMIC_NUMBER = #{dynamicNumber},</if>
+            <if test="dynamicChecket != null  ">DYNAMIC_CHECKET = #{dynamicChecket},</if>
+            <if test="createTime != null  ">CREATE_TIME = #{createTime},</if>
+        </trim>
+        WHERE ID = #{id}
+    </update>
+
+	<delete id="deleteDynamicCensusById" parameterType="Long">
+        DELETE FROM T_DYNAMIC_CENSUS WHERE ID = #{id}
+    </delete>
+	
+    <delete id="deleteDynamicCensusByIds" parameterType="String">
+        DELETE FROM T_DYNAMIC_CENSUS WHERE ID IN 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

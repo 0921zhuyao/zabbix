@@ -1,0 +1,92 @@
+package com.jd.project.module.admin.enterprise.mapper;
+
+import java.util.List;
+
+import com.jd.framework.web.mapper.BaseMapper;
+import com.jd.project.module.admin.enterprise.entity.SysuserEntity;
+
+/**
+ * 系统用户 数据层
+ * 
+ * @author TrevorPhilips
+ * @date 2018-12-28
+ */
+public interface SysuserMapper extends BaseMapper<SysuserEntity> {
+	/**
+	 * 查询系统用户信息
+	 * 
+	 * @param userid
+	 *            系统用户ID
+	 * @return 系统用户信息
+	 */
+	public SysuserEntity selectSysuserById(String userid);
+
+	/**
+	 * 查询系统用户列表
+	 * 
+	 * @param sysuser
+	 *            系统用户信息
+	 * @return 系统用户集合
+	 */
+	public List<SysuserEntity> selectSysuserList(SysuserEntity sysuser);
+
+	/**
+	 * 新增系统用户
+	 * 
+	 * @param sysuser
+	 *            系统用户信息
+	 * @return 结果
+	 */
+	public int insertSysuser(SysuserEntity sysuser);
+
+	/**
+	 * 修改系统用户
+	 * 
+	 * @param sysuser
+	 *            系统用户信息
+	 * @return 结果
+	 */
+	public int updateSysuser(SysuserEntity sysuser);
+
+	/**
+	 * 删除系统用户
+	 * 
+	 * @param userid
+	 *            系统用户ID
+	 * @return 结果
+	 */
+	public int deleteSysuserById(String userid);
+
+	/**
+	 * 批量删除系统用户
+	 * 
+	 * @param userids
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
+	public int deleteSysuserByIds(String[] userids);
+
+	/**
+	 * 批量新增莱斯同步过来的用户信息
+	 * 
+	 * @param syncData
+	 * @return
+	 */
+	public int insertLsUser(List<SysuserEntity> syncData);
+
+	/**
+	 * 批量修改莱斯同步过来的用户信息
+	 * 
+	 * @param updateLsUsers
+	 * @return
+	 */
+	public int updateLsUser(List<SysuserEntity> updateLsUsers);
+
+	/**
+	 * 查询所有用户ID
+	 * 
+	 * @return
+	 */
+	public List<String> selectUseridList();
+
+}

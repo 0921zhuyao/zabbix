@@ -1,0 +1,77 @@
+package com.jd.project.module.admin.standard.mapper;
+
+import java.util.List;
+
+import com.jd.framework.web.mapper.BaseMapper;
+import com.jd.project.module.admin.standard.entity.CheckRegulationRefEntity;
+
+/**
+ * 检查依据配置 数据层
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-22
+ */
+public interface CheckRegulationRefMapper extends BaseMapper<CheckRegulationRefEntity> {
+	/**
+	 * 查询检查依据配置信息
+	 * 
+	 * @param id
+	 *            检查依据配置ID
+	 * @return 检查依据配置信息
+	 */
+	public CheckRegulationRefEntity selectCheckRegulationRefById(Long id);
+
+	/**
+	 * 查询检查依据配置列表
+	 * 
+	 * @param checkRegulationRef
+	 *            检查依据配置信息
+	 * @return 检查依据配置集合
+	 */
+	public List<CheckRegulationRefEntity> selectCheckRegulationRefList(CheckRegulationRefEntity checkRegulationRef);
+
+	/**
+	 * 新增检查依据配置
+	 * 
+	 * @param checkRegulationRef
+	 *            检查依据配置信息
+	 * @return 结果
+	 */
+	public int insertCheckRegulationRef(CheckRegulationRefEntity checkRegulationRef);
+
+	/**
+	 * 修改检查依据配置
+	 * 
+	 * @param checkRegulationRef
+	 *            检查依据配置信息
+	 * @return 结果
+	 */
+	public int updateCheckRegulationRef(CheckRegulationRefEntity checkRegulationRef);
+
+	/**
+	 * 删除检查依据配置
+	 * 
+	 * @param id
+	 *            检查依据配置ID
+	 * @return 结果
+	 */
+	public int deleteCheckRegulationRefById(Long id);
+
+	/**
+	 * 批量删除检查依据配置
+	 * 
+	 * @param ids
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
+	public int deleteCheckRegulationRefByIds(String[] ids);
+
+	/**
+	 * 删除原有关联关系
+	 * 
+	 * @param checkTableId
+	 * @return
+	 */
+	public int deleteCheckRegulationRefByCheckTableId(Long checkTableId);
+
+}

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jd.project.module.admin.standard.mapper.IndustryMapper">
+    
+    <resultMap type="IndustryEntity" id="IndustryResult">
+        <result property="industryId"    column="INDUSTRY_ID"    />
+        <result property="industryName"    column="INDUSTRY_NAME"    />
+        <result property="sort"    column="SORT"    />
+        <result property="remark"    column="REMARK"    />
+        <result property="createBy"    column="CREATE_USER"    />
+        <result property="createTime"    column="CREATE_TIME"    />
+        <result property="updateBy"    column="UPDATE_USER"    />
+        <result property="updateTime"    column="UPDATE_TIME"    />
+        <result property="isDelete"    column="IS_DELETE"    />
+    </resultMap>
+	
+	<sql id="selectIndustryVo">
+        select INDUSTRY_ID, INDUSTRY_NAME, SORT, REMARK, CREATE_USER, CREATE_TIME, UPDATE_USER, UPDATE_TIME, IS_DELETE from T_INDUSTRY
+    </sql>
+	
+    <select id="selectIndustryList" parameterType="IndustryEntity" resultMap="IndustryResult">
+        <include refid="selectIndustryVo"/>
+        <where>  
+            <if test="industryId != null and industryId != ''"> and INDUSTRY_ID = #{industryId}</if>
+             <if test="industryName != null and industryName != ''"> and INDUSTRY_NAME = #{industryName}</if>
+             <if test="sort != null and sort != ''"> and SORT = #{sort}</if>
+             <if test="remark != null and remark != ''"> and REMARK = #{remark}</if>
+             <if test="createBy != null and createBy != ''"> and CREATE_USER = #{createBy}</if>
+             <if test="createTime != null and createTime != ''"> and CREATE_TIME = #{createTime}</if>
+             <if test="updateBy != null and updateBy != ''"> and UPDATE_USER = #{updateBy}</if>
+             <if test="updateTime != null and updateTime != ''"> and UPDATE_TIME = #{updateTime}</if>
+             <if test="isDelete != null and isDelete != ''"> and IS_DELETE = #{isDelete}</if>
+         </where>
+    </select>
+    
+    <select id="selectIndustryById" parameterType="Long" resultMap="IndustryResult">
+        <include refid="selectIndustryVo"/>
+        where INDUSTRY_ID = #{industryId}
+    </select>
+        
+    <insert id="insertIndustry" parameterType="IndustryEntity">
+        insert into T_INDUSTRY
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="industryId != null and industryId != '' ">INDUSTRY_ID,</if>
+			<if test="industryName != null and industryName != '' ">INDUSTRY_NAME,</if>
+			<if test="sort != null and sort != '' ">SORT,</if>
+			<if test="remark != null and remark != '' ">REMARK,</if>
+			<if test="createBy != null and createBy != '' ">CREATE_USER,</if>
+			<if test="createTime != null and createTime != '' ">CREATE_TIME,</if>
+			<if test="updateBy != null and updateBy != '' ">UPDATE_USER,</if>
+			<if test="updateTime != null and updateTime != '' ">UPDATE_TIME,</if>
+			<if test="isDelete != null and isDelete != '' ">IS_DELETE,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="industryId != null and industryId != ''">#{industryId},</if>
+			<if test="industryName != null and industryName != ''">#{industryName},</if>
+			<if test="sort != null and sort != ''">#{sort},</if>
+			<if test="remark != null and remark != ''">#{remark},</if>
+			<if test="createBy != null and createBy != ''">#{createBy},</if>
+			<if test="createTime != null and createTime != ''">#{createTime},</if>
+			<if test="updateBy != null and updateBy != ''">#{updateBy},</if>
+			<if test="updateTime != null and updateTime != ''">#{updateTime},</if>
+			<if test="isDelete != null and isDelete != ''">#{isDelete},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateIndustry" parameterType="IndustryEntity">
+        update T_INDUSTRY
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="industryName != null  and industryName != ''  ">INDUSTRY_NAME = #{industryName},</if>
+            <if test="sort != null  ">SORT = #{sort},</if>
+            <if test="remark != null  and remark != ''  ">REMARK = #{remark},</if>
+            <if test="createBy != null  ">CREATE_USER = #{createBy},</if>
+            <if test="createTime != null  ">CREATE_TIME = #{createTime},</if>
+            <if test="updateBy != null  ">UPDATE_USER = #{updateBy},</if>
+            <if test="updateTime != null  ">UPDATE_TIME = #{updateTime},</if>
+            <if test="isDelete != null  ">IS_DELETE = #{isDelete},</if>
+        </trim>
+        where INDUSTRY_ID = #{industryId}
+    </update>
+
+	<delete id="deleteIndustryById" parameterType="Long">
+        delete from T_INDUSTRY where INDUSTRY_ID = #{industryId}
+    </delete>
+	
+    <delete id="deleteIndustryByIds" parameterType="String">
+        delete from T_INDUSTRY where INDUSTRY_ID in 
+        <foreach item="industryId" collection="array" open="(" separator="," close=")">
+            #{industryId}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -1,0 +1,54 @@
+package com.jd.project.module.admin.evaluation.service;
+
+import java.util.List;
+
+import com.jd.project.module.admin.evaluation.entity.CompanyChecktablesEntity;
+
+/**
+ * 企业检查关联 服务层
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-29
+ */
+public interface CompanyChecktablesService {
+	/**
+     * 查询企业检查关联信息
+     * 
+     * @param checktablesId 企业检查关联ID
+     * @return 企业检查关联信息
+     */
+	public CompanyChecktablesEntity selectCompanyChecktablesById(Long checktablesId);
+	
+	/**
+     * 查询企业检查关联列表
+     * 
+     * @param companyChecktables 企业检查关联信息
+     * @return 企业检查关联集合
+     */
+	public List<CompanyChecktablesEntity> selectCompanyChecktablesList(CompanyChecktablesEntity companyChecktables);
+	
+	/**
+     * 新增企业检查关联
+     * 
+     * @param companyChecktables 企业检查关联信息
+     * @return 结果
+     */
+	public int insertCompanyChecktables(CompanyChecktablesEntity companyChecktables);
+	
+	/**
+     * 修改企业检查关联
+     * 
+     * @param companyChecktables 企业检查关联信息
+     * @return 结果
+     */
+	public int updateCompanyChecktables(CompanyChecktablesEntity companyChecktables);
+		
+	/**
+     * 删除企业检查关联信息
+     * 
+     * @param ids 需要删除的数据ID
+     * @return 结果
+     */
+	public int deleteCompanyChecktablesByIds(String ids);
+	
+}

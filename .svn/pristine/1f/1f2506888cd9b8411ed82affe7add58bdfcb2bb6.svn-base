@@ -1,0 +1,106 @@
+package com.jd.project.module.app.homePage.controller;
+
+import java.util.List;
+
+import com.jd.project.module.app.homePage.entity.DynamicCensusEntity;
+import com.jd.project.module.app.homePage.service.DynamicCensusService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import com.jd.framework.aspectj.lang.annotation.Log;
+import com.jd.framework.aspectj.lang.enums.BusinessType;
+import com.jd.framework.web.controller.BaseController;
+import com.jd.framework.web.page.TableDataInfo;
+import com.jd.framework.web.domain.Result;
+
+/**
+ * 企业不符合项统计 信息操作处理
+ * 
+ * @author TrevorPhilips
+ * @date 2019-01-23
+ */
+@Controller
+@RequestMapping("/module/dynamicCensus")
+public class DynamicCensusController extends BaseController{
+    private String prefix = "module/dynamicCensus";
+	
+	@Autowired
+	private DynamicCensusService dynamicCensusService;
+	
+	@RequiresPermissions("module:dynamicCensus:view")
+	@GetMapping()
+	public String initList() {
+	    return prefix + "/dynamicCensus_list";
+	}
+	
+	/**
+	 * 查询企业不符合项统计列表
+	 */
+	@RequiresPermissions("module:dynamicCensus:list")
+	@PostMapping("/query")
+	@ResponseBody
+	public TableDataInfo query(DynamicCensusEntity dynamicCensus) {
+		startPage();
+        List<DynamicCensusEntity> list = dynamicCensusService.selectDynamicCensusList(dynamicCensus);
+		return getDataTable(list);
+	}
+	
+	/**
+	 * 新增企业不符合项统计
+	 */
+	@GetMapping("/initAdd")
+	public String initAdd(ModelMap mmap) {
+	    mmap.put("dynamicCensus",new DynamicCensusEntity());
+	    return prefix + "/dynamicCensus_edit";
+	}
+	
+	/**
+	 * 新增保存企业不符合项统计
+	 */
+	@RequiresPermissions("module:dynamicCensus:add")
+	@Log(title = "企业不符合项统计", businessType = BusinessType.INSERT)
+	@PostMapping("/add")
+	@ResponseBody
+	public Result add(DynamicCensusEntity dynamicCensus) {		
+		return toAjax(dynamicCensusService.insertDynamicCensus(dynamicCensus));
+	}
+
+	/**
+	 * 修改企业不符合项统计
+	 */
+	@GetMapping("/initEdit/{id}")
+	public String initEdit(@PathVariable("id") Long id, ModelMap mmap) {
+		DynamicCensusEntity dynamicCensus = dynamicCensusService.selectDynamicCensusById(id);
+		mmap.put("dynamicCensus", dynamicCensus);
+	    return prefix + "/dynamicCensus_edit";
+	}
+	
+	/**
+	 * 修改保存企业不符合项统计
+	 */
+	@RequiresPermissions("module:dynamicCensus:edit")
+	@Log(title = "企业不符合项统计", businessType = BusinessType.UPDATE)
+	@PostMapping("/edit")
+	@ResponseBody
+	public Result edit(DynamicCensusEntity dynamicCensus) {		
+		return toAjax(dynamicCensusService.updateDynamicCensus(dynamicCensus));
+	}
+	
+	/**
+	 * 删除企业不符合项统计
+	 */
+	@RequiresPermissions("module:dynamicCensus:remove")
+	@Log(title = "企业不符合项统计", businessType = BusinessType.DELETE)
+	@PostMapping( "/del")
+	@ResponseBody
+	public Result del(String ids) {		
+		return toAjax(dynamicCensusService.deleteDynamicCensusByIds(ids));
+	}
+	
+}

@@ -1,0 +1,79 @@
+package com.jd.project.module.admin.enterprise.entity;
+
+import java.io.Serializable;
+
+public class LSSyncDataEntity implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
+	private String userid;
+
+	private String username;
+
+	private String orgid;
+
+	private String realname;
+
+	private String parent;
+
+	private String orgname;
+
+	private boolean isQy;
+
+	public String getUserid() {
+		return userid;
+	}
+
+	public void setUserid(String userid) {
+		this.userid = userid;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getOrgid() {
+		return orgid;
+	}
+
+	public void setOrgid(String orgid) {
+		this.orgid = orgid;
+	}
+
+	public String getRealname() {
+		return realname;
+	}
+
+	public void setRealname(String realname) {
+		this.realname = realname;
+	}
+
+	public String getParent() {
+		return parent;
+	}
+
+	public void setParent(String parent) {
+		this.parent = parent;
+	}
+
+	public String getOrgname() {
+		return orgname;
+	}
+
+	public void setOrgname(String orgname) {
+		this.orgname = orgname;
+	}
+
+	public boolean isQy() {
+		return isQy;
+	}
+
+	public void setQy(boolean isQy) {
+		this.isQy = isQy;
+	}
+
+}

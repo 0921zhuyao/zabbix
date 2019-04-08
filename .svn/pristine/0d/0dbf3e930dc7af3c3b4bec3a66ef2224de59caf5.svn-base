@@ -1,0 +1,318 @@
+package com.jd.project.module.admin.enterprise.controller;
+
+import com.alibaba.fastjson.JSONObject;
+import com.jd.common.utils.StringUtils;
+import com.jd.common.utils.WebServiceUtils.CxfUtils;
+import com.jd.common.utils.security.ShiroUtils;
+import com.jd.framework.aspectj.lang.annotation.Log;
+import com.jd.framework.aspectj.lang.enums.BusinessType;
+import com.jd.framework.web.controller.BaseController;
+import com.jd.framework.web.domain.Result;
+import com.jd.framework.web.page.TableDataInfo;
+import com.jd.project.module.admin.enterprise.entity.*;
+import com.jd.project.module.admin.enterprise.service.*;
+import com.jd.project.system.dict.domain.DictData;
+import com.jd.project.system.dict.domain.DictType;
+import com.jd.project.system.dict.service.IDictDataService;
+import com.jd.project.system.dict.service.IDictTypeService;
+import com.jd.project.system.sysorg.entity.SysorgEntity;
+import com.jd.project.system.sysorg.service.SysorgService;
+import com.jd.project.system.user.domain.User;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindException;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 企业基础 信息操作处理
+ * 
+ * @author xml
+ * @date 2018-11-23
+ */
+@Controller
+@RequestMapping("/module/qyjcxx")
+public class QyjcxxController extends BaseController {
+	private String prefix = "module/admin/enterprise/qyjcxx";
+
+	@Autowired
+	private QyjcxxService qyjcxxService;
+	@Autowired
+	private SysorgService sysorgService;
+	@Autowired
+	private DmJglbZgbmService dmJglbZgbmService;
+	@Autowired
+	private DmJnajHylxService dmJnajHylxService;
+	@Autowired
+	private DmJnajJjlxService dmJnajJjlxService;
+	@Autowired
+	private DmJnajService dmJnajService;
+
+	@RequiresPermissions("module:qyjcxx:view")
+	@GetMapping()
+	public String qyjcxx(ModelMap mmap) {
+		Map<String, Object> map = qyjcxxService.dictMapForQyjcxx();
+		mmap.put("dict", map);
+		return prefix + "/qyjcxx_list";
+	}
+
+	/**
+	 * 查询企业基础列表
+	 */
+	@RequiresPermissions("module:qyjcxx:list")
+	@PostMapping("/initList")
+	@ResponseBody
+	public TableDataInfo initList(QyjcxxEntity qyjcxx) {
+		User user = ShiroUtils.getUser();
+		if (null != user) {
+			if (StringUtils.isNotEmpty(user.getLsEnterpriseId())) {
+				List<String> orgCodes=sysorgService.selectSysOrgCodesById(user.getLsEnterpriseId());
+				if(null != orgCodes && orgCodes.size() > 0)
+                	qyjcxx.setOrgIds(orgCodes.toArray(new String[orgCodes.size()]));
+			}
+		} else {
+			return null;
+		}
+		startPage();
+		List<QyjcxxEntity> list = qyjcxxService.selectqyjcxxList(qyjcxx);
+		return getDataTable(list);
+	}
+
+	@PostMapping("/initCheckTableCompanyList")
+	@ResponseBody
+	public TableDataInfo initCheckTableCompanyList(QyjcxxEntity qyjcxx) {
+		User user = ShiroUtils.getUser();
+		if (null != user) {
+			if (StringUtils.isNotEmpty(user.getLsEnterpriseId())) {
+				List<String> orgCodes=sysorgService.selectSysOrgCodesById(user.getLsEnterpriseId());
+                qyjcxx.setOrgIds(orgCodes.toArray(new String[orgCodes.size()]));
+			}
+		} else {
+			return null;
+		}
+		startPage();
+		List<QyjcxxEntity> list = qyjcxxService.selectCheckTableCompanyList(qyjcxx);
+		return getDataTable(list);
+	}
+
+	/**
+	 * 新增企业基础
+	 */
+	@GetMapping("/initAdd")
+	public String initAdd(ModelMap mmap) {
+		mmap.put("qyjcxx", new QyjcxxEntity());
+		return prefix + "/qyjcxx_edit";
+	}
+
+	/**
+	 * 新增保存企业基础
+	 */
+	@RequiresPermissions("module:qyjcxx:add")
+	@Log(title = "企业基础", businessType = BusinessType.INSERT)
+	@PostMapping("/add")
+	@ResponseBody
+	public Result add(@Validated QyjcxxEntity qyjcxx) throws BindException {
+		return toAjax(qyjcxxService.insertqyjcxx(qyjcxx));
+	}
+
+	/**
+	 * 修改企业基础
+	 */
+	@GetMapping("/initEdit/{id}")
+	public String initEdit(@PathVariable("id") String id, ModelMap mmap) {
+		QyjcxxEntity qyjcxx = qyjcxxService.selectqyjcxxById(id);
+		mmap.put("qyjcxx", qyjcxx);
+		return prefix + "/qyjcxx_edit";
+	}
+
+	/**
+	 * 修改保存企业基础
+	 */
+	@RequiresPermissions("module:qyjcxx:edit")
+	@Log(title = "企业基础", businessType = BusinessType.UPDATE)
+	@PostMapping("/edit")
+	@ResponseBody
+	public Result edit(@Validated QyjcxxEntity qyjcxx) {
+		return toAjax(qyjcxxService.updateqyjcxx(qyjcxx));
+	}
+
+	/**
+	 * 删除企业基础
+	 */
+	@RequiresPermissions("module:qyjcxx:remove")
+	@Log(title = "企业基础", businessType = BusinessType.DELETE)
+	@PostMapping("/del")
+	@ResponseBody
+	public Result del(String ids) {
+		// 清除一遍,直接返回成功，因为一个sql执行的，可能出现部分没有数据清除，最后返回0
+		qyjcxxService.deleteqyjcxxByIds(ids);
+		return toAjax(1);
+	}
+
+	/**
+	 * 企业名称校验
+	 */
+	@PostMapping("/checkUnique")
+	@ResponseBody
+	public boolean checkUnique(QyjcxxEntity qyjcxx) {
+		if (StringUtils.isEmpty(qyjcxxService.validator(qyjcxx))) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+//---------------------------------------------LS接口同步数据-----------------------------------------------------------
+
+	void insertJglx(String pid,String dmxbm, String level,String mc, String zgbm){
+		DmJglbZgbmEntity dmJglbZgbmEntity=new DmJglbZgbmEntity();
+		dmJglbZgbmEntity.setDmxbm(dmxbm);
+		dmJglbZgbmEntity.setPid(pid);
+		dmJglbZgbmEntity.setMc(mc);
+		dmJglbZgbmEntity.setLevel(level);
+		dmJglbZgbmEntity.setZgbm(zgbm);
+		if(dmJglbZgbmService.selectDmJglbZgbmList(dmJglbZgbmEntity).size() > 0)
+			dmJglbZgbmService.updateDmJglbZgbm(dmJglbZgbmEntity);
+		else
+			dmJglbZgbmService.insertDmJglbZgbm(dmJglbZgbmEntity);
+	}
+
+	DmJnajHylxEntity initHylb(String pid,String dmx, String level,String ms){
+		DmJnajHylxEntity dmJnajHylxEntity=new DmJnajHylxEntity();
+		dmJnajHylxEntity.setPid(pid);
+		dmJnajHylxEntity.setLevel(level);
+		dmJnajHylxEntity.setDmx(dmx);
+		dmJnajHylxEntity.setMs(ms);
+		return dmJnajHylxEntity;
+	}
+
+	void initSzdq(String pid, String dmldm, String dmxbm, String ms){
+		DmJnajEntity dmJnajEntity=new DmJnajEntity();
+		dmJnajEntity.setPid(pid);
+		dmJnajEntity.setDmldm(dmldm);
+		dmJnajEntity.setMs(ms);
+		dmJnajEntity.setDmxbm(dmxbm);
+		if(dmJnajService.selectDmJnajList(dmJnajEntity).size() > 0)
+			dmJnajService.updateDmJnaj(dmJnajEntity);
+		else
+			dmJnajService.insertDmJnaj(dmJnajEntity);
+	}
+
+	void insertJjlx(String pid, String dml, String dmx, String mc){
+		DmJnajJjlxEntity jilx=new DmJnajJjlxEntity();
+		jilx.setDml(dml);
+		jilx.setDmx(dmx);
+		jilx.setMc(mc);
+		jilx.setPid(pid);
+		if(dmJnajJjlxService.selectDmJnajJjlxList(jilx).size() > 0)
+			dmJnajJjlxService.updateDmJnajJjlx(jilx);
+		else
+			dmJnajJjlxService.insertDmJnajJjlx(jilx);
+	}
+
+	private Integer StringToInteger(String data){
+		return StringUtils.isEmpty(data)?null:Integer.parseInt(data);
+	}
+    /**
+     * 企业名称校验
+     */
+    @GetMapping("/syncQyxx")
+    @ResponseBody
+    public void syncQyxx() {
+        try {
+
+            //企业信息--企业规模
+            List<JSONObject> aaa=CxfUtils.getListResult("queryDmList","QYGM","");
+			aaa.forEach(x->{
+				initSzdq(x.getString("pid"),x.getString("dmldm"), x.getString("dmxbm") , x.getString("ms") );
+			});
+            //企业信息--企业经营状态
+            List<JSONObject> v=CxfUtils.getListResult("queryDmList","QYJYZT","");
+			v.forEach(x->{
+				initSzdq(x.getString("pid"),x.getString("dmldm"), x.getString("dmxbm") , x.getString("ms") );
+			});
+            //企业信息--主管部门
+			List<JSONObject> aa=CxfUtils.getListResult("queryDmList","ZGBM","");
+			aa.forEach(x->{
+				initSzdq(x.getString("pid"),x.getString("dmldm"), x.getString("dmxbm") , x.getString("ms") );
+			});
+			//企业信息--所在地区
+			List<JSONObject> ll=CxfUtils.getListResult("queryDmList","SZDQ","");
+			ll.forEach(x->{
+				initSzdq(x.getString("pid"),x.getString("dmldm"), x.getString("dmxbm") , x.getString("ms") );
+			});
+			//企业信息--经济类型
+			List<JSONObject> a=CxfUtils.getListResult("queryJjlxList","");
+			a.forEach(x->{
+				insertJjlx(x.getString("pid"), x.getString("dml") , x.getString("dmx") , x.getString("mc") );
+			});
+			//企业信息--行业类型---同步
+			List<JSONObject> llll=CxfUtils.getListResult("queryHylxList","");
+			List<DmJnajHylxEntity> des=new ArrayList<>();
+			llll.forEach(x->{
+				des.add(initHylb(x.getString("pid"),x.getString("dmx") , x.getString("level"),x.getString("ms")));
+			});
+			dmJnajHylxService.insertDmJnajHylxBatch(des);
+			//企业信息--监管类别---同步
+			List<JSONObject> lll=CxfUtils.getListResult("queryJglbList","");
+			lll.forEach(x->{
+				insertJglx(x.getString("pid"),x.getString("dmxbm") , "0".equals(x.getString("pid"))?"0":"1" ,x.getString("mc") , x.getString("zgbm") );
+			});
+			//企业信息--基础信息---同步
+            JSONObject ls1=CxfUtils.getOneResult("queryQyxxWebServiceDataSet",5000,0);
+            List<JSONObject> ls=(List<JSONObject>)ls1.get("data");
+            List<QyjcxxEntity> qyjcxxs=new ArrayList<>();
+            ls.forEach(x->{
+				QyjcxxEntity qyjcxx=new QyjcxxEntity();
+				qyjcxx.setId(x.getString("id"));//id
+				qyjcxx.setScjydwqc(x.getString("scjydwqc"));//企业名称
+				qyjcxx.setTyshxydm(x.getString("tyshxydm"));//社会统一代码
+				qyjcxx.setFddbr(x.getString("fddbr"));//法定代表人
+				qyjcxx.setFrdh(x.getString("frdh"));//法定代表人电话
+				qyjcxx.setScjydz(x.getString("scjydz"));//生产经营地址
+				qyjcxx.setJjlx(x.getString("jjlx"));//经济类型
+				qyjcxx.setHylb(x.getString("hylb"));//行业类型
+				qyjcxx.setJglb(x.getString("jglb"));//"jglb": "监管类别",
+				qyjcxx.setJd(x.getString("jd"));//"jd": "经度（天地图）",
+				qyjcxx.setWd(x.getString("wd"));//"wd": "纬度（天地图）",
+				qyjcxx.setYyzz(x.getString("yyzz"));//"yyzz": "营业执照（附件）",
+				qyjcxx.setCyrysl(StringToInteger(x.getString("cyrysl")));//"cyrysl": "从业人员数量",
+				qyjcxx.setQygm(x.getString("qygm"));//"qygm": "企业规模",
+				qyjcxx.setQyjyzt(x.getString("qyjyzt"));// "qyjyzt": "企业经营状态（附件）",
+				qyjcxx.setScjydwzchlx(x.getString("scjydwzchlx"));// "scjydwzchlx": "生产经营单位注册号类型",
+				qyjcxx.setDwlxr(x.getString("dwlxr"));// "dwlxr": "单位联系人",
+				qyjcxx.setDwdh(x.getString("dwdh"));// "dwdh": "单位电话",
+				qyjcxx.setLxrsj(x.getString("lxrsj"));// "lxrsj": "联系人手机",
+				qyjcxx.setSzdq(x.getString("szdq"));// "szdq": "所在地区",
+				qyjcxx.setZgbm(x.getString("zgbm"));// "zgbm": "主管部门",
+				qyjcxx.setZyywsr(x.getString("zyywsr"));// "zyywsr": "主营业务收入",
+				qyjcxx.setCmcm(x.getString("cmcm"));// "cmcm": "厂门厂貌",
+				qyjcxx.setZt(StringToInteger(x.getString("zt")));// "zt 0:未审核，1：审核通过,2审核未通过",
+				qyjcxx.setShyj(x.getString("shyj"));// "shyj 审核意见",
+				qyjcxx.setYwaqscdjxk(StringToInteger(x.getString("ywaqscdjxk")));// "ywaqscdjxk 有无安全生产登记许可",
+				qyjcxx.setYwtzsbaqcs(StringToInteger(x.getString("ywtzsbaqcs")));// "ywtzsbaqcs 有无特种设备安全措施",
+				qyjcxx.setYwaqzj(StringToInteger(x.getString("ywaqzj")));// "ywaqzj 有无安全总监",
+				qyjcxx.setYwzzagry(StringToInteger(x.getString("ywzzagry")));// "ywzzagry 有无专职有安管人员",
+				qyjcxx.setYwzxzl(StringToInteger(x.getString("ywzxzl")));// "ywzxzl 有无专项治理",
+				qyjcxx.setYwjzagry(StringToInteger(x.getString("ywjzagry")));// "ywjzagry 有无兼职有安管人员",
+				qyjcxx.setYwwhpsy(StringToInteger(x.getString("ywwhpsy")));// "ywwhpsy 有无危化品使用情况",
+				qyjcxx.setBzhdbdj(StringToInteger(x.getString("bzhdbdj")));// "bzhdbdj 标准化达标登记",
+				qyjcxx.setYwagjg(StringToInteger(x.getString("ywagjg")));// "ywagjg 有无安管机构",
+				qyjcxx.setYwzcaqgcs(StringToInteger(x.getString("ywzcaqgcs")));// "ywzcaqgcs 有无注册安全工程师",
+				qyjcxx.setGxsj(x.getDate("gxsj"));// "gxsj 更新时间",
+				qyjcxx.setYwzdwxy(StringToInteger(x.getString("ywzdwxy")));// "ywzdwxy 有无重大危险源",
+				qyjcxx.setYwtzzyry(StringToInteger(x.getString("ywtzzyry")));// "ywtzzyry 有无特种作业人员",
+				qyjcxxs.add(qyjcxx);
+            });
+			qyjcxxService.insertqyjcxxBatch(qyjcxxs);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jd.project.module.admin.enterprise.mapper.DmJglbZgbmMapper">
+    
+    <resultMap type="DmJglbZgbmEntity" id="DmJglbZgbmResult">
+        <result property="id"    column="ID"    />
+        <result property="dmxbm"    column="DMXBM"    />
+        <result property="mc"    column="MC"    />
+        <result property="pid"    column="PID"    />
+        <result property="level"    column="LEVEL"    />
+        <result property="zgbm"    column="ZGBM"    />
+    </resultMap>
+	
+	<sql id="selectDmJglbZgbmVo">
+        SELECT ID, DMXBM, MC, PID, LEVEL, ZGBM FROM t_dm_jglb_zgbm
+    </sql>
+	
+    <select id="selectDmJglbZgbmList" parameterType="DmJglbZgbmEntity" resultMap="DmJglbZgbmResult">
+        <include refid="selectDmJglbZgbmVo"/>
+        <where>  
+            <if test="id != null and id != ''"> AND ID = #{id}</if>
+             <if test="dmxbm != null and dmxbm != ''"> AND DMXBM = #{dmxbm}</if>
+             <if test="mc != null and mc != ''"> AND MC = #{mc}</if>
+             <if test="pid != null and pid != ''"> AND PID = #{pid}</if>
+             <if test="level != null and level != ''"> AND LEVEL = #{level}</if>
+             <if test="zgbm != null and zgbm != ''"> AND ZGBM = #{zgbm}</if>
+         </where>
+    </select>
+    
+    <select id="selectDmJglbZgbmById" parameterType="Long" resultMap="DmJglbZgbmResult">
+        <include refid="selectDmJglbZgbmVo"/>
+        WHERE ID = #{id}
+    </select>
+        
+    <insert id="insertDmJglbZgbm" parameterType="DmJglbZgbmEntity" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_dm_jglb_zgbm
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != '' ">ID,</if>
+			<if test="dmxbm != null and dmxbm != '' ">DMXBM,</if>
+			<if test="mc != null and mc != '' ">MC,</if>
+			<if test="pid != null and pid != '' ">PID,</if>
+			<if test="level != null and level != '' ">LEVEL,</if>
+			<if test="zgbm != null and zgbm != '' ">ZGBM,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != ''">#{id},</if>
+			<if test="dmxbm != null and dmxbm != ''">#{dmxbm},</if>
+			<if test="mc != null and mc != ''">#{mc},</if>
+			<if test="pid != null and pid != ''">#{pid},</if>
+			<if test="level != null and level != ''">#{level},</if>
+			<if test="zgbm != null and zgbm != ''">#{zgbm},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateDmJglbZgbm" parameterType="DmJglbZgbmEntity">
+        UPDATE t_dm_jglb_zgbm
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="dmxbm != null  and dmxbm != ''  ">DMXBM = #{dmxbm},</if>
+            <if test="mc != null  and mc != ''  ">MC = #{mc},</if>
+            <if test="pid != null  and pid != ''  ">PID = #{pid},</if>
+            <if test="level != null  and level != ''  ">LEVEL = #{level},</if>
+            <if test="zgbm != null  and zgbm != ''  ">ZGBM = #{zgbm},</if>
+        </trim>
+        WHERE ID = #{id}
+    </update>
+
+	<delete id="deleteDmJglbZgbmById" parameterType="Long">
+        DELETE FROM t_dm_jglb_zgbm WHERE ID = #{id}
+    </delete>
+	
+    <delete id="deleteDmJglbZgbmByIds" parameterType="String">
+        DELETE FROM t_dm_jglb_zgbm WHERE ID IN 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

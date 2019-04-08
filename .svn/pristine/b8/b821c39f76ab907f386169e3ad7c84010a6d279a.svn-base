@@ -1,0 +1,112 @@
+package com.jd.project.module.admin.message.controller;
+
+import com.jd.framework.aspectj.lang.annotation.Log;
+import com.jd.framework.aspectj.lang.enums.BusinessType;
+import com.jd.framework.web.controller.BaseController;
+import com.jd.framework.web.domain.Result;
+import com.jd.framework.web.page.TableDataInfo;
+import com.jd.project.module.admin.message.entity.MsgEntity;
+import com.jd.project.module.admin.message.service.MsgService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+/**
+ * 消息配置 信息操作处理
+ * 
+ * @author zaq
+ * @date 2018-11-26
+ */
+@Controller
+@RequestMapping("/module/msg")
+public class MsgController extends BaseController{
+    private String prefix = "module/msg";
+	
+	@Autowired
+	private MsgService msgRefService;
+	
+	@RequiresPermissions("module:msg:view")
+	@GetMapping()
+	public String initList() {
+	    return prefix + "/msg";
+	}
+	
+	/**
+	 * 查询消息配置列表
+	 */
+//	@RequiresPermissions("module:msg:list")
+	@PostMapping("/query")
+	@ResponseBody
+	public TableDataInfo query(MsgEntity msg) {
+		startPage();
+        List<MsgEntity> list = msgRefService.selectMsgRefList(msg);
+		return getDataTable(list);
+	}
+	
+	/**
+	 * 新增消息配置
+	 */
+	@GetMapping("/initAdd")
+	public String initAdd(ModelMap mmap) {
+	    mmap.put("msg",new MsgEntity());
+	    return prefix + "/edit";
+	}
+	
+	/**
+	 * 新增保存消息配置
+	 */
+	@RequiresPermissions("module:msg:add")
+	@Log(title = "消息配置", businessType = BusinessType.INSERT)
+	@PostMapping("/add")
+	@ResponseBody
+	public Result add(MsgEntity msg) {
+		return toAjax(msgRefService.insertMsgRef(msg));
+	}
+
+	/**
+	 * 修改消息配置
+	 */
+	@GetMapping("/initEdit/{id}")
+	public String initEdit(@PathVariable("id") Long id, ModelMap mmap) {
+		MsgEntity msg = msgRefService.selectMsgRefById(id);
+		mmap.put("msg", msg);
+	    return prefix + "/edit";
+	}
+	
+	/**
+	 * 修改保存消息配置
+	 */
+	@RequiresPermissions("module:msg:edit")
+	@Log(title = "消息配置", businessType = BusinessType.UPDATE)
+	@PostMapping("/edit")
+	@ResponseBody
+	public Result edit(MsgEntity msg) {
+		return toAjax(msgRefService.updateMsgRef(msg));
+	}
+	
+	/**
+	 * 删除消息配置
+	 */
+//	@RequiresPermissions("module:msg:remove")
+	@Log(title = "消息配置", businessType = BusinessType.DELETE)
+	@PostMapping( "/del")
+	@ResponseBody
+	public Result del(String ids) {		
+		return toAjax(msgRefService.deleteMsgRefByIds(ids));
+	}
+
+	/**
+	 * 发送消息
+
+	@Log(title = "消息配置", businessType = BusinessType.INSERT)
+	@PostMapping( "/sendMessage")
+	@ResponseBody
+	public Result sendMessage(@RequestParam("sendId") Long sendId,@RequestParam("receiveId") Long receiveId,@RequestParam("content") String content) {
+		return msgRefService.sendMessage(sendId,receiveId,content);
+	} */
+	
+}

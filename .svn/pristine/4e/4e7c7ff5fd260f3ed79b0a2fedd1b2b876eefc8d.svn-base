@@ -1,0 +1,91 @@
+package com.jd.project.module.admin.message.service;
+
+import com.jd.common.constant.Constants;
+import com.jd.common.support.Convert;
+import com.jd.common.utils.StringUtils;
+import com.jd.common.utils.security.ShiroUtils;
+import com.jd.framework.web.service.BaseService;
+import com.jd.project.module.admin.message.entity.NoticeEntity;
+import com.jd.project.module.admin.message.mapper.NoticeMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+/**
+ * 消息 服务层实现
+ * 
+ * @author zaq
+ * @date 2018-11-26
+ */
+@Service
+@Transactional(rollbackFor = Exception.class)
+public class NoticeServiceImpl extends BaseService implements NoticeService {
+
+	@Autowired
+	private NoticeMapper noticeMapper;
+
+	/**
+     * 查询消息信息
+     * 
+     * @param id 消息ID
+     * @return 消息信息
+     */
+    @Override
+	public NoticeEntity selectMsgById(Long id) {
+	    return noticeMapper.selectMsgById(id);
+	}
+	
+	/**
+     * 查询消息列表
+     * 
+     * @param msg 消息信息
+     * @return 消息集合
+     */
+	@Override
+	public List<NoticeEntity> selectMsgList(NoticeEntity msg) {
+		if(msg != null && StringUtils.isNotEmpty(msg.getTitle())){
+			msg.setTitle(msg.getTitle().trim());
+		}
+	    return noticeMapper.selectMsgList(msg);
+	}
+	
+    /**
+     * 新增消息
+     * 
+     * @param msg 消息信息
+     * @return 结果
+     */
+	@Override
+	public int insertMsg(NoticeEntity msg) {
+		msg.setCrtUser(ShiroUtils.getUserId());
+		msg.setUpdUser(ShiroUtils.getUserId());
+		msg.setDelFlag(Constants.IS_NOT_DELETE);
+	    return noticeMapper.insertMsg(msg);
+	}
+	
+	/**
+     * 修改消息
+     * 
+     * @param msg 消息信息
+     * @return 结果
+     */
+	@Override
+	public int updateMsg(NoticeEntity msg) {
+		msg.setUpdUser(ShiroUtils.getUserId());
+	    return noticeMapper.updateMsg(msg);
+	}
+
+	/**
+     * 删除消息对象
+     * 
+     * @param ids 需要删除的数据ID
+     * @return 结果
+     */
+	@Override
+	public int deleteMsgByIds(String ids) {
+		return noticeMapper.deleteMsgByIds(Convert.toStrArray(ids));
+	}
+
+}

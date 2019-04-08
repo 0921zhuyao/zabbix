@@ -1,0 +1,67 @@
+package com.jd.project.module.admin.enterprise.service;
+
+import java.util.List;
+import java.util.Map;
+
+import com.jd.project.module.admin.enterprise.entity.NationallEconomyEntity;
+
+/**
+ * 国民经济行业分类 服务层
+ * 
+ * @author TrevorPhilips
+ * @date 2018-12-20
+ */
+public interface NationallEconomyService {
+	/**
+	 * 查询国民经济行业分类信息
+	 * 
+	 * @param nationallEconomyId
+	 *            国民经济行业分类ID
+	 * @return 国民经济行业分类信息
+	 */
+	public NationallEconomyEntity selectNationallEconomyById(String nationallEconomyId);
+
+	/**
+	 * 查询国民经济行业分类列表
+	 * 
+	 * @param nationallEconomy
+	 *            国民经济行业分类信息
+	 * @return 国民经济行业分类集合
+	 */
+	public List<NationallEconomyEntity> selectNationallEconomyList(NationallEconomyEntity nationallEconomy);
+
+	/**
+	 * 新增国民经济行业分类
+	 * 
+	 * @param nationallEconomy
+	 *            国民经济行业分类信息
+	 * @return 结果
+	 */
+	public int insertNationallEconomy(NationallEconomyEntity nationallEconomy);
+
+	/**
+	 * 修改国民经济行业分类
+	 * 
+	 * @param nationallEconomy
+	 *            国民经济行业分类信息
+	 * @return 结果
+	 */
+	public int updateNationallEconomy(NationallEconomyEntity nationallEconomy);
+
+	/**
+	 * 删除国民经济行业分类信息
+	 * 
+	 * @param ids
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
+	public int deleteNationallEconomyByIds(String ids);
+
+	/**
+	 * 加载所有国民经济行业列表树
+	 * 
+	 * @return
+	 */
+	public List<Map<String, Object>> industryTreeData();
+
+}

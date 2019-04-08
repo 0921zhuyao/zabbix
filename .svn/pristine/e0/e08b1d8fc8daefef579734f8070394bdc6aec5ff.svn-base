@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jd.project.module.admin.enterprise.mapper.NationallEconomyMapper">
+    
+    <resultMap type="NationallEconomyEntity" id="NationallEconomyResult">
+        <result property="nationallEconomyId"    column="NATIONALl_ECONOMY_ID"    />
+        <result property="nationallEconomyCode"    column="NATIONALl_ECONOMY_CODE"    />
+        <result property="nationallEconomyName"    column="NATIONALl_ECONOMY_NAME"    />
+        <result property="parentNationallEconomyId"    column="PARENT_NATIONALl_ECONOMY_ID"    />
+        <result property="remark"    column="REMARK"    />
+        <result property="allCode"    column="ALL_CODE"    />
+        <result property="createUser"    column="CREATE_USER"    />
+        <result property="createTime"    column="CREATE_TIME"    />
+        <result property="updateUser"    column="UPDATE_USER"    />
+        <result property="updateTime"    column="UPDATE_TIME"    />
+        <result property="isDelete"    column="IS_DELETE"    />
+    </resultMap>
+	
+	<sql id="selectNationallEconomyVo">
+        SELECT NATIONALl_ECONOMY_ID, NATIONALl_ECONOMY_CODE, NATIONALl_ECONOMY_NAME, PARENT_NATIONALl_ECONOMY_ID, REMARK, ALL_CODE, CREATE_USER, CREATE_TIME, UPDATE_USER, UPDATE_TIME, IS_DELETE FROM T_NATIONALl_ECONOMY
+    </sql>
+	
+    <select id="selectNationallEconomyList" parameterType="NationallEconomyEntity" resultMap="NationallEconomyResult">
+        <include refid="selectNationallEconomyVo"/>
+        <where>  
+            <if test="nationallEconomyId != null and nationallEconomyId != ''"> AND NATIONALl_ECONOMY_ID = #{nationallEconomyId}</if>
+             <if test="nationallEconomyCode != null and nationallEconomyCode != ''"> AND NATIONALl_ECONOMY_CODE = #{nationallEconomyCode}</if>
+             <if test="nationallEconomyName != null and nationallEconomyName != ''"> AND NATIONALl_ECONOMY_NAME = #{nationallEconomyName}</if>
+             <if test="parentNationallEconomyId != null and parentNationallEconomyId != ''"> AND PARENT_NATIONALl_ECONOMY_ID = #{parentNationallEconomyId}</if>
+             <if test="remark != null and remark != ''"> AND REMARK = #{remark}</if>
+             <if test="allCode != null and allCode != ''"> AND ALL_CODE = #{allCode}</if>
+             <if test="createUser != null and createUser != ''"> AND CREATE_USER = #{createUser}</if>
+             <if test="createTime != null and createTime != ''"> AND CREATE_TIME = #{createTime}</if>
+             <if test="updateUser != null and updateUser != ''"> AND UPDATE_USER = #{updateUser}</if>
+             <if test="updateTime != null and updateTime != ''"> AND UPDATE_TIME = #{updateTime}</if>
+             <if test="isDelete != null and isDelete != ''"> AND IS_DELETE = #{isDelete}</if>
+         </where>
+    </select>
+    
+    <select id="selectNationallEconomyById" parameterType="String" resultMap="NationallEconomyResult">
+        <include refid="selectNationallEconomyVo"/>
+        WHERE NATIONALl_ECONOMY_ID = #{nationallEconomyId}
+    </select>
+        
+    <insert id="insertNationallEconomy" parameterType="NationallEconomyEntity">
+        INSERT INTO T_NATIONALl_ECONOMY
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="nationallEconomyId != null and nationallEconomyId != '' ">NATIONALl_ECONOMY_ID,</if>
+			<if test="nationallEconomyCode != null and nationallEconomyCode != '' ">NATIONALl_ECONOMY_CODE,</if>
+			<if test="nationallEconomyName != null and nationallEconomyName != '' ">NATIONALl_ECONOMY_NAME,</if>
+			<if test="parentNationallEconomyId != null and parentNationallEconomyId != '' ">PARENT_NATIONALl_ECONOMY_ID,</if>
+			<if test="remark != null and remark != '' ">REMARK,</if>
+			<if test="allCode != null and allCode != '' ">ALL_CODE,</if>
+			<if test="createUser != null and createUser != '' ">CREATE_USER,</if>
+			<if test="createTime != null and createTime != '' ">CREATE_TIME,</if>
+			<if test="updateUser != null and updateUser != '' ">UPDATE_USER,</if>
+			<if test="updateTime != null and updateTime != '' ">UPDATE_TIME,</if>
+			<if test="isDelete != null and isDelete != '' ">IS_DELETE,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="nationallEconomyId != null and nationallEconomyId != ''">#{nationallEconomyId},</if>
+			<if test="nationallEconomyCode != null and nationallEconomyCode != ''">#{nationallEconomyCode},</if>
+			<if test="nationallEconomyName != null and nationallEconomyName != ''">#{nationallEconomyName},</if>
+			<if test="parentNationallEconomyId != null and parentNationallEconomyId != ''">#{parentNationallEconomyId},</if>
+			<if test="remark != null and remark != ''">#{remark},</if>
+			<if test="allCode != null and allCode != ''">#{allCode},</if>
+			<if test="createUser != null and createUser != ''">#{createUser},</if>
+			<if test="createTime != null and createTime != ''">#{createTime},</if>
+			<if test="updateUser != null and updateUser != ''">#{updateUser},</if>
+			<if test="updateTime != null and updateTime != ''">#{updateTime},</if>
+			<if test="isDelete != null and isDelete != ''">#{isDelete},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateNationallEconomy" parameterType="NationallEconomyEntity">
+        UPDATE T_NATIONALl_ECONOMY
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="nationallEconomyCode != null  AND nationallEconomyCode != ''  ">NATIONALl_ECONOMY_CODE = #{nationallEconomyCode},</if>
+            <if test="nationallEconomyName != null  AND nationallEconomyName != ''  ">NATIONALl_ECONOMY_NAME = #{nationallEconomyName},</if>
+            <if test="parentNationallEconomyId != null  AND parentNationallEconomyId != ''  ">PARENT_NATIONALl_ECONOMY_ID = #{parentNationallEconomyId},</if>
+            <if test="remark != null  AND remark != ''  ">REMARK = #{remark},</if>
+            <if test="allCode != null  AND allCode != ''  ">ALL_CODE = #{allCode},</if>
+            <if test="createUser != null  ">CREATE_USER = #{createUser},</if>
+            <if test="createTime != null  ">CREATE_TIME = #{createTime},</if>
+            <if test="updateUser != null  ">UPDATE_USER = #{updateUser},</if>
+            <if test="updateTime != null  ">UPDATE_TIME = #{updateTime},</if>
+            <if test="isDelete != null  ">IS_DELETE = #{isDelete},</if>
+        </trim>
+        WHERE NATIONALl_ECONOMY_ID = #{nationallEconomyId}
+    </update>
+
+	<delete id="deleteNationallEconomyById" parameterType="String">
+        DELETE FROM T_NATIONALl_ECONOMY WHERE NATIONALl_ECONOMY_ID = #{nationallEconomyId}
+    </delete>
+	
+    <delete id="deleteNationallEconomyByIds" parameterType="String">
+        DELETE FROM T_NATIONALl_ECONOMY WHERE NATIONALl_ECONOMY_ID IN 
+        <foreach item="nationallEconomyId" collection="array" open="(" separator="," close=")">
+            #{nationallEconomyId}
+        </foreach>
+    </delete>
+    
+    <!--查询所有国民经济行业-->
+    <select id="selectIndustryAll" resultMap="NationallEconomyResult">
+		<include refid="selectNationallEconomyVo"/>
+	</select>
+</mapper>

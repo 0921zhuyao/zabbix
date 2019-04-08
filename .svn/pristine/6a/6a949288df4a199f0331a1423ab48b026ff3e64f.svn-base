@@ -1,0 +1,152 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+    <div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 select-info">
+                    <form id="taskPlan-form">
+                        <div class="select-list">
+                            <ul>
+                                <li>
+                                                                                               任务名称：<input type="text" name="planName"/>
+                                </li>
+                                <li>
+                                                                                                审核状态：<select name="planStatus">
+                                                <option value="">所有</option>
+                                                <option value="0">未审核</option>
+                                                <option value="1">审核通过</option>
+                                                <option value="2">驳回</option>
+                                            </select>
+                                </li>
+                                <li class="select-time">
+                                    <label>创建时间： </label>
+                                    <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="createTime"/>
+                                    <span>-</span>
+                                    <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="updateTime"/>
+                                </li>
+                                <li>
+                                    <a class="btn btn-primary  btn-sm" onclick="searchGrid()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                    <a class="btn btn-warning  btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </form>
+                </div>
+		<div class="btn-group hidden-xs" id="toolbar" role="group">
+			<a class="btn btn-outline btn-sm btn-success " onclick="$.operate.add_plan()" shiro:hasPermission="module:taskPlan:add">
+				<i class="fa fa-plus"></i> 新增
+			</a>
+			<a class="btn btn-outline btn-sm btn-danger " onclick="$.operate.removeAll()" shiro:hasPermission="module:taskPlan:remove">
+				<i class="fa fa-trash-o"></i> 删除
+			</a>
+		</div>
+			
+		<div class="col-sm-12 select-table table-striped">
+			<table id="bootstrap-table" data-mobile-responsive="true"></table>
+		</div>
+	</div>
+    </div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('module:taskPlan:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('module:taskPlan:remove')}]];
+        var auditeFlag = [[${@permission.hasPermi('module:taskPlan:audite')}]]
+        var prefix = ctx + "module/taskPlan"
+
+        var datas = [
+            {dictValue:"0",dictLabel:"未审核",listClass:"warning"},
+            {dictValue:"1",dictLabel:"审核通过",listClass:"primary"},
+            {dictValue:"2",dictLabel:"驳回",listClass:"danger"}
+        ];
+        
+        $(function() {
+            var options = {
+                url: prefix + "/query",
+                createUrl: prefix + "/initAdd",
+                updateUrl: prefix + "/initEdit/{id}",
+                removeUrl: prefix + "/del",
+                auditeUrl: prefix + "/initAudite/{id}",
+                modalName: "自评计划任务",
+                sortName: "updateTime",
+                sortOrder: "desc",
+                search: false,
+                id: "planId",
+                showExport: false,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'planName', 
+					title : '任务名称' 
+				},
+				{
+					field : 'planStartTime', 
+					title : '任务开始时间' 
+				},
+				{
+					field : 'planStatus', 
+					title : '审核状态',
+					formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(datas, value);
+                    }
+				},
+				{
+					field : 'auditContent', 
+					title : '审核意见' 
+				},
+				{
+					field : 'remark', 
+					title : '备注' 
+				},
+				{
+					field : 'sort', 
+					title : '排序号' 
+				},
+				{
+					field : 'createUser', 
+					title : '创建人',
+					formatter: function(value, row, index) {
+	                    return $.table.selectUserName(users, value);
+	                }
+				},
+				{
+					field : 'createTime', 
+					title : '创建时间' 
+				},
+				{
+					field : 'updateUser', 
+					title : '更新人',
+					formatter: function(value, row, index) {
+	                    return $.table.selectUserName(users, value);
+	                }
+				},
+				{
+					field : 'updateTime', 
+					title : '更新时间',
+					sortable: true
+				},
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+		            	actions.push('<a class="btn btn-primary btn-xs ' + auditeFlag + '" href="#" onclick="$.operate.audite(\'' + row.planId + '\')"><i class="glyphicon glyphicon-saved"></i>审核</a> ');
+		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.planId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+		            	if(row.planStatus != 1){
+	                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.planId + '\')"><i class="fa fa-remove"></i>删除</a>');		            		
+		            	}
+						return actions.join('');
+		            }
+		        }]
+            };
+            $.table.init(options);
+        });
+        
+        function searchGrid(){
+            $.table.search("taskPlan-form");
+        }
+    </script>
+</body>
+</html>

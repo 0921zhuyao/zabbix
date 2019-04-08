@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jd.project.module.admin.evaluation.mapper.TaskDetailMapper">
+    
+    <resultMap type="TaskDetailEntity" id="TaskDetailResult">
+        <result property="taskDetailId"    column="TASK_DETAIL_ID"    />
+        <result property="taskPlanId"    column="TASK_PLAN_ID"    />
+        <result property="companyId"    column="COMPANY_ID"    />
+        <result property="joinTime"    column="JOIN_TIME"    />
+        <result property="gradeResult"    column="GRADE_RESULT"    />
+        <result property="gradeRemark"    column="GRADE_REMARK"    />
+        <result property="checktableStatus"    column="CHECKTABLE_STATUS"/>
+        <result property="initLevel"    column="INIT_LEVEL"    />
+        <result property="remark"    column="REMARK"    />
+        <result property="createUser"    column="CREATE_USER"    />
+        <result property="createTime"    column="CREATE_TIME"    />
+        <result property="updateUser"    column="UPDATE_USER"    />
+        <result property="updateTime"    column="UPDATE_TIME"    />
+        <result property="isDelete"    column="IS_DELETE"    />
+        <result property="scjydwqc"    column="scjydwqc"    />
+        <result property="tyshxydm"    column="tyshxydm"    />
+        <result property="fddbr"    column="fddbr"    />
+        <result property="frdh"    column="frdh"    />
+        <result property="noPassNumber"    column="NO_PASS_NUMBER"    />
+        <result property="xzzfNumber"    column="XZZF_NUMBER"    />
+        <result property="orgCode"    column="ORG_CODE"    />
+
+    </resultMap>
+	
+	<sql id="selectTaskDetailVo">
+        SELECT TASK_DETAIL_ID, TASK_PLAN_ID, COMPANY_ID, JOIN_TIME, GRADE_RESULT, GRADE_REMARK, CHECKTABLE_STATUS, INIT_LEVEL, REMARK, CREATE_USER, CREATE_TIME, UPDATE_USER, UPDATE_TIME, IS_DELETE FROM T_TASK_DETAIL
+    </sql>
+
+    <select id="queryQyjcxxByTaskPlanDetailId" parameterType="TaskDetailEntity" resultMap="TaskDetailResult">
+        SELECT  TASK_DETAIL_ID,d.COMPANY_ID,d.TASK_PLAN_ID,d.CHECKTABLE_STATUS,
+                 q.scjydwqc,q.tyshxydm,q.fddbr,q.frdh,d.CREATE_USER,
+                 count(IF(dc.DYNAMIC_TYPE=0 and d.CHECKTABLE_STATUS=4,dc.DYNAMIC_TYPE,null)) NO_PASS_NUMBER,
+                 count(IF(dc.DYNAMIC_TYPE=1 and d.CHECKTABLE_STATUS=4,dc.DYNAMIC_TYPE,null)) XZZF_NUMBER,
+                 d.INIT_LEVEL,
+                 q.zgbm
+        FROM T_TASK_DETAIL d
+        LEFT JOIN qyxx_zc q ON q.id = d.COMPANY_ID and d.IS_DELETE=0
+        LEFT JOIN T_DYNAMIC dc on dc.COMPANY_ID=q.id and dc.DYNAMIC_STATUS!=2
+        GROUP BY TASK_DETAIL_ID
+        HAVING
+        1=1
+        <if test="scjydwqc != null and scjydwqc != ''"> and q.scjydwqc like CONCAT('%',#{scjydwqc},'%')</if>
+        <!--<if test="orgId != null and orgId != ''> and q.ORGID = #{orgId}</if>-->
+        <if test="tyshxydm != null and tyshxydm != ''"> and q.tyshxydm = #{tyshxydm}</if>
+        <if test="fddbr != null and fddbr != ''"> and q.fddbr like CONCAT('%',#{fddbr},'%')</if>
+        <if test="frdh != null and frdh != ''"> and q.frdh = #{frdh}</if>
+        <if test="checktableStatus != null and checktableStatus != ''"> and d.CHECKTABLE_STATUS = #{checktableStatus}</if>
+        <if test="orgIds != null and orgIds != ''">
+                AND q.zgbm in
+                <foreach collection ="orgIds" item="item" index= "index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+       <!-- <if test="orgCode != null and orgCode != ''"> and s.ORG_CODE like CONCAT('%',#{orgCode},'%')</if>-->
+        ORDER BY d.UPDATE_TIME DESC
+    </select>
+
+    <select id="selectTaskDetailList" parameterType="TaskDetailEntity" resultMap="TaskDetailResult">
+        <include refid="selectTaskDetailVo"/>
+        <where>  
+             <if test="taskDetailId != null and taskDetailId != ''"> AND TASK_DETAIL_ID = #{taskDetailId}</if>
+             <if test="taskPlanId != null and taskPlanId != ''"> AND TASK_PLAN_ID = #{taskPlanId}</if>
+             <if test="companyId != null and companyId != ''"> AND COMPANY_ID = #{companyId}</if>
+             <if test="joinTime != null and joinTime != ''"> AND JOIN_TIME = #{joinTime}</if>
+             <if test="gradeResult != null and gradeResult != ''"> AND GRADE_RESULT = #{gradeResult}</if>
+             <if test="gradeRemark != null and gradeRemark != ''"> AND GRADE_REMARK = #{gradeRemark}</if>
+             <if test="checktableStatus != null and checktableStatus != ''"> AND CHECKTABLE_STATUS = #{checktableStatus}</if>
+             <if test="initLevel != null and initLevel != ''"> AND INIT_LEVEL = #{initLevel}</if>
+             <if test="remark != null and remark != ''"> AND REMARK = #{remark}</if>
+             <if test="createUser != null and createUser != ''"> AND CREATE_USER = #{createUser}</if>
+             <if test="createTime != null"> 
+             	AND DATE_FORMAT(CREATE_TIME,'%y%m%d') &gt;= DATE_FORMAT(#{createTime},'%y%m%d')
+             </if>
+             <if test="updateUser != null and updateUser != ''"> AND UPDATE_USER = #{updateUser}</if>
+             <if test="updateTime != null">
+                AND DATE_FORMAT(UPDATE_TIME,'%y%m%d') &lt;= DATE_FORMAT(#{updateTime},'%y%m%d')
+             </if> 
+             	AND IS_DELETE = 0
+         </where>
+    </select>
+    
+    <select id="selectTaskDetailById" parameterType="Long" resultMap="TaskDetailResult">
+        <include refid="selectTaskDetailVo"/>
+        WHERE TASK_DETAIL_ID = #{taskDetailId}
+    </select>
+        
+    <insert id="insertTaskDetail" parameterType="TaskDetailEntity">
+        INSERT INTO T_TASK_DETAIL
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="taskPlanId != null and taskPlanId != '' ">TASK_PLAN_ID,</if>
+			<if test="companyId != null and companyId != '' ">COMPANY_ID,</if>
+			JOIN_TIME,
+			<if test="gradeResult != null and gradeResult != '' ">GRADE_RESULT,</if>
+			<if test="gradeRemark != null and gradeRemark != '' ">GRADE_REMARK,</if>
+			<if test="checktableStatus != null and checktableStatus != '' ">CHECKTABLE_STATUS,</if>
+			<if test="initLevel != null and initLevel != '' ">INIT_LEVEL,</if>
+			<if test="remark != null and remark != '' ">REMARK,</if>
+			<if test="createUser != null and createUser != '' ">CREATE_USER,</if>
+			CREATE_TIME,
+			<if test="updateUser != null and updateUser != '' ">UPDATE_USER,</if>
+			UPDATE_TIME,
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="taskPlanId != null and taskPlanId != ''">#{taskPlanId},</if>
+			<if test="companyId != null and companyId != ''">#{companyId},</if>
+			sysdate(),
+			<if test="gradeResult != null and gradeResult != ''">#{gradeResult},</if>
+			<if test="gradeRemark != null and gradeRemark != ''">#{gradeRemark},</if>
+			<if test="checktableStatus != null and checktableStatus != ''">#{checktableStatus},</if>
+			<if test="initLevel != null and initLevel != ''">#{initLevel},</if>
+			<if test="remark != null and remark != ''">#{remark},</if>
+			<if test="createUser != null and createUser != ''">#{createUser},</if>
+			sysdate(),
+			<if test="updateUser != null and updateUser != ''">#{updateUser},</if>
+			sysdate(),
+         </trim>
+    </insert>
+	 
+    <update id="updateTaskDetail" parameterType="TaskDetailEntity">
+        UPDATE T_TASK_DETAIL
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="taskPlanId != null  ">TASK_PLAN_ID = #{taskPlanId},</if>
+            <if test="companyId != null and companyId != ''  ">COMPANY_ID = #{companyId},</if>
+            <if test="gradeResult != null  ">GRADE_RESULT = #{gradeResult},</if>
+            <if test="gradeRemark != null and gradeRemark != ''  ">GRADE_REMARK = #{gradeRemark},</if>
+            <if test="checktableStatus != null and checktableStatus != ''  ">CHECKTABLE_STATUS = #{checktableStatus},</if>
+            <if test="initLevel != null and initLevel != ''  ">INIT_LEVEL = #{initLevel},</if>
+            <if test="remark != null and remark != ''  ">REMARK = #{remark},</if>
+            <if test="updateUser != null  ">UPDATE_USER = #{updateUser},</if>
+            UPDATE_TIME = sysdate(),
+        </trim>
+        WHERE TASK_DETAIL_ID = #{taskDetailId}
+    </update>
+
+	<update id="deleteTaskDetailById" parameterType="Long">
+        UPDATE T_TASK_DETAIL SET IS_DELETE = 1 WHERE TASK_DETAIL_ID = #{taskDetailId}
+    </update>
+	
+    <delete id="deleteTaskDetailByIds" parameterType="String">
+        UPDATE T_TASK_DETAIL SET IS_DELETE = 1 WHERE TASK_DETAIL_ID IN 
+        <foreach item="taskDetailId" collection="array" open="(" separator="," close=")">
+            #{taskDetailId}
+        </foreach>
+    </delete>
+    
+    <!-- 通过任务ID删除详情信息 -->
+    <update id="deleteTaskDetailByTaskPlanId" parameterType="String">
+    	UPDATE T_TASK_DETAIL SET IS_DELETE = 1 WHERE TASK_PLAN_ID IN 
+    	<foreach item="taskPlanId" collection="array" open="(" separator="," close=")">
+            #{taskPlanId}
+        </foreach>
+    </update>
+    
+    <!-- 批量插入任务详情表 -->
+    <insert id="insertTaskDetailBatch" parameterType="TaskDetailEntity">
+    	INSERT INTO T_TASK_DETAIL (TASK_PLAN_ID, COMPANY_ID, JOIN_TIME, GRADE_RESULT, GRADE_REMARK, INIT_LEVEL, REMARK, CREATE_USER, CREATE_TIME, UPDATE_USER, UPDATE_TIME)
+    	VALUES
+    	<foreach collection ="list" item="taskDetailEntity" separator =",">
+    	(#{taskDetailEntity.taskPlanId},#{taskDetailEntity.companyId},sysdate(),#{taskDetailEntity.gradeResult},#{taskDetailEntity.gradeRemark},#{taskDetailEntity.initLevel},#{taskDetailEntity.remark},#{taskDetailEntity.createUser},sysdate(),#{taskDetailEntity.updateUser},sysdate())
+    	</foreach>
+    </insert>
+    
+    <!-- 根据企业ID查询属于其的任务详情ID -->
+    <select id="queryTaskDetailByCompanyId" parameterType="String" resultMap="TaskDetailResult">
+    	SELECT TASK_DETAIL_ID, TASK_PLAN_ID, COMPANY_ID, JOIN_TIME, GRADE_RESULT, GRADE_REMARK, CHECKTABLE_STATUS, INIT_LEVEL, REMARK, CREATE_USER, CREATE_TIME, UPDATE_USER, UPDATE_TIME, IS_DELETE 
+    	FROM T_TASK_DETAIL
+    	WHERE IS_DELETE = 0 AND COMPANY_ID = #{companyId}
+    </select>
+    
+    <!-- 修改企业自评状态 -->
+    <update id="updateChecktableStatus" parameterType="TaskDetailEntity">
+    	UPDATE T_TASK_DETAIL SET CHECKTABLE_STATUS = #{checktableStatus},UPDATE_TIME = sysdate(),INIT_LEVEL = #{initLevel} WHERE IS_DELETE = 0 AND COMPANY_ID = #{companyId}
+    </update>
+    
+    <!-- 通过企业ID查询任务详情信息 -->
+    <select id="findTaskDetailByCompanyId" parameterType="String" resultMap="TaskDetailResult">
+    	<include refid="selectTaskDetailVo"/>
+    	WHERE IS_DELETE = 0 AND COMPANY_ID = #{enterpriseId}
+    </select>
+</mapper>

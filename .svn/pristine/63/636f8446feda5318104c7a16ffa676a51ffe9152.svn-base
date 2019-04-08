@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jd.project.module.admin.enterprise.mapper.SpecialTreatmentMapper">
+    
+    <resultMap type="SpecialTreatmentEntity" id="SpecialTreatmentResult">
+        <result property="id"    column="ID"    />
+        <result property="companyId"    column="COMPANY_ID"    />
+        <result property="code"    column="CODE"    />
+        <result property="remark"    column="REMARK"    />
+        <result property="createUser"    column="CREATE_USER"    />
+        <result property="createTime"    column="CREATE_TIME"    />
+        <result property="updateUser"    column="UPDATE_USER"    />
+        <result property="updateTime"    column="UPDATE_TIME"    />
+        <result property="isDelete"    column="IS_DELETE"    />
+    </resultMap>
+	
+	<sql id="selectSpecialTreatmentVo">
+        SELECT ID, COMPANY_ID, CODE, REMARK, CREATE_USER, CREATE_TIME, UPDATE_USER, UPDATE_TIME, IS_DELETE FROM T_SPECIAL_TREATMENT
+    </sql>
+	
+    <select id="selectSpecialTreatmentList" parameterType="SpecialTreatmentEntity" resultMap="SpecialTreatmentResult">
+        <include refid="selectSpecialTreatmentVo"/>
+        <where>  
+            <if test="id != null and id != ''"> AND ID = #{id}</if>
+             <if test="companyId != null and companyId != ''"> AND COMPANY_ID = #{companyId}</if>
+             <if test="code != null and code != ''"> AND CODE = #{code}</if>
+             <if test="remark != null and remark != ''"> AND REMARK = #{remark}</if>
+             <if test="createUser != null and createUser != ''"> AND CREATE_USER = #{createUser}</if>
+             <if test="createTime != null"> AND CREATE_TIME = #{createTime}</if>
+             <if test="updateUser != null and updateUser != ''"> AND UPDATE_USER = #{updateUser}</if>
+             <if test="updateTime != null"> AND UPDATE_TIME = #{updateTime}</if>
+             AND IS_DELETE = 0
+         </where>
+    </select>
+    
+    <select id="selectSpecialTreatmentById" parameterType="Long" resultMap="SpecialTreatmentResult">
+        <include refid="selectSpecialTreatmentVo"/>
+        WHERE ID = #{id}
+    </select>
+        
+    <insert id="insertSpecialTreatment" parameterType="SpecialTreatmentEntity">
+        INSERT INTO T_SPECIAL_TREATMENT
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="companyId != null and companyId != '' ">COMPANY_ID,</if>
+			<if test="code != null and code != '' ">CODE,</if>
+			<if test="remark != null and remark != '' ">REMARK,</if>
+			<if test="createUser != null and createUser != '' ">CREATE_USER,</if>
+			CREATE_TIME,
+			<if test="updateUser != null and updateUser != '' ">UPDATE_USER,</if>
+			UPDATE_TIME,
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="companyId != null and companyId != ''">#{companyId},</if>
+			<if test="code != null and code != ''">#{code},</if>
+			<if test="remark != null and remark != ''">#{remark},</if>
+			<if test="createUser != null and createUser != ''">#{createUser},</if>
+			sysdate(),
+			<if test="updateUser != null and updateUser != ''">#{updateUser},</if>
+			sysdate(),
+         </trim>
+    </insert>
+	 
+    <update id="updateSpecialTreatment" parameterType="SpecialTreatmentEntity">
+        UPDATE T_SPECIAL_TREATMENT
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="companyId != null  AND companyId != ''  ">COMPANY_ID = #{companyId},</if>
+            <if test="code != null  ">CODE = #{code},</if>
+            <if test="remark != null  AND remark != ''  ">REMARK = #{remark},</if>
+            <if test="updateUser != null  ">UPDATE_USER = #{updateUser},</if>
+            UPDATE_TIME = sysdate(),
+        </trim>
+        WHERE ID = #{id}
+    </update>
+
+	<delete id="deleteSpecialTreatmentById" parameterType="Long">
+        DELETE FROM T_SPECIAL_TREATMENT WHERE ID = #{id}
+    </delete>
+
+    <delete id="deleteSpecialTreatmentByCompanyId">
+        DELETE FROM T_SPECIAL_TREATMENT WHERE COMPANY_ID=#{companyId}
+    </delete>
+	
+    <delete id="deleteSpecialTreatmentByIds" parameterType="String">
+        DELETE FROM T_SPECIAL_TREATMENT WHERE ID IN 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+    <!-- 批量新增 -->
+    <insert id="insertSpecialTreatmentBatch" parameterType="SpecialTreatmentEntity">
+    	INSERT INTO T_SPECIAL_TREATMENT (COMPANY_ID, CODE, REMARK, CREATE_USER, CREATE_TIME, UPDATE_USER, UPDATE_TIME)
+    	VALUES
+    	<foreach collection="list" item="specialTreatment" separator=",">
+    		(#{specialTreatment.companyId},#{specialTreatment.code},#{specialTreatment.remark},#{specialTreatment.createUser},sysdate(),#{specialTreatment.updateUser},sysdate())
+    	</foreach>
+    </insert>
+    
+    <!-- 通过companyId查询专项治理编码 -->
+    <select id="querySpecialTreatmentCodeBycompanyId" parameterType="String" resultMap="SpecialTreatmentResult">
+    	<include refid="selectSpecialTreatmentVo"/>
+        <where>
+             AND COMPANY_ID = #{companyId} AND IS_DELETE = 0
+         </where>
+    </select>
+</mapper>

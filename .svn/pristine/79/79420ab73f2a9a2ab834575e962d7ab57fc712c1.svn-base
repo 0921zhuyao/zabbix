@@ -1,0 +1,79 @@
+package com.jd.project.module.admin.evaluation.service;
+
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import com.jd.common.support.Convert;
+import com.jd.framework.web.service.BaseService;
+import com.jd.project.module.admin.evaluation.entity.CompanyChecktablesEntity;
+import com.jd.project.module.admin.evaluation.mapper.CompanyChecktablesMapper;
+
+/**
+ * 企业检查关联 服务层实现
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-29
+ */
+@Service
+@Transactional(rollbackFor = Exception.class)
+public class CompanyChecktablesServiceImpl extends BaseService implements CompanyChecktablesService {
+	@Autowired
+	private CompanyChecktablesMapper companyChecktablesMapper;
+
+	/**
+     * 查询企业检查关联信息
+     * 
+     * @param checktablesId 企业检查关联ID
+     * @return 企业检查关联信息
+     */
+    @Override
+	public CompanyChecktablesEntity selectCompanyChecktablesById(Long checktablesId) {
+	    return companyChecktablesMapper.selectCompanyChecktablesById(checktablesId);
+	}
+	
+	/**
+     * 查询企业检查关联列表
+     * 
+     * @param companyChecktables 企业检查关联信息
+     * @return 企业检查关联集合
+     */
+	@Override
+	public List<CompanyChecktablesEntity> selectCompanyChecktablesList(CompanyChecktablesEntity companyChecktables) {
+	    return companyChecktablesMapper.selectCompanyChecktablesList(companyChecktables);
+	}
+	
+    /**
+     * 新增企业检查关联
+     * 
+     * @param companyChecktables 企业检查关联信息
+     * @return 结果
+     */
+	@Override
+	public int insertCompanyChecktables(CompanyChecktablesEntity companyChecktables) {
+	    return companyChecktablesMapper.insertCompanyChecktables(companyChecktables);
+	}
+	
+	/**
+     * 修改企业检查关联
+     * 
+     * @param companyChecktables 企业检查关联信息
+     * @return 结果
+     */
+	@Override
+	public int updateCompanyChecktables(CompanyChecktablesEntity companyChecktables) {
+	    return companyChecktablesMapper.updateCompanyChecktables(companyChecktables);
+	}
+
+	/**
+     * 删除企业检查关联对象
+     * 
+     * @param ids 需要删除的数据ID
+     * @return 结果
+     */
+	@Override
+	public int deleteCompanyChecktablesByIds(String ids) {
+		return companyChecktablesMapper.deleteCompanyChecktablesByIds(Convert.toStrArray(ids));
+	}
+	
+}

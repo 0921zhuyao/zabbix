@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>企业自评</title>
+</head>
+<link rel="stylesheet" th:href="@{/css/app/self-judge.css}">
+<link rel="stylesheet" type="text/css" th:href="@{ /css/app/alert.css}">
+<body>
+<!--头部内容-->
+<header id="header" class="mui-bar mui-bar-nav">
+    <span class="action-back" onclick="window.history.back()">
+        <img th:src="@{/images/return.png}" alt="">
+    </span>
+    <h1 class="mui-title">[[${qyjcxxEntity.scjydwqc}]]</h1>
+</header>
+<div class="space"></div>
+<ul class="list" th:with="checkTableNames=${checkTableNameEntities}">
+    <li th:each="checkTableName : ${checkTableNames}" th:onclick="'javascript:detail('+${checkTableName.checkTableNameId}+');'">
+        <img th:src="@{/images/check-form-icon1.png}" alt="" class="list-icon">
+        <span>[[${checkTableName.checkTableName}]]</span>
+        <img th:src="@{/images/arrow.png}" alt="" class="arrow">
+        <button th:if="${checkTableName.status} eq 0" class="no-start">未开始</button>
+        <button th:if="${checkTableName.status} eq 1" class="beging">进行中</button>
+        <button th:if="${checkTableName.status} eq 2" class="finish">已完成</button>
+    </li>
+</ul>
+<div class="space1"></div>
+<div class="butt"><button th:if="${statusFlag} != 0" th:onclick="'javascript:checkSubmit(\''+${qyjcxxEntity.id}+'\');'">提交</button></div>
+</body>
+<script type="text/javascript" th:src="@{ /js/app/jquery-3.0.0.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/app/alert.min.js}"></script>
+<script th:inline="javascript">	
+   	function detail(tableNameId){
+   		location.href = "/app/companyChecktable/detail/" + tableNameId + "/" + [[${qyjcxxEntity.id}]];
+   	}
+   	
+   	function checkSubmit(companyId){
+   		var config = {
+    	        url: "/app/companyChecktable/checkSubmit",
+    	        type: "post",
+    	        dataType: "json",
+    	        data: {companyId:companyId},
+    	        success: function(result) {
+    	        	if (result.code == 0) {
+    	        		msgAlert(result.msg);
+                    } else {
+                    	msgAlert(result.msg);
+                    }
+    	        }
+    	    };
+    	    $.ajax(config)
+   	}
+   	
+   	function msgAlert(msg){
+   		jqueryAlert({
+	        'content' : msg,
+	        'closeTime' : 1500,
+	    })
+   	}
+</script>
+</html>

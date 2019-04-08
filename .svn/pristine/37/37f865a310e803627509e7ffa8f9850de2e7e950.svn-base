@@ -1,0 +1,86 @@
+package com.jd.project.module.admin.standard.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.jd.common.support.Convert;
+import com.jd.framework.web.service.BaseService;
+import com.jd.project.module.admin.standard.entity.CheckTablePropEntity;
+import com.jd.project.module.admin.standard.mapper.CheckTablePropMapper;
+
+/**
+ * 检查检查属性 服务层实现
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-21
+ */
+@Service
+@Transactional(rollbackFor = Exception.class)
+public class CheckTablePropServiceImpl extends BaseService implements CheckTablePropService {
+	@Autowired
+	private CheckTablePropMapper checkTablePropMapper;
+
+	/**
+	 * 查询检查检查属性信息
+	 * 
+	 * @param propId
+	 *            检查检查属性ID
+	 * @return 检查检查属性信息
+	 */
+	@Override
+	public CheckTablePropEntity selectCheckTablePropById(Long propId) {
+		return checkTablePropMapper.selectCheckTablePropById(propId);
+	}
+
+	/**
+	 * 查询检查检查属性列表
+	 * 
+	 * @param checkTableProp
+	 *            检查检查属性信息
+	 * @return 检查检查属性集合
+	 */
+	@Override
+	public List<CheckTablePropEntity> selectCheckTablePropList(CheckTablePropEntity checkTableProp) {
+		return checkTablePropMapper.selectCheckTablePropList(checkTableProp);
+	}
+
+	/**
+	 * 新增检查检查属性
+	 * 
+	 * @param checkTableProp
+	 *            检查检查属性信息
+	 * @return 结果
+	 */
+	@Override
+	public int insertCheckTableProp(CheckTablePropEntity checkTableProp) {
+		return checkTablePropMapper.insertCheckTableProp(checkTableProp);
+	}
+
+	/**
+	 * 修改检查检查属性
+	 * 
+	 * @param checkTableProp
+	 *            检查检查属性信息
+	 * @return 结果
+	 */
+	@Override
+	public int updateCheckTableProp(CheckTablePropEntity checkTableProp) {
+		return checkTablePropMapper.updateCheckTableProp(checkTableProp);
+	}
+
+	/**
+	 * 删除检查检查属性对象
+	 * 
+	 * @param ids
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
+	@Override
+	public int deleteCheckTablePropByIds(String ids) {
+		return checkTablePropMapper.deleteCheckTablePropByIds(Convert.toStrArray(ids));
+	}
+
+}

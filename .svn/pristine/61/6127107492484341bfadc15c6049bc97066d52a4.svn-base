@@ -1,0 +1,69 @@
+package com.jd.project.module.admin.evaluation.service;
+
+import com.jd.project.module.admin.evaluation.entity.CompanyChecktableFilesEntity;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+
+/**
+ * 企业自评记录附件 服务层
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-29
+ */
+public interface CompanyChecktableFilesService {
+	/**
+	 * 查询企业自评记录附件信息
+	 * 
+	 * @param checktableFilesId
+	 *            企业自评记录附件ID
+	 * @return 企业自评记录附件信息
+	 */
+	public CompanyChecktableFilesEntity selectCompanyChecktableFilesById(Long checktableFilesId);
+
+	/**
+	 * 查询企业自评记录附件列表
+	 * 
+	 * @param companyChecktableFiles
+	 *            企业自评记录附件信息
+	 * @return 企业自评记录附件集合
+	 */
+	public List<CompanyChecktableFilesEntity> selectCompanyChecktableFilesList(
+			CompanyChecktableFilesEntity companyChecktableFiles);
+
+	/**
+	 * 新增企业自评记录附件
+	 * 
+	 * @param companyChecktableFiles
+	 *            企业自评记录附件信息
+	 * @return 结果
+	 */
+	public int insertCompanyChecktableFiles(CompanyChecktableFilesEntity companyChecktableFiles);
+
+	/**
+	 * 修改企业自评记录附件
+	 * 
+	 * @param companyChecktableFiles
+	 *            企业自评记录附件信息
+	 * @return 结果
+	 */
+	public int updateCompanyChecktableFiles(CompanyChecktableFilesEntity companyChecktableFiles);
+
+	/**
+	 * 删除企业自评记录附件信息
+	 * 
+	 * @param ids
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
+	public int deleteCompanyChecktableFilesByIds(String ids);
+
+	/**
+	 * 带文件的新增或修改企业自评记录
+	 *
+	 * @param file
+	 *           w文件
+	 * @return 结果
+	 */
+	public String insertFile(MultipartFile file);
+}

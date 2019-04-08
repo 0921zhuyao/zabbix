@@ -1,0 +1,585 @@
+package com.jd.project.module.admin.enterprise.entity;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.jd.common.utils.DateUtils;
+import com.jd.framework.web.domain.BasisEntity;
+import com.jd.project.module.admin.evaluation.entity.DynamicEntity;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.Range;
+
+import javax.validation.constraints.*;
+import java.util.Date;
+import java.util.List;
+
+/**
+ * 企业基础表 jb_qyjcxx
+ * 
+ * @author xml
+ * @date 2018-11-23
+ */
+public class QyjcxxEntity extends BasisEntity
+{
+	private static final long serialVersionUID = 1L;
+	private String id;
+	/** 企业名称,应全局唯一，不允许重名。 */
+	@Length(min = 5,max = 200,message ="请按要求填写企业名称")
+	private String scjydwqc;
+	/** 生产经营单位注册号类型 */
+	@Length(max = 100,message ="请按要求生产经营单位注册号类型")
+	private String scjydwzchlx;
+	/** 统一社会信用代码 */
+	@Length(max = 18,message ="请按要求填写统一社会信用代码")
+	private String tyshxydm;
+	/** 单位联系人 */
+	@Length(max = 100,message ="请按要求填写单位联系人")
+	private String dwlxr;
+	/** 单位电话 */
+	@Length(max = 50,message ="请按要求填写单位电话")
+	private String dwdh;
+	/** 联系人手机 */
+	@Length(max = 50,message ="请按要求填写联系人手机")
+	private String lxrsj;
+	/** 法定代表人 */
+	@Length(max = 100,message ="请按要求填写法定代表人")
+	private String fddbr;
+	/** 法人电话 */
+	@Length(max = 50,message ="请按要求填写法人电话")
+	private String frdh;
+	/** 生产经营地址 */
+	@Length(max = 2000,message ="请按要求填写生产经营地址")
+	private String scjydz;
+	/** 经济类型(详见t_dm_jnaj_jjlx表) */
+	@Length(max = 20,message ="请按要求填写经济类型")
+	private String jjlx;
+	/** 行业类别(详见t_dm_jnaj_hylx表) */
+	@Length(max = 20,message ="请按要求填写行业类别")
+	private String hylb;
+	/** 监管类别(详见t_dm_jglb_zgbm表) */
+	@Length(max = 20,message ="请按要求填写监管类别")
+	private String jglb;
+	/** 所在地区(详见t_dm_jnaj WHERE dmldm='SZDQ') */
+	@Length(max = 64,message ="请按要求填写所在地区")
+	private String szdq;
+	/** 主管部门(详见t_dm_jnaj WHERE dmldm='ZGBM') */
+	@Length(max = 64,message ="请按要求填写主管部门")
+	private String zgbm;
+	/** 经度 */
+	private String jd;
+	/** 纬度 */
+	private String wd;
+	/** 营业执照 */
+	@Length(max = 32,message ="请按要求填写营业执照")
+	private String yyzz;
+	/** 主营业务收入 */
+	@Length(max = 20,message ="请按要求填写主营业务收入")
+	private String zyywsr;
+	/** 从业人员数量 */
+	private Integer cyrysl;
+	/** 企业规模(详见t_dm_jnaj WHERE dmldm='QYGM') */
+	@Length(max = 20,message ="请按要求填写企业规模")
+	private String qygm;
+	/** 企业经营状态 */
+	@Length(max = 20,message ="请按要求填写企业经营状态")
+	private String qyjyzt;
+	/** 厂门厂貌 */
+	@Length(max = 32,message ="请按要求填写厂门厂貌")
+	private String cmcm;
+	/** 0:未审核，1：审核通过,2审核未通过 */
+	private Integer zt;
+	/** 审核意见 */
+	private String shyj;
+	/** 有无安管机构(-1:未填报，0:无,1:有) */
+	private Integer ywagjg;
+	/** 有无专职有安管人员(-1:未填报，0:无,1:有) */
+	private Integer ywzzagry;
+	/** 有无兼职有安管人员(-1:未填报，0:无,1:有) */
+	private Integer ywjzagry;
+	/** 有无安全总监(-1:未填报，0:无,1:有) */
+	private Integer ywaqzj;
+	/** 有无特种作业人员(-1:未填报，0:无,1:有) */
+	private Integer ywtzzyry;
+	/** 有无注册安全工程师(-1:未填报，0:无,1:有) */
+	private Integer ywzcaqgcs;
+	/** 有无特种设备安全措施(-1:未填报，0:无,1:有) */
+	private Integer ywtzsbaqcs;
+	/** 标准化达标登记((-1:未填报，0:无,1:有)) */
+	private Integer bzhdbdj;
+	/** 有无重大危险源(-1:未填报，0:无,1:有) */
+	private Integer ywzdwxy;
+	/** 有无安全生产登记许可(-1:未填报，0:无,1:有) */
+	private Integer ywaqscdjxk;
+	/** 有无危化品使用情况(-1:未填报，0:无,1:有) */
+	private Integer ywwhpsy;
+	/** 有无专项治理(-1:未填报，0:无,1:有) */
+	private Integer ywzxzl;
+	/** 更新时间 */
+	private Date gxsj;
+	/** 大中小微 */
+	private String gmqk;
+	/** 规模情况 */
+	private String qygmqk;
+	/** 企业名称 */
+	private String orgName;
+	/** 动态运行列表 */
+	public List<DynamicEntity> dyList;
+
+	/** LS_SYSORG表的主键 */
+	private String orgId;
+	/** LS_SYSORG表的code值 */
+	private String orgCode;
+
+	/** LS_SYSORG表的主键 */
+	private String[] orgIds;
+	/**
+	 * 企业分级等级
+	 */
+	private String grade;
+
+	public String getGrade() {
+		return grade;
+	}
+
+	public void setGrade(String grade) {
+		this.grade = grade;
+	}
+
+	public String[] getOrgIds() {
+		return orgIds;
+	}
+
+	public void setOrgIds(String[] orgIds) {
+		this.orgIds = orgIds;
+	}
+
+	private Long taskDetailId;
+
+	public String getQygmqk() {
+		return qygmqk;
+	}
+
+	public void setQygmqk(String qygmqk) {
+		this.qygmqk = qygmqk;
+	}
+
+	private String specialTreatmentStr;
+
+	public String getOrgCode() {
+		return orgCode;
+	}
+
+	public void setOrgCode(String orgCode) {
+		this.orgCode = orgCode;
+	}
+
+	public String getSpecialTreatmentStr() {
+		return specialTreatmentStr;
+	}
+
+	public void setSpecialTreatmentStr(String specialTreatmentStr) {
+		this.specialTreatmentStr = specialTreatmentStr;
+	}
+
+	public Long getTaskDetailId() {
+		return taskDetailId;
+	}
+
+	public void setTaskDetailId(Long taskDetailId) {
+		this.taskDetailId = taskDetailId;
+	}
+
+	public List<DynamicEntity> getDyList() {
+		return dyList;
+	}
+
+	public void setDyList(List<DynamicEntity> dyList) {
+		this.dyList = dyList;
+	}
+
+	public String getOrgName() {
+		return orgName;
+	}
+
+	public void setOrgName(String orgName) {
+		this.orgName = orgName;
+	}
+
+	public String getOrgId() {
+		return orgId;
+	}
+
+	public void setOrgId(String orgId) {
+		this.orgId = orgId;
+	}
+
+	public static long getSerialVersionUID() {
+		return serialVersionUID;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getTyshxydm() {
+		return tyshxydm;
+	}
+
+	public void setTyshxydm(String tyshxydm) {
+		this.tyshxydm = tyshxydm;
+	}
+
+
+	public String getFddbr() {
+		return fddbr;
+	}
+
+	public void setFddbr(String fddbr) {
+		this.fddbr = fddbr;
+	}
+
+	public String getFrdh() {
+		return frdh;
+	}
+
+	public void setFrdh(String frdh) {
+		this.frdh = frdh;
+	}
+
+
+	public String getScjydz() {
+		return scjydz;
+	}
+
+	public void setScjydz(String scjydz) {
+		this.scjydz = scjydz;
+	}
+
+	public String getJjlx() {
+		return jjlx;
+	}
+
+	public void setJjlx(String jjlx) {
+		this.jjlx = jjlx;
+	}
+
+	public String getHylb() {
+		return hylb;
+	}
+
+	public void setHylb(String hylb) {
+		this.hylb = hylb;
+	}
+
+	public String getQyjyzt() {
+		return qyjyzt;
+	}
+
+	public void setQyjyzt(String qyjyzt) {
+		this.qyjyzt = qyjyzt;
+	}
+
+	public Integer getCyrysl() {
+		return cyrysl;
+	}
+
+	public void setCyrysl(Integer cyrysl) {
+		this.cyrysl = cyrysl;
+	}
+
+	public String getQygm() {
+		return qygm;
+	}
+
+	public void setQygm(String qygm) {
+		this.qygm = qygm;
+	}
+
+
+	public String getJd() {
+		return jd;
+	}
+
+	public void setJd(String jd) {
+		this.jd = jd;
+	}
+
+	public String getWd() {
+		return wd;
+	}
+
+	public void setWd(String wd) {
+		this.wd = wd;
+	}
+
+	public String getYyzz() {
+		return yyzz;
+	}
+
+	public void setYyzz(String yyzz) {
+		this.yyzz = yyzz;
+	}
+
+	public String getScjydwqc() {
+		return scjydwqc;
+	}
+
+	public void setScjydwqc(String scjydwqc) {
+		this.scjydwqc = scjydwqc;
+	}
+
+	public String getScjydwzchlx() {
+		return scjydwzchlx;
+	}
+
+	public void setScjydwzchlx(String scjydwzchlx) {
+		this.scjydwzchlx = scjydwzchlx;
+	}
+
+	public String getDwlxr() {
+		return dwlxr;
+	}
+
+	public void setDwlxr(String dwlxr) {
+		this.dwlxr = dwlxr;
+	}
+
+	public String getDwdh() {
+		return dwdh;
+	}
+
+	public void setDwdh(String dwdh) {
+		this.dwdh = dwdh;
+	}
+
+	public String getLxrsj() {
+		return lxrsj;
+	}
+
+	public void setLxrsj(String lxrsj) {
+		this.lxrsj = lxrsj;
+	}
+
+	public String getJglb() {
+		return jglb;
+	}
+
+	public void setJglb(String jglb) {
+		this.jglb = jglb;
+	}
+
+	public String getSzdq() {
+		return szdq;
+	}
+
+	public void setSzdq(String szdq) {
+		this.szdq = szdq;
+	}
+
+	public String getZgbm() {
+		return zgbm;
+	}
+
+	public void setZgbm(String zgbm) {
+		this.zgbm = zgbm;
+	}
+
+	public String getZyywsr() {
+		return zyywsr;
+	}
+
+	public void setZyywsr(String zyywsr) {
+		this.zyywsr = zyywsr;
+	}
+
+	public String getCmcm() {
+		return cmcm;
+	}
+
+	public void setCmcm(String cmcm) {
+		this.cmcm = cmcm;
+	}
+
+
+	public String getShyj() {
+		return shyj;
+	}
+
+	public void setShyj(String shyj) {
+		this.shyj = shyj;
+	}
+
+	public Integer getYwagjg() {
+		return ywagjg;
+	}
+
+	public Integer getZt() {
+		return zt;
+	}
+
+	public void setZt(Integer zt) {
+		this.zt = zt;
+	}
+
+	public void setYwagjg(Integer ywagjg) {
+		this.ywagjg = ywagjg;
+	}
+
+	public Integer getYwzzagry() {
+		return ywzzagry;
+	}
+
+	public void setYwzzagry(Integer ywzzagry) {
+		this.ywzzagry = ywzzagry;
+	}
+
+	public Integer getYwjzagry() {
+		return ywjzagry;
+	}
+
+	public void setYwjzagry(Integer ywjzagry) {
+		this.ywjzagry = ywjzagry;
+	}
+
+	public Integer getYwaqzj() {
+		return ywaqzj;
+	}
+
+	public void setYwaqzj(Integer ywaqzj) {
+		this.ywaqzj = ywaqzj;
+	}
+
+	public Integer getYwtzzyry() {
+		return ywtzzyry;
+	}
+
+	public void setYwtzzyry(Integer ywtzzyry) {
+		this.ywtzzyry = ywtzzyry;
+	}
+
+	public Integer getYwzcaqgcs() {
+		return ywzcaqgcs;
+	}
+
+	public void setYwzcaqgcs(Integer ywzcaqgcs) {
+		this.ywzcaqgcs = ywzcaqgcs;
+	}
+
+	public Integer getYwtzsbaqcs() {
+		return ywtzsbaqcs;
+	}
+
+	public void setYwtzsbaqcs(Integer ywtzsbaqcs) {
+		this.ywtzsbaqcs = ywtzsbaqcs;
+	}
+
+	public Integer getBzhdbdj() {
+		return bzhdbdj;
+	}
+
+	public void setBzhdbdj(Integer bzhdbdj) {
+		this.bzhdbdj = bzhdbdj;
+	}
+
+	public Integer getYwzdwxy() {
+		return ywzdwxy;
+	}
+
+	public void setYwzdwxy(Integer ywzdwxy) {
+		this.ywzdwxy = ywzdwxy;
+	}
+
+	public Integer getYwaqscdjxk() {
+		return ywaqscdjxk;
+	}
+
+	public void setYwaqscdjxk(Integer ywaqscdjxk) {
+		this.ywaqscdjxk = ywaqscdjxk;
+	}
+
+	public Integer getYwwhpsy() {
+		return ywwhpsy;
+	}
+
+	public void setYwwhpsy(Integer ywwhpsy) {
+		this.ywwhpsy = ywwhpsy;
+	}
+
+	public Integer getYwzxzl() {
+		return ywzxzl;
+	}
+
+	public void setYwzxzl(Integer ywzxzl) {
+		this.ywzxzl = ywzxzl;
+	}
+
+	public Date getGxsj() {
+		return gxsj;
+	}
+
+	public void setGxsj(Date gxsj) {
+		this.gxsj = gxsj;
+	}
+
+	public String getGmqk() {
+		return gmqk;
+	}
+
+	public void setGmqk(String gmqk) {
+		this.gmqk = gmqk;
+	}
+
+	@Override
+	public String toString() {
+		return "QyjcxxEntity{" +
+				"id='" + id + '\'' +
+				", scjydwqc='" + scjydwqc + '\'' +
+				", scjydwzchlx='" + scjydwzchlx + '\'' +
+				", tyshxydm='" + tyshxydm + '\'' +
+				", dwlxr='" + dwlxr + '\'' +
+				", dwdh='" + dwdh + '\'' +
+				", lxrsj='" + lxrsj + '\'' +
+				", fddbr='" + fddbr + '\'' +
+				", frdh='" + frdh + '\'' +
+				", scjydz='" + scjydz + '\'' +
+				", jjlx='" + jjlx + '\'' +
+				", hylb='" + hylb + '\'' +
+				", jglb='" + jglb + '\'' +
+				", szdq='" + szdq + '\'' +
+				", zgbm='" + zgbm + '\'' +
+				", jd='" + jd + '\'' +
+				", wd='" + wd + '\'' +
+				", yyzz='" + yyzz + '\'' +
+				", zyywsr='" + zyywsr + '\'' +
+				", cyrysl=" + cyrysl +
+				", qygm='" + qygm + '\'' +
+				", qyjyzt='" + qyjyzt + '\'' +
+				", cmcm='" + cmcm + '\'' +
+				", zt=" + zt +
+				", shyj='" + shyj + '\'' +
+				", ywagjg=" + ywagjg +
+				", ywzzagry=" + ywzzagry +
+				", ywjzagry=" + ywjzagry +
+				", ywaqzj=" + ywaqzj +
+				", ywtzzyry=" + ywtzzyry +
+				", ywzcaqgcs=" + ywzcaqgcs +
+				", ywtzsbaqcs=" + ywtzsbaqcs +
+				", bzhdbdj=" + bzhdbdj +
+				", ywzdwxy=" + ywzdwxy +
+				", ywaqscdjxk=" + ywaqscdjxk +
+				", ywwhpsy=" + ywwhpsy +
+				", ywzxzl=" + ywzxzl +
+				", gxsj=" + gxsj +
+				", gmqk='" + gmqk + '\'' +
+				", orgName='" + orgName + '\'' +
+				", dyList=" + dyList +
+				", orgId='" + orgId + '\'' +
+				", orgCode='" + orgCode + '\'' +
+				", grade='" + grade + '\'' +
+				", taskDetailId=" + taskDetailId +
+				", specialTreatmentStr='" + specialTreatmentStr + '\'' +
+				'}';
+	}
+}

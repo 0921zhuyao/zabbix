@@ -1,0 +1,85 @@
+package com.jd.project.module.admin.enterprise.service;
+
+import com.jd.project.module.admin.enterprise.entity.DmJnajEntity;
+import com.jd.project.module.admin.enterprise.mapper.DmJnajMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import com.jd.common.support.Convert;
+import com.jd.framework.web.service.BaseService;
+
+import java.util.List;
+
+/**
+ * 所在地区 服务层实现
+ * 
+ * @author TrevorPhilips
+ * @date 2019-01-04
+ */
+@Service
+@Transactional(rollbackFor = Exception.class)
+public class DmJnajServiceImpl extends BaseService implements DmJnajService {
+	@Autowired
+	private DmJnajMapper dmJnajMapper;
+
+	/**
+     * 查询所在地区信息
+     * 
+     * @param id 所在地区ID
+     * @return 所在地区信息
+     */
+    @Override
+	public DmJnajEntity selectDmJnajById(Long id) {
+	    return dmJnajMapper.selectDmJnajById(id);
+	}
+
+	@Override
+	public List<DmJnajEntity> selectDmJnajByDmxbm(String value) {
+		return dmJnajMapper.selectDmJnajByDmxbm(value);
+	}
+
+	/**
+     * 查询所在地区列表
+     * 
+     * @param dmJnaj 所在地区信息
+     * @return 所在地区集合
+     */
+	@Override
+	public List<DmJnajEntity> selectDmJnajList(DmJnajEntity dmJnaj) {
+	    return dmJnajMapper.selectDmJnajList(dmJnaj);
+	}
+	
+    /**
+     * 新增所在地区
+     * 
+     * @param dmJnaj 所在地区信息
+     * @return 结果
+     */
+	@Override
+	public int insertDmJnaj(DmJnajEntity dmJnaj) {
+	    return dmJnajMapper.insertDmJnaj(dmJnaj);
+	}
+	
+	/**
+     * 修改所在地区
+     * 
+     * @param dmJnaj 所在地区信息
+     * @return 结果
+     */
+	@Override
+	public int updateDmJnaj(DmJnajEntity dmJnaj) {
+	    return dmJnajMapper.updateDmJnaj(dmJnaj);
+	}
+
+	/**
+     * 删除所在地区对象
+     * 
+     * @param ids 需要删除的数据ID
+     * @return 结果
+     */
+	@Override
+	public int deleteDmJnajByIds(String ids) {
+		return dmJnajMapper.deleteDmJnajByIds(Convert.toStrArray(ids));
+	}
+	
+}

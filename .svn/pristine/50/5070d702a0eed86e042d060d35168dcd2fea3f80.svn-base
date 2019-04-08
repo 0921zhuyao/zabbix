@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jd.project.module.app.register.mapper.AccidentRegMapper">
+
+    <resultMap id="accidentRegResult" type="AccidentRegEntity">
+        <result property="id"    column="ID"    />
+        <result property="entId"    column="ent_id"    />
+        <result property="name"    column="name"    />
+        <result property="sex"    column="sex"    />
+        <result property="age"    column="age"    />
+        <result property="job"    column="job"    />
+        <result property="deadNum"    column="dead_num"    />
+        <result property="accidentType"    column="accident_type"    />
+        <result property="manageType"    column="manage_type"    />
+        <result property="belongStreet"    column="belong_street"    />
+        <result property="sanction"    column="sanction"    />
+        <result property="responsibility"    column="responsibility"    />
+        <result property="happenDate"    column="happen_date"    />
+        <result property="status"    column="status"    />
+        <result property="path"    column="path"    />
+        <result property="remark"    column="REMARK"    />
+        <result property="createUser"    column="CREATE_USER"    />
+        <result property="createTime"    column="CREATE_TIME"    />   
+        <result property="updateUser"    column="UPDATE_USER"    />
+        <result property="updateTime"    column="UPDATE_TIME"    />
+        <result property="isDelete"    column="IS_DELETE"    />
+    </resultMap>
+    
+    <sql id="selectEntity">
+        select ID,ent_id,name,sex,age,job,dead_num,accident_type,manage_type,belong_street,sanction,responsibility,happen_date,status,path,REMARK,CREATE_USER,CREATE_TIME,UPDATE_USER,UPDATE_TIME,IS_DELETE from t_accident_reg;
+    </sql>
+
+    <insert id="insertAllResult" parameterType="AccidentRegEntity">
+        INSERT INTO t_accident_reg
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="entId != null and entId != '' ">ent_id,</if>
+            <if test="name != null and name != '' ">name,</if>
+            <if test="sex != null and sex != '' ">sex,</if>
+            <if test="age != null and age != '' ">age,</if>
+            <if test="job != null and job != '' ">job,</if>
+            <if test="deadNum != null and deadNum != '' ">dead_num,</if>
+            <if test="accidentType != null and accidentType != '' ">accident_type,</if>
+            <if test="manageType != null and manageType != '' ">manage_type,</if>
+            <if test="belongStreet != null and belongStreet != '' ">belong_street,</if>
+            <if test="sanction != null and sanction != '' ">sanction,</if>
+            <if test="responsibility != null and responsibility != '' ">responsibility,</if>
+            <if test="happenDate != null">happen_date,</if>
+            <if test="status != null and status != '' ">status,</if>
+            <if test="path != null and path != '' ">path,</if>
+            <if test="remark != null and remark != '' ">REMARK,</if>
+            <if test="createUser != null and createUser != '' ">CREATE_USER,</if>
+            <if test="createTime != null">CREATE_TIME,</if>
+            <if test="updateUser != null and updateUser != '' ">UPDATE_USER,</if>
+            <if test="updateTime != null">UPDATE_TIME,</if>
+            <if test="isDelete != null">IS_DELETE</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="entId != null and entId != '' ">#{entId},</if>
+            <if test="name != null and name != '' ">#{name},</if>
+            <if test="sex != null and sex != '' ">#{sex},</if>
+            <if test="age != null and age != '' ">#{age},</if>
+            <if test="job != null and job != '' ">#{job},</if>
+            <if test="deadNum != null and deadNum != '' ">#{deadNum},</if>
+            <if test="accidentType != null and accidentType != '' ">#{accidentType},</if>
+            <if test="manageType != null and manageType != '' ">#{manageType},</if>
+            <if test="belongStreet != null and belongStreet != '' ">#{belongStreet},</if>
+            <if test="sanction != null and sanction != '' ">#{sanction},</if>
+            <if test="responsibility != null and responsibility != '' ">#{responsibility},</if>
+            <if test="happenDate != null">#{happenDate},</if>
+            <if test="status != null and status != '' ">#{status},</if>
+            <if test="path != null and path != '' ">#{path},</if>
+            <if test="remark != null and remark != '' ">#{remark},</if>
+            <if test="createUser != null and createUser != '' ">#{createUser},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateUser != null and updateUser != '' ">#{updateUser},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="isDelete != null">#{isDelete}</if>
+        </trim>
+    </insert>
+</mapper>

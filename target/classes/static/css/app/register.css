@@ -1,0 +1,277 @@
+body{
+    background: #f8f8fb;
+}
+.content{
+    width: 100%;
+    background: #f8f8fb;
+    margin-top: 45px;
+    padding-top: 7px;
+}
+.table-box-1{
+    background: white;
+    padding: 0 10px;
+    margin-bottom: 8px;
+}
+.selectdate,.selectunit,.selectstreet{
+    background: #ffff00 url(../../images/down_icon-red.png) no-repeat 90% center;
+    width: 65%;
+    float: right;
+    height: 30px;
+    border-radius: 5px;
+    text-align: left;
+    padding: 5px 10px;
+    margin-top: 5px;
+    background-size: 9px;
+}
+
+.input-box{
+    height: 100%;
+    margin:  0 auto ;
+    overflow-x: hidden;
+}
+.input-box1{
+    height: 100%;
+    margin:  0 auto ;
+}
+.input-list{
+    width: 100%;
+    height: 40px;
+    /*overflow-x: hidden;*/
+}
+.input-list span{
+    font-size: 13px;
+    color: black;
+    font-weight: 600;
+    display: inline-block;
+    height: 40px;
+    line-height: 40px;
+    float: left;
+}
+#toptext{color:#000;}
+.input-list input[type="text"]{
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    background: #fff8f8;
+    padding-left: 16px;
+    color: #8c8c8c;
+    font-size: 14px;
+    border: none;
+    border-radius: 0%;
+}
+.input{
+    float: right;
+    width: 68%;
+    height: 40px;
+    line-height: 40px;
+    position: relative;
+    color: #8c8c8c;
+}
+.input1{
+    width: 200%;
+}
+.input-list input::placeholder{
+    font-size: 14px;
+}
+.input img{
+    width: 9px;
+    position: absolute;
+    right: -40%;
+    top: 19px;
+}
+.select-text{
+    width: 200%;
+    height: 30px;
+    line-height: 30px;
+    background: #fff8f8;
+    padding-left: 16px;
+}
+.select-text:nth-child(1){
+    margin-top: 5px;
+}
+input[type=radio]{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    width: 15px;
+    height: 15px;
+    border: 1px solid #ff3333;
+    outline: none;
+    cursor: pointer;
+    
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+    margin: 13px 4px 0 20px;
+    background: white;
+}
+.table-box-1:nth-child(3) .input{
+    font-weight: bold;
+}
+
+input[type=radio]:after{
+    content: '';
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    display: block;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    background: #ff3333;
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 12px;
+    border-radius: 12px;
+    -webkit-transform: scale(0);
+    -moz-transform: scale(0);
+    transform: scale(0);
+    /*增加一些动画*/
+    -webkit-transition : all ease-in-out 300ms;
+    -moz-transition : all ease-in-out 300ms;
+    transition : all ease-in-out 300ms;
+}
+input[type=radio]:checked:after{
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    transform: scale(1);
+}
+.content>img{
+    width: 70%;
+    margin: 40px 15% 10px;
+}
+.select{
+    width: 70%;
+    position:relative;
+    outline: none;
+    height: 30px;
+    line-height: 30px;
+    margin-top: 5px;
+    border: none;
+    float: right;
+    z-index: 8;
+}
+.select dt{
+    display:inline-block;
+    background: #fff8f8 url(../../images/down_icon-red.png) no-repeat 90% center;
+    background-size:9px;
+    line-height:30px;
+    padding-left:10px;
+    cursor:pointer;
+    width:90%;
+    padding-right:12px;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    overflow:hidden;
+    position:relative;
+    z-index:9;
+    color: #8c8c8c;
+    font-size: 14px;
+    height: 30px;
+}
+.select dd{
+    position:absolute;
+    left:0;
+    top:29px;
+    background:#fff8f8;
+    display:none;
+    margin-top: -1px;
+}
+.select dd ul{
+    width:104px;
+    max-height:120px;
+    overflow:auto;
+}
+.select dd ul li a{
+    line-height:30px;
+    display:block;
+    padding:0 10px;
+    font-size: 14px;
+    color: #8c8c8c;
+}
+.select dd ul li a:hover{
+    background:#f5f5f5;
+}
+.finish-icon{
+    width: 22px;
+    height: 40px;
+    display: inline-block;
+    float: left;
+}
+.finish-icon img{
+    width: 15px;
+    margin-top: 13px;
+}
+@media screen and (max-width: 360px){
+    input[type=radio] {
+        margin: 13px 4px 0 10px;
+        background: white;
+    }
+}
+.input-radio lable{
+    display: inline-block;
+    font-weight: bold;
+    height: 40px;
+    line-height: 40px;
+}
+.textarea,.fileUpload{
+    width: 100%;
+    border: 1px solid #FF6868;
+    border-radius: 5px;
+    padding: 5px;
+    margin-bottom: 15px;
+}
+
+.textarea textarea{
+    font-size: 14px;
+    text-indent: 2em;
+}
+.file {
+    position: relative;
+    display: inline-block;
+    color: rgb(30, 136, 199);
+    text-indent: 0px;
+    line-height: 20px;
+    width: 30px;
+    height: 30px;
+    background: url(../../images/upload.png) 0% 0% / 30px 30px no-repeat;
+    border-radius: 50%;
+    overflow: hidden;
+    text-decoration: none;
+    /* margin: 31px 0px 0px 40%; */
+}
+.file input {
+    position: absolute;
+    font-size: 100px;
+    right: 0px;
+    top: 0px;
+    opacity: 0;
+}
+.fileUpload{text-align: center;}
+.fileUpload>p>span{
+    transform: scale(0.8);
+    font-size: 12px;
+    display:block;
+}
+.button{
+    padding: 0 10px;
+    width: 100%;
+    text-align: center;
+    margin: 70px 0 100px;
+}
+.button>form>input{
+    width: 80%;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    background: -webkit-linear-gradient(top,#ff4847,#ea1f20);
+    background: -moz-linear-gradient(top,#ff4847,#ea1f20);
+    color: #fff;
+    height: 40px;
+    font-size: 15px;
+}

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<link href="/ajax/libs/iCheck/custom.css"
+	th:href="@{/ajax/libs/iCheck/custom.css}" rel="stylesheet" />
+<body class="white-bg">
+	<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+		<form class="form-horizontal m" id="form-user-edit"
+			th:object="${user}">
+			<input name="userId" type="hidden" th:field="*{userId}" />
+			<input name="positionId"  type="hidden" id="positionId" th:field="*{positionId}"/>
+			<input name="deptId" type="hidden" th:field="*{lsEnterpriseId}" id="treeId" />
+			<input name="departIds"  type="hidden" id="departIds"/>
+			<input name="lsEnterpriseId"  type="hidden" id="lsEnterpriseId"/>
+			<div class="form-group">
+				<label class="col-sm-3 control-label ">登录名称：</label>
+				<div class="col-sm-8">
+					<input class="form-control" type="text" readonly="true"
+						th:field="*{loginName}" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">是否为企业：</label>
+				<div class="col-sm-8">
+
+					<label class="checkbox-inline i-checks" > <input type="radio" th:field="*{lsIsEnterprise}" name="lsIsEnterprise" value="1" /> 是 </label>
+					<label class="checkbox-inline i-checks" > <input type="radio" th:field="*{lsIsEnterprise}" name="lsIsEnterprise" value="0" /> 否 </label>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">所属企业：</label>
+				<div class="col-sm-8">
+					<input class="form-control" type="text" name="enterpriseName" onclick="selectEnterprise()" readonly="readonly" id="enterpriseName" placeholder="请选择所属企业" th:field="*{lsEnterpriseName}">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">所属部门：</label>
+				<div class="col-sm-8">
+					<input class="form-control" type="text" name="departName"
+						onclick="selectDeptTree()" readonly="true" id="treeName"
+						th:field="*{dept.deptName}" placeholder="请选择部门">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">用户名称：</label>
+				<div class="col-sm-8">
+					<input class="form-control" type="text" name="userName"
+						id="userName" th:field="*{userName}">
+				</div>
+			</div>
+			<!--<div class="form-group">-->
+				<!--<label class="col-sm-3 control-label">邮箱：</label>-->
+				<!--<div class="col-sm-8">-->
+					<!--<input class="form-control" type="text" name="email" id="email"-->
+						<!--th:field="*{email}">-->
+				<!--</div>-->
+			<!--</div>-->
+			<div class="form-group">
+				<label class="col-sm-3 control-label">手机：</label>
+				<div class="col-sm-8">
+					<input class="form-control" type="text" name="phonenumber"
+						id="phonenumber" th:field="*{phonenumber}">
+				</div>
+			</div>
+			<!--<div class="form-group">-->
+				<!--<label class="col-sm-3 control-label">性别：</label>-->
+				<!--<div class="col-sm-8">-->
+					<!--<select id="sex" class="form-control m-b">-->
+						<!--<option value="0" th:field="*{sex}">男</option>-->
+						<!--<option value="1" th:field="*{sex}">女</option>-->
+					<!--</select>-->
+				<!--</div>-->
+			<!--</div>-->
+			<div class="form-group">
+				<label class="col-sm-3 control-label">状态：</label>
+				<div class="col-sm-8">
+					<div class="onoffswitch">
+						<input type="checkbox"
+							th:checked="${user.status == '0' ? true : false}"
+							class="onoffswitch-checkbox" id="status" name="status"> <label
+							class="onoffswitch-label" for="status"> <span
+							class="onoffswitch-inner"></span> <span
+							class="onoffswitch-switch"></span>
+						</label>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">职称：</label>
+				<div class="col-sm-8">
+					<input class="form-control" type="text" name="positionId" onclick="selectPosition()" readonly="readonly" id="positionName" th:field="*{positionName}">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">角色：</label>
+				<div class="col-sm-8">
+					<label th:each="role:${roles}" class="checkbox-inline i-checks">
+						<input name="role" type="radio" th:value="${role.roleId}"
+						th:text="${role.roleName}" th:checked="${role.flag}"
+						th:disabled="${role.status == '1'}">
+					</label>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="form-control-static col-sm-offset-9">
+					<button type="submit" class="btn btn-primary">提交</button>
+					<button onclick="$.modal.close()" class="btn btn-danger"
+						type="button">关闭</button>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div th:include="include::footer"></div>
+	<script th:src="@{/ajax/libs/iCheck/icheck.min.js}"></script>
+	<script th:src="@{/ajax/libs/select/select2.js}"></script>
+	<script>
+        $(document).ready(function() {
+            var menuType = $('input[name="lsIsEnterprise"]:checked').val();
+            menuVisible(menuType);
+        });
+
+        $("#form-user-edit").validate({
+        	rules:{
+        		userName:{
+        			required:true,
+        		},
+        		deptName:{
+        			required:true,
+        		},
+        		email:{
+        			required:false,
+                    email:true,
+                    remote: {
+                        url: ctx + "system/user/checkEmailUnique",
+                        type: "post",
+                        dataType: "json",
+                        data: {
+                        	"userId": function() {
+                                return $("#userId").val();
+                            },
+                			"email": function() {
+                                return $.common.trim($("#email").val());
+                            }
+                        },
+                        dataFilter: function (data, type) {
+                        	return data;
+                        }
+                    }
+        		},
+        		phonenumber:{
+        			required:false,
+        			isPhone:true,
+                    remote: {
+                        url: ctx + "system/user/checkPhoneUnique",
+                        type: "post",
+                        dataType: "json",
+                        data: {
+                        	"userId": function() {
+                        		return $("#userId").val();
+                            },
+                			"phonenumber": function() {
+                                return $.common.trim($("#phonenumber").val());
+                            }
+                        },
+                        dataFilter: function (data, type) {
+                        	return data;
+                        }
+                    }
+        		},
+        	},
+        	messages: {
+        		"email": {
+                    remote: "Email已经存在"
+                },
+        		"phonenumber":{
+                	remote: "手机号码已经存在"
+        		}
+            },
+        	submitHandler:function(form){
+        		edit();
+        	}
+        });
+
+        function edit() {
+        	var userId = $("input[name='userId']").val();
+        	var deptId = $("input[name='deptId']").val();
+        	var positionId = $("input[name='positionId']").val();
+        	var userName = $("input[name='userName']").val();
+        	var email = $("input[name='email']").val();
+        	var phonenumber = $("input[name='phonenumber']").val();
+            var lsIsEnterprise = $("input[name='lsIsEnterprise']:checked").val();
+            var lsEnterpriseId =$("#lsEnterpriseId").val();
+        	var sex = $("#sex option:selected").val();
+        	var status = $("input[name='status']").is(':checked') == true ? 0 : 1;
+        	var roleIds = $.form.selectRadio("role");
+        	var postIds = $.form.selectSelects("post");
+        	var departIds = $("input[name='departIds']").val();
+        	$.ajax({
+        		cache : true,
+        		type : "POST",
+        		url : ctx + "system/user/edit",
+        		data : {
+        			"userId": userId,
+        			"positionId": positionId,
+        			"deptId": deptId,
+        			"userName": userName,
+        			"email": email,
+        			"phonenumber": phonenumber,
+        			"sex": sex,
+                    "lsIsEnterprise": lsIsEnterprise,
+                    "lsEnterpriseId": lsEnterpriseId,
+        			"status": status,
+        			"roleIds": roleIds,
+        			"postIds": postIds,
+        			"departIds":departIds
+        		},
+        		async : false,
+        		error : function(request) {
+        			$.modal.alertError("系统错误");
+        		},
+        		success : function(data) {
+        			$.operate.saveSuccess(data);
+        		}
+        	});
+        }
+
+        /*用户管理-修改-选择部门树*/
+        function selectDeptTree() {
+        	var treeId = $("#deptId").val();
+        	var deptId = treeId == null || treeId == "" ? "00023e72ec69476f9008da8807b5b9e2" : treeId;
+            var url = ctx + "system/user/selectOrgTree/" + deptId;
+        	$.modal.open("选择部门", url, '380', '380');
+        }
+        /*用户管理-修改-选择职称*/
+        function selectPosition() {
+            var url = ctx + "system/user/selectPosition";
+            $.modal.open("选择职称", url, '380', '380');
+        }
+        /*用户管理-新增-选择企业*/
+        function selectEnterprise() {
+            var url = ctx + "system/user/selectEnterprise";
+            $.modal.open("选择企业", url, '380', '380');
+        }
+
+        function selectDeptTree1() {
+        	var treeId = $("#deptId").val();
+        	var deptId = treeId == null || treeId == "" ? "100" : treeId;
+            var url = ctx + "module/department/selectDeptTree/" + deptId + "?paramNameId=edf";
+        	$.modal.open("选择党组织", url, '380', '380');
+        }
+
+        /*字符串转json并赋值*/
+        function toJsonObj(obj){
+            var json = JSON.parse($(obj).val());
+            $(obj).val(json.parentId);
+		}
+
+        $(function() {
+            $('input').on('ifChecked',
+                function(event) {
+                    var menuType = $(event.target).val();
+                    menuVisible(menuType);
+            });
+        });
+
+        function menuVisible(menuType) {
+            if(menuType == 1 ){
+                $("#enterpriseName").parents(".form-group").show();
+                $("#treeName").parents(".form-group").hide();
+                $("#treeId").val("");
+            }if(menuType == 0){
+                $("#enterpriseName").parents(".form-group").hide();
+                $("#treeName").parents(".form-group").show();
+            }
+        }
+    </script>
+</body>
+</html>

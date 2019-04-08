@@ -1,0 +1,157 @@
+package com.jd.project.module.admin.evaluation.controller;
+
+import java.text.SimpleDateFormat;
+import java.util.List;
+
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.jd.common.utils.security.ShiroUtils;
+import com.jd.framework.aspectj.lang.annotation.Log;
+import com.jd.framework.aspectj.lang.enums.BusinessType;
+import com.jd.framework.web.controller.BaseController;
+import com.jd.framework.web.domain.Result;
+import com.jd.framework.web.page.TableDataInfo;
+import com.jd.project.module.admin.enterprise.entity.QyjcxxEntity;
+import com.jd.project.module.admin.evaluation.entity.TaskPlanEntity;
+import com.jd.project.module.admin.evaluation.service.TaskPlanService;
+
+/**
+ * 自评计划任务 信息操作处理
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-29
+ */
+@Controller
+@RequestMapping("/module/taskPlan")
+public class TaskPlanController extends BaseController {
+	private String prefix = "module/admin/evaluation/taskPlan";
+
+	private static final Logger log = LoggerFactory.getLogger(TaskPlanController.class);
+
+	@Autowired
+	private TaskPlanService taskPlanService;
+
+	@RequiresPermissions("module:taskPlan:view")
+	@GetMapping()
+	public String initList() {
+		return prefix + "/taskPlan_list";
+	}
+
+	/**
+	 * 查询自评计划任务列表
+	 */
+	@RequiresPermissions("module:taskPlan:list")
+	@PostMapping("/query")
+	@ResponseBody
+	public TableDataInfo query(TaskPlanEntity taskPlan) {
+		taskPlan.setCreateUser(ShiroUtils.getUserId());
+		startPage();
+		List<TaskPlanEntity> list = taskPlanService.selectTaskPlanList(taskPlan);
+		return getDataTable(list);
+	}
+
+	/**
+	 * 新增自评计划任务
+	 */
+	@GetMapping("/initAdd")
+	public String initAdd(ModelMap mmap) {
+		mmap.put("taskPlan", new TaskPlanEntity());
+		return prefix + "/taskPlan_edit";
+	}
+
+	/**
+	 * 新增保存自评计划任务
+	 */
+	@RequiresPermissions("module:taskPlan:add")
+	@Log(title = "自评计划任务", businessType = BusinessType.INSERT)
+	@PostMapping("/add")
+	@ResponseBody
+	public Result add(TaskPlanEntity taskPlan) {
+
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		try {
+			taskPlan.setPlanStartTime(format.parse(taskPlan.getPlanStartTimeStr()));
+			return toAjax(taskPlanService.insertTaskPlan(taskPlan));
+		} catch (Exception e) {
+			log.error(e.getMessage());
+			return Result.error(e.getMessage());
+		}
+	}
+
+	/**
+	 * 修改自评计划任务
+	 */
+	@GetMapping("/initEdit/{planId}")
+	public String initEdit(@PathVariable("planId") Long planId, ModelMap mmap) {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		TaskPlanEntity taskPlan = taskPlanService.selectTaskPlanById(planId);
+		taskPlan.setPlanStartTimeStr(format.format(taskPlan.getPlanStartTime()));
+		// 查询关联的企业信息
+		List<QyjcxxEntity> details = taskPlanService.selectQyjcxxsByTaskDetailId(planId);
+		List<QyjcxxEntity> list = JSONArray.parseArray(JSON.toJSONString(details), QyjcxxEntity.class);
+		taskPlan.setEnterprises(list);
+		mmap.put("taskPlan", taskPlan);
+		return prefix + "/taskPlan_edit";
+	}
+
+	/**
+	 * 修改保存自评计划任务
+	 */
+	@RequiresPermissions("module:taskPlan:edit")
+	@Log(title = "自评计划任务", businessType = BusinessType.UPDATE)
+	@PostMapping("/edit")
+	@ResponseBody
+	public Result edit(TaskPlanEntity taskPlan) {
+		return toAjax(taskPlanService.updateTaskPlan(taskPlan));
+	}
+
+	/**
+	 * 删除自评计划任务
+	 */
+	@RequiresPermissions("module:taskPlan:remove")
+	@Log(title = "自评计划任务", businessType = BusinessType.DELETE)
+	@PostMapping("/del")
+	@ResponseBody
+	public Result del(String ids) {
+		return toAjax(taskPlanService.deleteTaskPlanByIds(ids));
+	}
+
+	/**
+	 * 审核自评计划任务页面
+	 */
+	@GetMapping("/initAudite/{planId}")
+	public String initAudite(@PathVariable("planId") Long planId, ModelMap mmap) {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		TaskPlanEntity taskPlan = taskPlanService.selectTaskPlanById(planId);
+		taskPlan.setPlanStartTimeStr(format.format(taskPlan.getPlanStartTime()));
+		// 查询关联的企业信息
+		List<QyjcxxEntity> details = taskPlanService.selectQyjcxxsByTaskDetailId(planId);
+		List<QyjcxxEntity> list = JSONArray.parseArray(JSON.toJSONString(details), QyjcxxEntity.class);
+		taskPlan.setEnterprises(list);
+		mmap.put("taskPlan", taskPlan);
+		return prefix + "/taskPlan_audite";
+	}
+
+	/**
+	 * 审核自评计划任务
+	 */
+	@RequiresPermissions("module:taskPlan:audite")
+	@Log(title = "自评计划任务", businessType = BusinessType.UPDATE)
+	@PostMapping("/audite")
+	@ResponseBody
+	public Result audite(TaskPlanEntity taskPlan) {
+		return toAjax(taskPlanService.updateTaskPlanAuditeStutas(taskPlan));
+	}
+}

@@ -1,0 +1,101 @@
+package com.jd.project.module.admin.evaluation.mapper;
+
+import java.util.List;
+import java.util.Map;
+
+import com.jd.framework.web.mapper.BaseMapper;
+import com.jd.project.module.admin.evaluation.entity.DynamicEntity;
+
+/**
+ * 动态运行记录 数据层
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-29
+ */
+public interface DynamicMapper extends BaseMapper<DynamicEntity> {
+	/**
+	 * 查询动态运行记录信息
+	 * 
+	 * @param dynamicsId
+	 *            动态运行记录ID
+	 * @return 动态运行记录信息
+	 */
+	public DynamicEntity selectDynamicById(Long dynamicsId);
+
+	/**
+	 * 查询动态运行记录列表
+	 * 
+	 * @param dynamic
+	 *            动态运行记录信息
+	 * @return 动态运行记录集合
+	 */
+	public List<DynamicEntity> selectDynamicList(DynamicEntity dynamic);
+
+	/**
+	 * 新增动态运行记录
+	 * 
+	 * @param dynamic
+	 *            动态运行记录信息
+	 * @return 结果
+	 */
+	public int insertDynamic(DynamicEntity dynamic);
+
+	/**
+	 * 修改动态运行记录
+	 * 
+	 * @param dynamic
+	 *            动态运行记录信息
+	 * @return 结果
+	 */
+	public int updateDynamic(DynamicEntity dynamic);
+
+	/**
+	 * 删除动态运行记录
+	 * 
+	 * @param dynamicsId
+	 *            动态运行记录ID
+	 * @return 结果
+	 */
+	public int deleteDynamicById(Long dynamicsId);
+
+	/**
+	 * 批量删除动态运行记录
+	 * 
+	 * @param dynamicsIds
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
+	public int deleteDynamicByIds(String[] dynamicsIds);
+
+	/**
+	 * 根据类型查询动态运行信息
+	 * 
+	 * @param dynamicEntity
+	 * @return
+	 */
+	public List<Map<String, Object>> selectCompanyChecktableList(DynamicEntity dynamicEntity);
+
+	/**
+	 * 查询动态运行记录及附件信息
+	 * 
+	 * @param dynamicsId
+	 * @return
+	 */
+	public DynamicEntity selectDynamicAndFileById(Long dynamicsId);
+
+	/**
+	 * 查询动态运行详情信息
+	 *
+	 * @param dynamicEntity
+	 * @return
+	 */
+	public DynamicEntity selectDynamicNoPassCheckDetail(DynamicEntity dynamicEntity);
+
+	/**
+	 * 批量插入
+	 * 
+	 * @param dynamicEntity
+	 * @return
+	 */
+	public int insertDynamicBatch(List<DynamicEntity> dynamicEntity);
+}

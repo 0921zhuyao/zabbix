@@ -1,0 +1,56 @@
+package com.jd.project.module.app.homePage.service;
+
+
+import com.jd.project.module.app.homePage.entity.DynamicCensusEntity;
+
+import java.util.List;
+
+/**
+ * 企业不符合项统计 服务层
+ * 
+ * @author TrevorPhilips
+ * @date 2019-01-23
+ */
+public interface DynamicCensusService {
+	/**
+     * 查询企业不符合项统计信息
+     * 
+     * @param id 企业不符合项统计ID
+     * @return 企业不符合项统计信息
+     */
+	public DynamicCensusEntity selectDynamicCensusById(Long id);
+	
+	/**
+     * 查询企业不符合项统计列表
+     * 
+     * @param dynamicCensus 企业不符合项统计信息
+     * @return 企业不符合项统计集合
+     */
+	public List<DynamicCensusEntity> selectDynamicCensusList(DynamicCensusEntity dynamicCensus);
+	
+	/**
+     * 新增企业不符合项统计
+     * 
+     * @param dynamicCensus 企业不符合项统计信息
+     * @return 结果
+     */
+	public int insertDynamicCensus(DynamicCensusEntity dynamicCensus);
+	
+	/**
+     * 修改企业不符合项统计
+     * 
+     * @param dynamicCensus 企业不符合项统计信息
+     * @return 结果
+     */
+	public int updateDynamicCensus(DynamicCensusEntity dynamicCensus);
+		
+	/**
+     * 删除企业不符合项统计信息
+     * 
+     * @param ids 需要删除的数据ID
+     * @return 结果
+     */
+	public int deleteDynamicCensusByIds(String ids);
+
+	public DynamicCensusEntity selectDynamicCensus(int currentMonth);
+}

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jd.project.module.admin.standard.mapper.CheckTableNameMapper">
+    
+    <resultMap type="CheckTableNameEntity" id="CheckTableNameResult">
+        <result property="checkTableNameId"    column="CHECK_TABLE_NAME_ID"    />
+        <result property="checkTableTypeId"    column="CHECK_TABLE_TYPE"    />
+        <result property="industryId"    column="INDUSTRY_CODE"    />
+        <result property="checkTableName"    column="CHECK_TABLE_NAME"    />
+        <result property="sort"    column="SORT"    />
+        <result property="remark"    column="REMARK"    />
+        <result property="createTime"    column="CREATE_TIME"    />
+        <result property="updateTime"    column="UPDATE_TIME"    />
+        <result property="isDelete"    column="IS_DELETE"    />
+        <result property="checkTableCode"    column="CHECK_TABLE_CODE"    />
+        <result property="createUser"    column="CREATE_USER"    />
+        <result property="updateUser"    column="UPDATE_USER"    />
+        <result property="specialCode"    column="SPECIAL_CODE"    />
+    </resultMap>
+	
+	<sql id="selectCheckTableNameVo">
+        select CHECK_TABLE_NAME_ID, CHECK_TABLE_TYPE, INDUSTRY_CODE, CHECK_TABLE_NAME, SORT, REMARK, CREATE_TIME, UPDATE_TIME, IS_DELETE,CREATE_USER, UPDATE_USER, CHECK_TABLE_CODE, SPECIAL_CODE from T_CHECK_TABLE_NAME
+    </sql>
+	
+    <select id="selectCheckTableNameList" parameterType="CheckTableNameEntity" resultMap="CheckTableNameResult">
+        <include refid="selectCheckTableNameVo"/>
+        <where>  
+            <if test="checkTableNameId != null and checkTableNameId != ''"> and CHECK_TABLE_NAME_ID = #{checkTableNameId}</if>
+             <if test="checkTableTypeId != null"> and CHECK_TABLE_TYPE = #{checkTableTypeId}</if>
+             <if test="industryId != null and industryId != ''"> and INDUSTRY_CODE = #{industryId}</if>
+             <if test="checkTableName != null and checkTableName != ''"> and CHECK_TABLE_NAME like concat('%', #{checkTableName}, '%')</if>
+             <if test="sort != null and sort != ''"> and SORT = #{sort}</if>
+             <if test="remark != null and remark != ''"> and REMARK = #{remark}</if>
+             <if test="createTime != null">
+              and date_format(CREATE_TIME,'%y%m%d') &gt;= date_format(#{createTime},'%y%m%d')
+             </if>
+             <if test="updateTime != null">
+               and date_format(UPDATE_TIME,'%y%m%d') &lt;= date_format(#{updateTime},'%y%m%d')
+             </if>
+             and IS_DELETE = 0
+             <if test="checkTableCode != null and checkTableCode != ''"> and CHECK_TABLE_CODE = #{checkTableCode}</if>
+             <if test="createUser != null and createUser != ''"> and CREATE_USER = #{createUser}</if>
+             <if test="updateUser != null and updateUser != ''"> and UPDATE_USER = #{updateUser}</if>
+             <if test="specialCode != null and specialCode != ''"> and SPECIAL_CODE = #{specialCode}</if>
+         </where>
+    </select>
+    
+    <select id="selectCheckTableNameById" parameterType="Long" resultMap="CheckTableNameResult">
+        <include refid="selectCheckTableNameVo"/>
+        where CHECK_TABLE_NAME_ID = #{checkTableNameId}
+    </select>
+        
+    <insert id="insertCheckTableName" parameterType="CheckTableNameEntity">
+        insert into T_CHECK_TABLE_NAME
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="checkTableNameId != null and checkTableNameId != '' ">CHECK_TABLE_NAME_ID,</if>
+			<if test="checkTableTypeId != null">CHECK_TABLE_TYPE,</if>
+			<if test="industryId != null and industryId != '' ">INDUSTRY_CODE,</if>
+			<if test="checkTableName != null and checkTableName != '' ">CHECK_TABLE_NAME,</if>
+			<if test="sort != null and sort != '' ">SORT,</if>
+			<if test="remark != null and remark != '' ">REMARK,</if>
+			CREATE_TIME,
+			UPDATE_TIME,
+			<if test="checkTableCode != null and checkTableCode != '' ">CHECK_TABLE_CODE,</if>
+			<if test="createUser != null and createUser != '' ">CREATE_USER,</if>
+			<if test="updateUser != null and updateUser != '' ">UPDATE_USER,</if>
+			<if test="specialCode != null and specialCode != ''">SPECIAL_CODE,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="checkTableNameId != null and checkTableNameId != ''">#{checkTableNameId},</if>
+			<if test="checkTableTypeId != null">#{checkTableTypeId},</if>
+			<if test="industryId != null and industryId != ''">#{industryId},</if>
+			<if test="checkTableName != null and checkTableName != ''">#{checkTableName},</if>
+			<if test="sort != null and sort != ''">#{sort},</if>
+			<if test="remark != null and remark != ''">#{remark},</if>
+			sysdate(),
+			sysdate(),
+			<if test="checkTableCode != null and checkTableCode != ''">#{checkTableCode},</if>
+			<if test="createUser != null and createUser != '' ">#{createUser},</if>
+            <if test="updateUser != null and updateUser != '' ">#{updateUser},</if>
+            <if test="specialCode != null and specialCode != ''">#{specialCode},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateCheckTableName" parameterType="CheckTableNameEntity">
+        update T_CHECK_TABLE_NAME
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="checkTableTypeId != null  ">CHECK_TABLE_TYPE = #{checkTableTypeId},</if>
+            <if test="industryId != null  ">INDUSTRY_CODE = #{industryId},</if>
+            <if test="checkTableName != null  and checkTableName != ''  ">CHECK_TABLE_NAME = #{checkTableName},</if>
+            <if test="sort != null  ">SORT = #{sort},</if>
+            <if test="remark != null  and remark != ''  ">REMARK = #{remark},</if>
+            UPDATE_TIME = sysdate(),
+            <if test="isDelete != null  ">IS_DELETE = #{isDelete},</if>
+            <if test="checkTableCode != null  and checkTableCode != ''  ">CHECK_TABLE_CODE = #{checkTableCode},</if>
+            <if test="updateUser != null and updateUser != '' ">UPDATE_USER = #{updateUser},</if>
+            <if test="specialCode != null and specialCode != ''">SPECIAL_CODE = #{specialCode},</if>
+        </trim>
+        where CHECK_TABLE_NAME_ID = #{checkTableNameId}
+    </update>
+
+	<update id="deleteCheckTableNameById" parameterType="Long">
+        update T_CHECK_TABLE_NAME set IS_DELETE = 1 where CHECK_TABLE_NAME_ID = #{checkTableNameId}
+    </update>
+	
+    <update id="deleteCheckTableNameByIds" parameterType="String">
+        update T_CHECK_TABLE_NAME set IS_DELETE = 1 where CHECK_TABLE_NAME_ID in 
+        <foreach item="checkTableNameId" collection="array" open="(" separator="," close=")">
+            #{checkTableNameId}
+        </foreach>
+    </update>
+    
+    <select id="selectCheckTableNameAll" resultMap="CheckTableNameResult">
+        <include refid="selectCheckTableNameVo"></include>
+    </select>
+    
+    <!-- 校验检查项编码 -->
+    <select id="checkCheckTableNameUnique" parameterType="String" resultMap="CheckTableNameResult">
+        <include refid="selectCheckTableNameVo"/>
+        where CHECK_TABLE_NAME = #{checkTableName}
+    </select>
+    
+    <!-- 查询与企业相关的检查表 -->
+    <select id="queryCheckTablesByCompany" parameterType="String" resultMap="CheckTableNameResult">
+    	SELECT n.* FROM T_CHECK_TABLE_NAME n 
+		LEFT JOIN LS_JB_QYJCXX q ON q.HYLB = n.INDUSTRY_CODE
+		WHERE q.ID = #{enterpriseId} AND q.HYLB = 1 AND n.IS_DELETE = 0
+		UNION
+		SELECT n.* FROM T_CHECK_TABLE_NAME n WHERE n.CHECK_TABLE_TYPE = 0 AND n.IS_DELETE = 0
+		UNION
+		SELECT n.* FROM T_CHECK_TABLE_NAME n 
+		LEFT JOIN T_SPECIAL_TREATMENT s ON s.CODE = n.SPECIAL_CODE
+		WHERE n.IS_DELETE = 0 AND s.IS_DELETE = 0 AND s.COMPANY_ID = #{enterpriseId}
+    </select>
+</mapper>

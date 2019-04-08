@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<link href="/ajax/libs/jquery-layout/jquery.layout-latest.css" th:href="@{/ajax/libs/jquery-layout/jquery.layout-latest.css}" rel="stylesheet"/>
+
+<body class="gray-bg">
+	<div class="container-div ui-layout-center">
+		<div class="row">
+			<div class="col-sm-12 select-info">
+				<form id="deploy-form" onkeydown="if(event.keyCode==13){return false;}">
+					<div class="select-list">
+						<ul>
+							<li>
+								模型名称：<input type="text" name="modelName"/>
+							</li>
+							<li>
+								<a class="btn btn-primary  btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			
+	        <div class="btn-group hidden-xs" id="toolbar" role="group">
+	            <a class="btn btn-outline btn-sm btn-danger " onclick="$.operate.removeAll()" shiro:hasPermission="activiti:deploy:delete">
+	                <i class="fa fa-trash-o"></i> 删除
+	            </a>
+	        </div>
+	        
+	        <div class="col-sm-12 select-table table-striped">
+			    <table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+	<div th:include="include :: footer"></div>
+	<script th:src="@{/ajax/libs/jquery-layout/jquery.layout-latest.js}"></script>
+	<script th:inline="javascript">
+		var removeFlag = [[${@permission.hasPermi('activiti:deploy:delete')}]];
+		var prefix = ctx + "activiti/deploy";
+
+		$(document).ready(function(){
+			$('body').layout({ west__size: 185 });
+			queryDeployList();
+		});
+
+		function queryDeployList() {
+		    var options = {
+		        url: prefix + "/list",
+		        removeUrl: prefix + "/delete",
+		        sortName: "deploymentTime",
+		        sortOrder: "desc",
+		        modalName: "工作流部署",
+		        search: false,
+		        showExport: false,
+		        columns: [{
+		            checkbox: true
+		        },
+		        {
+		            field: 'id',
+		            title: '部署编号'
+		        },
+		        {
+		            field: 'name',
+		            title: '模型名称',
+		            sortable: true
+		        },
+		        {
+		            field: 'deploymentTime',
+		            title: '部署时间',
+                    formatter: function(value, row, index) {
+		                return formatDateTime(value);
+                    }
+		        },
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		                var actions = [];
+		                actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a> ');
+		                return actions.join('');
+		            }
+		        }]
+		    };
+		    $.table.init(options);
+		}
+	</script>
+</body>
+</html>

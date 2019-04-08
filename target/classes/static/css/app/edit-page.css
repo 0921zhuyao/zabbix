@@ -1,0 +1,195 @@
+body{
+    background: #f8f8fb;
+}
+.content{
+    width: 100%;
+    background: #f8f8fb;
+    margin-top: 45px;
+    padding-top: 7px;
+}
+.table-box-1{
+    /*width: 100%;*/
+    height: 100%;
+    background: white;
+    padding: 15px 17px 0 17px;
+    /*overflow-x: hidden;*/
+    margin-bottom: 8px;
+}
+.input-box{
+    height: 100%;
+    margin:  0 auto ;
+    overflow-x: hidden;
+}
+.input-box1{
+    height: 100%;
+    margin:  0 auto ;
+}
+.input-list{
+    width: 100%;
+    height: 40px;
+    /*overflow-x: hidden;*/
+}
+.input-list span{
+    font-size: 16px;
+    color: black;
+    font-weight: 600;
+    display: inline-block;
+    height: 40px;
+    line-height: 40px;
+    float: left;
+}
+.input-list input[type="text"]{
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    background: #f8dddd;
+    padding-left: 16px;
+    color: #8c8c8c;
+    font-size: 14px;
+    border: none;
+    border-radius: 0%;
+}
+.input{
+    float: right;
+    width: 40%;
+    height: 40px;
+    line-height: 40px;
+    position: relative;
+    color: #8c8c8c;
+}
+.input1{
+    width: 200%;
+}
+.input-list input::placeholder{
+    font-size: 14px;
+}
+.input img{
+    width: 9px;
+    position: absolute;
+    right: -40%;
+    top: 19px;
+}
+.select-text{
+    width: 200%;
+    height: 30px;
+    line-height: 30px;
+    background: #fff8f8;
+    padding-left: 16px;
+}
+.select-text:nth-child(1){
+    margin-top: 5px;
+}
+
+.table-box-1:nth-child(3) .input{
+    font-weight: bold;
+}
+
+.content>img{
+    width: 70%;
+    margin: 40px 15% 10px;
+}
+.select{
+    width: 70%;
+    position:relative;
+    outline: none;
+    height: 30px;
+    line-height: 30px;
+    margin-top: 5px;
+    border: none;
+    float: right;
+    z-index: 8;
+}
+.select dt{
+    display:inline-block;
+    background: #f8dddd url(../../images/down_icon-red.png) no-repeat 90% center;
+    background-size:9px;
+    line-height:30px;
+    padding-left:10px;
+    cursor:pointer;
+    width:90%;
+    padding-right:12px;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    overflow:hidden;
+    position:relative;
+    z-index:9;
+    color: #8c8c8c;
+    font-size: 14px;
+    height: 30px;
+}
+.select dd{
+    position:absolute;
+    left:0;
+    top:29px;
+    background:#fff8f8;
+    display:none;
+    margin-top: -1px;
+}
+.select dd ul{
+    width:104px;
+    max-height:120px;
+    overflow:auto;
+}
+.select dd ul li a{
+    line-height:30px;
+    display:block;
+    padding:0 10px;
+    font-size: 14px;
+    color: #8c8c8c;
+}
+.select dd ul li a:hover{
+    background:#f5f5f5;
+}
+.finish-icon{
+    width: 22px;
+    height: 40px;
+    display: inline-block;
+    float: left;
+}
+.finish-icon img{
+    width: 15px;
+    margin-top: 13px;
+}
+@media screen and (max-width: 360px){
+    /*.input-list span {*/
+    /*font-size: 14px;*/
+    /*}*/
+    /*.table-box-1 {*/
+    /*padding: 15px 12px 0 12px;*/
+    /*}*/
+    input[type=radio] {
+        margin: 13px 4px 0 10px;
+        background: white;
+    }
+}
+.input-radio lable{
+    display: inline-block;
+    font-weight: bold;
+    height: 40px;
+    line-height: 40px;
+}
+
+legend{
+    font-size: 16px;
+    color: black;
+    font-weight: 600;
+    display: inline-block;
+    height: 40px;
+    line-height: 40px;
+    float: left;
+    width: 20%;
+}
+fieldset p{
+    position: relative;
+    float: right;
+    width: 70%;
+    height: 35px;
+    top: 10px;
+}
+fieldset p select{
+    position: relative;
+    float: right;
+    width: 80%;
+    background: #f8dddd url(../../images/down_icon-red.png) no-repeat 90% center;
+    background-size: 9px;
+}

@@ -1,0 +1,264 @@
+package com.jd.project.module.app.homePage.controller;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.logging.log4j.util.Strings;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.alibaba.fastjson.JSONArray;
+import com.github.pagehelper.util.StringUtil;
+import com.jd.common.utils.DateUtils;
+import com.jd.common.utils.http.HttpUtils;
+import com.jd.common.utils.security.ShiroUtils;
+import com.jd.framework.shiro.authc.LoginType;
+import com.jd.framework.shiro.token.UserToken;
+import com.jd.framework.web.controller.BaseController;
+import com.jd.project.module.admin.enterprise.entity.QyjcxxEntity;
+import com.jd.project.module.admin.enterprise.entity.SysuserEntity;
+import com.jd.project.module.admin.enterprise.service.QyjcxxService;
+import com.jd.project.module.admin.evaluation.entity.DynamicHistoryEntity;
+import com.jd.project.module.admin.evaluation.entity.TaskDetailEntity;
+import com.jd.project.module.admin.evaluation.service.DynamicHistoryService;
+import com.jd.project.module.admin.evaluation.service.TaskDetailService;
+import com.jd.project.module.admin.message.entity.MsgEntity;
+import com.jd.project.module.admin.message.service.MsgService;
+import com.jd.project.module.admin.message.service.NoticeService;
+import com.jd.project.module.app.homePage.entity.DynamicCensusEntity;
+import com.jd.project.module.app.homePage.service.DynamicCensusService;
+import com.jd.project.module.app.homePage.service.HomePageService;
+import com.jd.project.module.ws.InterfaceAddress;
+import com.jd.project.system.sysorg.entity.SysorgEntity;
+import com.jd.project.system.sysorg.service.SysorgService;
+import com.jd.project.system.user.domain.User;
+import com.jd.project.system.user.service.IUserService;
+
+/**
+ * 手机端主页面
+ * 
+ * @author memory
+ * @date 2018-11-21
+ */
+@Controller
+@RequestMapping("/app/homePage")
+public class HomePageController extends BaseController {
+	private String prefix = "module/app/homePage";
+	private static final String APP_LOGIN_TYPE = LoginType.APP.toString();
+
+	@Autowired
+	private HomePageService homePageService;
+
+	@Autowired
+	private NoticeService noticeService;
+
+	@Autowired
+	private QyjcxxService qyjcxxService;
+
+	@Autowired
+	private MsgService msgService;
+
+	@Autowired
+	private SysorgService sysorgService;
+
+	@Autowired
+	private IUserService userService;
+
+	@Autowired
+	private TaskDetailService taskDetailService;
+
+	@Autowired
+	private DynamicHistoryService dynamicHistoryService;
+
+    @Autowired
+    private DynamicCensusService dynamicCensusService;
+
+	/**
+	 * 平台授权登录
+	 */
+	@GetMapping("/index")
+	public String index(String token,String userName,HttpServletRequest request){
+		try {
+			System.out.println("=====================>" + token);
+			StringBuffer sb = new StringBuffer("username=");
+			sb.append(userName);
+            String json = HttpUtils.
+                    sendPost(InterfaceAddress.getAppUrl()+"jnaj/facade/jd/queryYhxxByUsername",
+                            sb.toString(),"Bearer " + token);
+            System.out.println("=====================>" + json);
+            //存储token
+			HttpUtils.token = token;
+            JSONArray jarr = null;
+            try {
+				jarr = JSONArray.parseArray(json);
+			}catch (Exception e){
+            	e.printStackTrace();
+			}
+            if (jarr.size() >0  && null != jarr.getJSONObject(0).get("userid")){
+                String userId = jarr.getJSONObject(0).get("userid").toString();
+                Object isQy = jarr.getJSONObject(0).get("isQy");
+//                ShiroUtils.getUser().setLsIsEnterprise(Long.parseLong(null != isQy ? isQy.toString():""));
+//				if (null != isQy){
+                    //校验莱斯用户是否存在，如果不存在就新增，存在即更新
+					SysuserEntity suser = userService.selectLsUserById(jarr.getJSONObject(0).get("userid").toString());
+					if ( null != suser)
+                        suser.setUserid(jarr.getJSONObject(0).get("userid").toString());
+                    suser.setOrgid(jarr.getJSONObject(0).get("orgid").toString());
+                    suser.setUsername(jarr.getJSONObject(0).get("username").toString());
+                    suser.setRealname(jarr.getJSONObject(0).get("realname").toString());
+                    if (null == suser)
+                        userService.insertUser(suser);
+                    else
+                        userService.updateUserInfo(suser);
+                    //=========================================================================
+                //校验系统用户是否存在，如果不存在就新增，存在即更新
+					 User user = userService.selectUserByLsUserId(jarr.getJSONObject(0).get("userid").toString());
+					 user.setLsUserId(jarr.getJSONObject(0).get("userid").toString());
+                    user.setLoginName(jarr.getJSONObject(0).get("username").toString());
+                    user.setUserName(jarr.getJSONObject(0).get("realname").toString());
+                    user.setLsIsEnterprise(Boolean.parseBoolean(jarr.getJSONObject(0).get("isQy").toString())?1L:0L);
+                    //如果是企业将部门ID更新到企业ID
+                    if (user.getLsIsEnterprise() == 1L)
+                        user.setLsEnterpriseId(jarr.getJSONObject(0).get("orgid").toString());
+                    if (null == user)
+                        userService.insertUser(user);
+                    else
+                        userService.updateUserInfo(user);
+//				}
+				UserToken usertoken = new UserToken(userId, userId, APP_LOGIN_TYPE);
+				Subject subject = SecurityUtils.getSubject();
+				subject.login(usertoken);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if(null != ShiroUtils.getUser()){
+			if(ShiroUtils.getUser().getLsIsEnterprise() == 0L)
+				return redirect("/app/homePage/indexGov");
+			else
+				return redirect("/app/homePage/indexEnt");
+		}else
+			return "无法匹配到该用户！";
+	}
+
+
+	/**
+	 *	街道用户主页跳转
+	 * @param mmap
+	 * @return
+	 */
+	@GetMapping("/indexGov")
+	public String indexGov(ModelMap mmap,HttpServletRequest request) {
+		try {
+
+			Map<String, Object> map = new HashMap<String, Object>();
+			//用户ID
+
+			//获取消息
+			MsgEntity msg = new MsgEntity();
+			msg.setReceiveId(ShiroUtils.getUser().getUserId().toString());
+			msg.setStatus(0L);
+			mmap.put("msgCount",msgService.selectMsgRefList(msg).size());
+			//获取通知公告
+			mmap.put("notice",noticeService.selectMsgList(null).size() > 0?noticeService.selectMsgList(null).get(0):0);
+			//获取企业自评情况数据
+			SysorgEntity se = new SysorgEntity();
+			String id = ShiroUtils.getUser().getLsEnterpriseId();
+//			if(!Strings.isEmpty(ShiroUtils.getUser().getDeptId()))
+				se = sysorgService.selectsysorgById(ShiroUtils.getUser().getLsEnterpriseId());
+			map.put("orgCode",null != se ? se.getOrg_code():null);
+			Map<String, String> numMap = homePageService.countEntNumber(map);
+			//这里更新该部门下的企业总数
+			numMap.put("ZQYS",String.valueOf(qyjcxxService.getTotalEnt(se.getOrg_code()).size()));
+			mmap.put("evaluation",numMap);
+			//获取动态运行情况数据
+			mmap.put("enterprise",homePageService.queryCompany(map));
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return prefix + "/indexGov";
+	}
+
+	/**
+	 *	企业用户主页跳转
+	 * @param mmap
+	 * @return
+	 */
+	@GetMapping("/indexEnt")
+	public String indexEnt(ModelMap mmap,HttpServletRequest request) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		//获取消息
+		MsgEntity msg = new MsgEntity();
+		msg.setReceiveId(ShiroUtils.getUser().getUserId().toString());
+		msg.setStatus(0L);
+		mmap.put("msgCount",msgService.selectMsgRefList(msg).size());
+		//获取通知公告
+		mmap.put("notice",noticeService.selectMsgList(null).get(0));
+		//获取企业信息
+		QyjcxxEntity enterprise = qyjcxxService.selectqyjcxxById(ShiroUtils.getUser().getLsEnterpriseId());
+		//校验企业是否存在
+		if(null == enterprise) return "企业不存在！";
+		mmap.put("enterprise",enterprise);
+        //获取任务情况
+        TaskDetailEntity tde = new TaskDetailEntity();
+        tde.setCompanyId(enterprise.getId());
+        List<TaskDetailEntity> tdeList = taskDetailService.selectTaskDetailList(tde);
+        mmap.put("taskDetail", tdeList.size()> 0 ?tdeList.get(0):null);
+		System.out.println(111);
+		//校验企业基础信息是否完整
+		if( !StringUtil.isEmpty(enterprise.getId() ) 	&&
+				null!=enterprise.getCyrysl() 	&&	//从业人数
+			    !StringUtil.isEmpty(enterprise.getQyjyzt() ) &&	//经营状态
+				!StringUtil.isEmpty(enterprise.getQygm() ) //大中小微
+		){
+			mmap.put("enterpriseFull",true);
+		}else
+			mmap.put("enterpriseFull",false);
+		//获取动态运行情况数据
+		map.put("companyId",ShiroUtils.getUser().getLsEnterpriseId());
+		//不符合项
+		map.put("dynamicType","0");
+		mmap.put("dynamicInconformity",homePageService.queryDynamic(map));
+		//动态检查项
+		map.put("dynamicType","1");
+		mmap.put("dynamicEnforce",homePageService.queryDynamic(map));
+		//获取已整改的数据
+		DynamicHistoryEntity dhe = new DynamicHistoryEntity();
+		dhe.setCompanyId(ShiroUtils.getUser().getLsEnterpriseId());
+		mmap.put("dynamicHistory",dynamicHistoryService.selectDynamicHistoryList(dhe));
+		//获取月份列表（数据为：当前月往前推半年）
+		int currentMonth =DateUtils.currentMonth();
+		String[] months = new String[6];
+        long[] initNon =new long[6];
+        long[] dynaNon =new long[6];
+		for(int i=0;i<6;i++){
+			if (currentMonth > 0 ){
+			    //获取月份列表
+				months[6-i-1] = currentMonth + "月";
+                //获取动态运行统计数据
+                DynamicCensusEntity dce = dynamicCensusService.selectDynamicCensus(currentMonth);
+                //获取初始化不符合项
+                initNon[6-i-1] = null != dce?dce.getDynamicNumber():0;
+                //获取执法检查不符合项
+                dynaNon[6-i-1] = null != dce? dce.getDynamicChecket():0;
+				currentMonth --;
+				if(currentMonth == 0)
+					currentMonth = 12;
+			}
+		}
+		mmap.put("initNon",initNon);
+		mmap.put("dynaNon",dynaNon);
+		mmap.put("months",months);
+        mmap.put("enterpriseId",ShiroUtils.getUser().getLsEnterpriseId());
+		return prefix + "/indexEnt";
+	}
+}

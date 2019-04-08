@@ -1,0 +1,228 @@
+/*
+* @Author: miazhang
+* @Date:   2018-11-01 14:45:51
+* @Last Modified by:   miazhang
+* @Last Modified time: 2018-12-01 09:42:09
+*/
+/*
+* @Author: miazhang
+* @Date:   2018-11-01 10:51:55
+* @Last Modified by:   miazhang
+* @Last Modified time: 2018-11-01 14:25:56
+*/
+body{
+	background: #f8f8fb00;
+	width:100%;
+	height: 100%;
+}
+.content{
+	margin-top: 45px;
+}
+img.main_bg{
+	width:100%;
+}
+.swiper-container{
+	width: 100%;
+	height: 160px;
+}
+.swiper-container img{
+	width: 100%;
+	height: 100%;
+}
+.swiper-pagination-bullet {
+	background: #fff;
+	opacity: .4;
+}
+.swiper-pagination-bullet-active {
+	opacity: 1;
+	background: white;
+}
+.notice{
+	border-bottom: 1px dashed #999;
+	padding:0 15px;
+	background: #fff;
+}
+.notice p{
+	line-height: 45px;
+	width: 100%;
+	font-size: 13px;
+	background: url(../../images/notice_icon.png) no-repeat left center;
+	background-size: 18px 18px;
+	text-indent: 20px;
+}
+.notice_nav{
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	height: 93px;
+	background: #fff;
+	text-align: center;
+	/*padding:0 30px;*/
+	border-bottom: 1px dashed #999;
+}
+.notice_nav a{
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+.notice_nav img{
+	width:58%;
+}
+.notice_nav p{
+	color: #2a1f1f;
+	font-size: 15px;
+}
+.self_judge{
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	background: #fff;
+	height: 41px;
+	padding:0 15px;
+}
+.self_judge h3{
+	font-size: 16px;
+	color: #000;
+	border-left: 4px solid #ff0404;
+	text-indent: 5px; 
+}
+.go_judge{
+	color: #858585;
+	font-size: 14px;
+}
+.judge_info,.had_judge,.no_judge,.stat_con{
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+}
+.judge_info{
+	background: #fff;
+	padding:0 15px 20px 15px;
+	position: relative;
+}
+.content_line{
+	border-bottom: 1px solid #e5e5e5;
+}
+.number_judge{
+	margin-top: -40px;
+}
+.number_judge2{
+	margin-left: 10px;
+}
+.number_judge p{
+	font-size: 15px;
+	color: #000;
+}
+.number_judge span{
+	font-size: 13px;
+	color: #969696;
+}
+.number_judge span i{
+	font-size: 17px;
+	color: #f23838;
+	font-weight: 600;
+}
+.judge_info img{
+	width:40%;
+}
+.states{
+	border-top: 1px dashed #999;
+}
+.states h3{
+	border-left: 4px solid #f9ac11;
+}
+.states_content{
+	background: #fff;
+}
+.stat_con{
+	padding:0 15px;
+	height: 50px;
+}
+.stat_con img{
+	cursor: pointer;
+	width:25px;
+}
+.stat_con .con_name{
+	color:#000;
+	font-size: 15px;
+	margin-bottom: 5px;
+}
+.stat_con .con_address{
+	color:#a0a0a0;
+	font-size: 12px;
+}
+.stat_con div{
+	width:88%;
+}
+.hide_content{
+	background: #f8f8fb;
+	display: none;
+}
+.hide_content ul li{
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	padding:15px;
+}
+.hide_content ul li p{
+	width:84%;
+}
+.hide_content ul li button{
+  	border-width: 1px;
+  	border-color: rgb(255, 47, 47);
+  	border-radius: 3px;
+  	background-color: rgb(241, 87, 100);
+  	padding:4px 5px;
+	color: #fff;
+	font-size: 10px;
+}
+/* 头像 */
+.pic_mine{
+	display:inline-block;
+	float: right;
+	width:30px;
+    height: 45px;
+    margin-right: 5px;
+    display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	padding:0 10px;
+	position: relative;
+}
+.pic_mine img{
+	width:30px;
+	height: 30px;
+	border-radius: 50%;
+}
+.num_tag{
+	position: absolute;
+	right:5px;
+	top:5px;
+	display: inline-block;
+	width:15px;
+	height: 15px;
+	text-align: center;
+	line-height: 15px;
+	border-radius: 50%;
+	background:#ff3333;
+	color: #fff;
+	font-size: 5px;
+}
+.all_num{
+	position: absolute;
+	bottom: 15px;
+    right: 50%;
+    transform: translateX(50%);
+    font-size: 16px;
+    color: #000;
+}
+.stat_con span{
+	font-size:12px;
+	color:#a0a0a0;
+	margin-right:15%;
+}

@@ -1,0 +1,36 @@
+package com.jd.project.module.app.evaluation.controller;
+
+import com.jd.framework.aspectj.lang.annotation.Log;
+import com.jd.framework.aspectj.lang.enums.BusinessType;
+import com.jd.framework.web.controller.BaseController;
+import com.jd.framework.web.domain.Result;
+import com.jd.project.module.admin.evaluation.service.CompanyChecktableFilesService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+/**
+ * 企业自评记录附件 信息操作处理
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-29
+ */
+@Controller
+@RequestMapping("/app/companyChecktableFiles")
+public class CompanyChecktableFilesForMobileController extends BaseController {
+
+	@Autowired
+	private CompanyChecktableFilesService companyChecktableFilesService;
+
+	/**
+	 * 删除企业自评记录附件
+	 */
+	@Log(title = "企业自评记录附件", businessType = BusinessType.DELETE)
+	@PostMapping("/del")
+	@ResponseBody
+	public Result del(String ids) {
+		return toAjax(companyChecktableFilesService.deleteCompanyChecktableFilesByIds(ids));
+	}
+}

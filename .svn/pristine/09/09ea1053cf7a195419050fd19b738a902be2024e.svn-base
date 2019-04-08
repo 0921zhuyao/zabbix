@@ -1,0 +1,157 @@
+package com.jd.project.module.admin.enterprise.controller;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.jd.common.utils.Pinyin4j;
+import com.jd.project.system.role.domain.Role;
+import com.jd.project.system.role.service.IRoleService;
+import com.jd.project.system.user.domain.UserRole;
+import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.jd.common.utils.WebServiceUtils.CxfUtils;
+import com.jd.framework.aspectj.lang.annotation.Log;
+import com.jd.framework.aspectj.lang.enums.BusinessType;
+import com.jd.framework.web.controller.BaseController;
+import com.jd.framework.web.domain.Result;
+import com.jd.project.module.admin.enterprise.entity.SysuserEntity;
+import com.jd.project.module.ws.InterfaceAddress;
+import com.jd.project.system.sysorg.entity.SysorgEntity;
+import com.jd.project.system.sysorg.service.SysorgService;
+import com.jd.project.system.user.service.IUserService;
+
+@Controller
+@RequestMapping("/ls")
+public class LSSyncDataController extends BaseController {
+
+	@Autowired
+	private IUserService userService;
+
+	@Autowired
+	private SysorgService sysorgService;
+
+	@Autowired
+	private IRoleService roleService;
+
+	@Log(title = "同步莱斯用户数据", businessType = BusinessType.INSERT)
+	@GetMapping("/syncLsUser")
+	@ResponseBody
+	public Result syncLsUser() {
+		List<SysuserEntity> syncData = new ArrayList<>();
+		int flag = 0;
+		try {
+			String jsonStr = CxfUtils.getLsJSONStr(InterfaceAddress.getQueryYhxxList(), 5000, 0);
+			JSONObject jsonObject = JSON.parseObject(jsonStr);
+			syncData = JSON.parseArray(jsonObject.getString("data"), SysuserEntity.class);
+			if (syncData.size() > 0) {
+				for (SysuserEntity sysuserEntity : syncData) {
+					SysuserEntity entity = CxfUtils.getLsUserByUserName(sysuserEntity.getUsername());
+					sysuserEntity.setIsQy(entity.getIsQy());
+				}
+				flag = userService.modifyLsUser(syncData);
+			} else {
+				return error(0, "莱斯用户信息为空");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return error(0, "获取莱斯用户接口数据失败");
+		}
+		return toAjax(flag);
+	}
+
+	@Log(title = "同步莱斯组织数据", businessType = BusinessType.INSERT)
+	@GetMapping("/syncLsOrg")
+	@ResponseBody
+	public Result syncLsOrg() {
+		List<SysorgEntity> syncData = new ArrayList<>();
+		int flag = 0;
+		try {
+			String jsonStr = CxfUtils.getLsJSONStr(InterfaceAddress.getQueryZzjgxxList(), 5000, 0);
+			JSONObject jsonObject = JSON.parseObject(jsonStr);
+			syncData = JSON.parseArray(jsonObject.getString("data"), SysorgEntity.class);
+			if (syncData.size() > 0) {
+				flag = sysorgService.modifyLsOrg(syncData);
+			} else {
+				return error(0, "莱斯组织信息为空");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return error(0, "获取莱斯组织接口数据失败");
+		}
+		return toAjax(flag);
+	}
+
+	@Log(title = "根据username查询用户信息详情")
+	@PostMapping("/getLsUserByUserName")
+	@ResponseBody
+	public Result getLsUserByUserName(String userName) {
+		try {
+			SysuserEntity sysuserEntity = CxfUtils.getLsUserByUserName(userName);
+			System.out.println(sysuserEntity.getIsQy());
+			return success(sysuserEntity.getIsQy());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return error(0, "获取用户信息失败");
+		}
+	}
+
+	@Log(title = "同步莱斯角色数据")
+	@GetMapping("/syncLsRole")
+	@ResponseBody
+	public Result syncLsRole() {
+		Pinyin4j pinyin4j = new Pinyin4j();
+		List<Role> syncData = new ArrayList<>();
+		int flag = 0;
+		try {
+			List<JSONObject> jsonList = CxfUtils.getListResult("queryJsxxList","");
+			jsonList.forEach(x ->{
+				Role r = new Role();
+				r.setLsRoleId(x.getString("roleid"));
+				try {
+					r.setRoleKey(pinyin4j.toPinYinLowercase(x.getString("rolename")));
+				} catch (BadHanyuPinyinOutputFormatCombination badHanyuPinyinOutputFormatCombination) {
+					badHanyuPinyinOutputFormatCombination.printStackTrace();
+				}
+				r.setLsRoleName(x.getString("rolename"));
+				syncData.add(r);
+			});
+			if (syncData.size() > 0) {
+				flag = roleService.syncRole(syncData);
+			} else {
+				return error(0, "莱斯角色信息为空");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return error(0, "获取莱斯角色接口数据失败");
+		}
+		return toAjax(flag);
+	}
+
+	@Log(title = "同步莱斯用户角色关联数据")
+	@GetMapping("/syncLsUserRole")
+	@ResponseBody
+	public Result syncLsUserRole() {
+		int flag = 0;
+		try {
+			List<JSONObject> jsonList = CxfUtils.getListResult("queryUserRoleList","");
+			if (jsonList.size() > 0) {
+				flag = userService.syncUserRole(jsonList);
+			} else {
+				return error(0, "莱斯用户角色关联信息为空");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return error(0, "获取莱斯用户角色关联接口数据失败");
+		}
+		return toAjax(flag);
+	}
+
+}

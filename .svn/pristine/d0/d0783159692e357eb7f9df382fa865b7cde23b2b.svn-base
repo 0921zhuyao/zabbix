@@ -1,0 +1,85 @@
+package com.jd.project.module.admin.evaluation.service;
+
+import java.util.List;
+
+import com.jd.project.module.admin.enterprise.entity.QyjcxxEntity;
+import com.jd.project.module.admin.evaluation.entity.TaskPlanEntity;
+
+/**
+ * 自评计划任务 服务层
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-29
+ */
+public interface TaskPlanService {
+	/**
+	 * 查询自评计划任务信息
+	 * 
+	 * @param planId
+	 *            自评计划任务ID
+	 * @return 自评计划任务信息
+	 */
+	public TaskPlanEntity selectTaskPlanById(Long planId);
+
+	/**
+	 * 查询自评计划任务列表
+	 * 
+	 * @param taskPlan
+	 *            自评计划任务信息
+	 * @return 自评计划任务集合
+	 */
+	public List<TaskPlanEntity> selectTaskPlanList(TaskPlanEntity taskPlan);
+
+	/**
+	 * 移动端查询自评计划任务列表
+	 *
+	 * @param taskPlan
+	 *            自评计划任务信息
+	 * @return 自评计划任务集合
+	 */
+	public List<TaskPlanEntity> selectTaskPlanListForMbile(TaskPlanEntity taskPlan);
+
+	/**
+	 * 新增自评计划任务
+	 * 
+	 * @param taskPlan
+	 *            自评计划任务信息
+	 * @return 结果
+	 */
+	public int insertTaskPlan(TaskPlanEntity taskPlan) throws Exception;
+
+	/**
+	 * 修改自评计划任务
+	 * 
+	 * @param taskPlan
+	 *            自评计划任务信息
+	 * @return 结果
+	 */
+	public int updateTaskPlan(TaskPlanEntity taskPlan);
+
+	/**
+	 * 删除自评计划任务信息
+	 * 
+	 * @param ids
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
+	public int deleteTaskPlanByIds(String ids);
+
+	/**
+	 * 查询企业关联信息
+	 * 
+	 * @param planId
+	 * @return
+	 */
+	public List<QyjcxxEntity> selectQyjcxxsByTaskDetailId(Long planId);
+
+	/**
+	 * 审核自评计划任务
+	 * 
+	 * @param taskPlan
+	 * @return
+	 */
+	public int updateTaskPlanAuditeStutas(TaskPlanEntity taskPlan);
+
+}

@@ -1,0 +1,474 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal" id="form-qyjcxx-edit" th:object="${qyjcxx}">
+            <input id="id" name="id" th:field="*{id}"  type="hidden">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">生产经营单位全称：</label>
+                <div class="col-sm-4">
+                    <input id="qymc" name="qymc" th:field="*{scjydwqc}" class="form-control" type="text">
+                </div>
+
+                <label class="col-sm-2 control-label">生产经营单位注册号类型：</label>
+                <div class="col-sm-4">
+                    <input id="jc" name="jc" th:field="*{scjydwzchlx}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">统一社会信用代码：</label>
+                <div class="col-sm-4">
+                    <input id="qybm" name="qybm" th:field="*{tyshxydm}" class="form-control" type="text">
+                </div>
+
+                <label class="col-sm-2 control-label">单位联系人：</label>
+                <div class="col-sm-4">
+                    <input id="qyip" name="qyip" th:field="*{lxrsj}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">法定代表人：</label>
+                <div class="col-sm-4">
+                    <input id="qypxh" name="qypxh" th:field="*{fddbr}" class="form-control" type="text">
+                </div>
+
+                <label class="col-sm-2 control-label">法人电话：</label>
+                <div class="col-sm-4">
+                    <input id="gszch" name="gszch" th:field="*{frdh}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">生产经营地址：</label>
+                <div class="col-sm-4">
+                    <input id="tyshxydm" name="tyshxydm" th:field="*{scjydz}" class="form-control" type="text">
+                </div>
+
+                <label class="col-sm-2 control-label">经济类型：</label>
+                <div class="col-sm-4">
+                    <select class="form-control" id="jjlx" name="jjlx" th:with="type=${@dmJnajJjlxServiceImpl.selectAllDmJnajJjlxList()}">
+                        <option value="">请选择</option>
+                        <option th:selected="${dict.dmx eq qyjcxx?.jjlx}" th:each="dict : ${type}" th:text="${dict.mc}" th:value="${dict.dmx}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">行业类别：</label>
+                <div class="col-sm-4">
+                    <select id="hylb" name="hylb" class="form-control selectpicker bla bla bli" data-live-search="true" data-live-search-placeholder="搜索" data-actions-box="true">
+                        <option value="">请选择</option>
+                        <option th:selected="${dict.dmx eq qyjcxx?.hylb}" th:each="dict:${@dmJnajHylxServiceImpl.selectAllDmJnajHylxList()}" th:value="${dict.dmx}" th:text="${dict.ms}"></option>
+                    </select>
+                </div>
+                <label class="col-sm-2 control-label">监管类别：</label>
+                <div class="col-sm-4">
+                    <select class="form-control" id="jglb" name="jglb" th:with="type=${@dmJglbZgbmServiceImpl.selectAllDmJglbZgbmList()}">
+                        <option value="">请选择</option>
+                        <option th:selected="${dict.code eq qyjcxx?.jglb}" th:each="dict : ${type}" th:text="${dict.mc}" th:value="${dict.code}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">所在地区：</label>
+                <div class="col-sm-4">
+                    <select class="form-control" id="szdq" name="szdq" th:with="type=${@dmJnajServiceImpl.selectDmJnajByDmxbm('SZDQ')}">
+                        <option value="">请选择</option>
+                        <option th:selected="${dict.dmxbm eq qyjcxx?.szdq}" th:each="dict : ${type}" th:text="${dict.ms}" th:value="${dict.dmxbm}"></option>
+                    </select>
+                </div>
+                <label class="col-sm-2 control-label">主管部门：</label>
+                <div class="col-sm-4">
+                    <select class="form-control" id="zgbm" name="zgbm" th:with="type=${@dmJnajServiceImpl.selectDmJnajByDmxbm('ZGBM')}">
+                        <option value="">请选择</option>
+                        <option th:selected="${dict.dmxbm eq qyjcxx?.zgbm}" th:each="dict : ${type}" th:text="${dict.ms}" th:value="${dict.dmxbm}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">经度：</label>
+                <div class="col-sm-4">
+                    <input id="frdh" name="frdh" th:field="*{jd}" class="form-control" type="text">
+                </div>
+                <label class="col-sm-2 control-label">纬度：</label>
+                <div class="col-sm-4">
+                    <input id="frdm" name="frdm" th:field="*{wd}" class="form-control" type="text">
+                </div>
+            </div>
+
+            <div class="form-group">	
+                <label class="col-sm-2 control-label">营业执照：</label>
+                <div class="col-sm-4">
+                    <input id="lxr" name="lxr" th:field="*{yyzz}" class="form-control" type="text">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">主营业务收入：</label>
+                <div class="col-sm-4">
+                    <input id="lxdh" name="lxdh" th:field="*{zyywsr}" class="form-control" type="text">
+                </div>
+
+                <label class="col-sm-2 control-label">从业人员数量：</label>
+                <div class="col-sm-4">
+                    <input id="dzyx" name="dzyx" th:field="*{cyrysl}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">企业规模：</label>
+                <div class="col-sm-4">
+                    <select class="form-control" id="qygm" name="qygm" th:with="type=${@dmJnajServiceImpl.selectDmJnajByDmxbm('QYGM')}">
+                        <option value="">请选择</option>
+                        <option th:selected="${dict.dmxbm eq qyjcxx?.qygm}" th:each="dict : ${type}" th:text="${dict.ms}" th:value="${dict.dmxbm}"></option>
+                    </select>
+                </div>
+                <label class="col-sm-2 control-label">企业经营状态：</label>
+                <div class="col-sm-4">
+                    <select class="form-control" id="qyjyzt" name="qyjyzt" th:with="type=${@dmJnajServiceImpl.selectDmJnajByDmxbm('QYJYZT')}">
+                        <option value="">请选择</option>
+                        <option th:selected="${dict.dmxbm eq qyjcxx?.qyjyzt}" th:each="dict : ${type}" th:text="${dict.ms}" th:value="${dict.dmxbm}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">厂门厂貌：</label>
+                <div class="col-sm-4">
+                    <input id="qygfwzdz" name="qygfwzdz" th:field="*{cmcm}" class="form-control" type="text">
+                </div>
+                <label class="col-sm-2 control-label">审核：</label>
+                <div class="col-sm-4">
+                    <select class="form-control" id="zt" name="zt">
+                        <option value="0" th:selected="${qyjcxx?.zt==0}">未审核</option>
+                        <option value="1" th:selected="${qyjcxx?.zt==1}">审核通过</option>
+                        <option value="2" th:selected="${qyjcxx?.zt==2}">审核未通过</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">审核意见：</label>
+                <div class="col-sm-4">
+                    <input id="zyfzr" name="zyfzr" th:field="*{shyj}" class="form-control" type="text">
+                </div>
+                <label class="col-sm-2 control-label">有无安管机构：</label>
+                <div class="col-sm-4">
+                    <select class="form-control" id="ywagjg" name="ywagjg">
+                        <option value="-1" th:selected="${qyjcxx?.ywagjg==-1}">未填报</option>
+                        <option value="0" th:selected="${qyjcxx?.ywagjg==0}">无</option>
+                        <option value="1" th:selected="${qyjcxx?.ywagjg==1}">有</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">有无专职有安管人员：</label>
+                <div class="col-sm-4">
+                    <select class="form-control" id="ywzzagry" name="ywzzagry">
+                        <option value="-1" th:selected="${qyjcxx?.ywzzagry==-1}">未填报</option>
+                        <option value="0" th:selected="${qyjcxx?.ywzzagry==0}">无</option>
+                        <option value="1" th:selected="${qyjcxx?.ywzzagry==1}">有</option>
+                    </select>
+                </div>
+                <label class="col-sm-2 control-label">有无兼职有安管人员：</label>
+                <div class="col-sm-4">
+                    <select class="form-control" id="ywjzagry" name="ywjzagry">
+                        <option value="-1" th:selected="${qyjcxx?.ywjzagry==-1}">未填报</option>
+                        <option value="0" th:selected="${qyjcxx?.ywjzagry==0}">无</option>
+                        <option value="1" th:selected="${qyjcxx?.ywjzagry==1}">有</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">有无安全总监：</label>
+                <div class="col-sm-4">
+                    <select class="form-control" id="ywaqzj" name="ywaqzj">
+                        <option value="-1" th:selected="${qyjcxx?.ywaqzj==-1}">未填报</option>
+                        <option value="0" th:selected="${qyjcxx?.ywaqzj==0}">无</option>
+                        <option value="1" th:selected="${qyjcxx?.ywaqzj==1}">有</option>
+                    </select>
+                </div>
+                <label class="col-sm-2 control-label">有无特种作业人员：</label>
+                <div class="col-sm-4">
+                    <select class="form-control" id="ywtzzyry" name="ywtzzyry">
+                        <option value="-1" th:selected="${qyjcxx?.ywtzzyry==-1}">未填报</option>
+                        <option value="0" th:selected="${qyjcxx?.ywtzzyry==0}">无</option>
+                        <option value="1" th:selected="${qyjcxx?.ywtzzyry==1}">有</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">有无注册安全工程师：</label>
+                <div class="col-sm-4">
+                    <select class="form-control" id="ywzcaqgcs" name="ywzcaqgcs">
+                        <option value="-1" th:selected="${qyjcxx?.ywzcaqgcs==-1}">未填报</option>
+                        <option value="0" th:selected="${qyjcxx?.ywzcaqgcs==0}">无</option>
+                        <option value="1" th:selected="${qyjcxx?.ywzcaqgcs==1}">有</option>
+                    </select>
+                </div>
+                <label class="col-sm-2 control-label">有无特种设备安全措施：</label>
+                <div class="col-sm-4">
+                    <select class="form-control" id="ywtzsbaqcs" name="ywtzsbaqcs">
+                        <option value="-1" th:selected="${qyjcxx?.ywtzsbaqcs==-1}">未填报</option>
+                        <option value="0" th:selected="${qyjcxx?.ywtzsbaqcs==0}">无</option>
+                        <option value="1" th:selected="${qyjcxx?.ywtzsbaqcs==1}">有</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">标准化达标登记：</label>
+                <div class="col-sm-4">
+                    <select class="form-control" id="bzhdbdj" name="bzhdbdj">
+                        <option value="-1" th:selected="${qyjcxx?.bzhdbdj==-1}">未填报</option>
+                        <option value="0" th:selected="${qyjcxx?.bzhdbdj==0}">无</option>
+                        <option value="1" th:selected="${qyjcxx?.bzhdbdj==1}">有</option>
+                    </select>
+                </div>
+                <label class="col-sm-2 control-label">有无重大危险源：</label>
+                <div class="col-sm-4">
+                    <select class="form-control" id="ywzdwxy" name="ywzdwxy">
+                        <option value="-1" th:selected="${qyjcxx?.ywzdwxy==-1}">未填报</option>
+                        <option value="0" th:selected="${qyjcxx?.ywzdwxy==0}">无</option>
+                        <option value="1" th:selected="${qyjcxx?.ywzdwxy==1}">有</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">有无安全生产登记许可：</label>
+                <div class="col-sm-4">
+                    <select class="form-control" id="ywaqscdjxk" name="ywaqscdjxk">
+                        <option value="-1" th:selected="${qyjcxx?.ywaqscdjxk==-1}">未填报</option>
+                        <option value="0" th:selected="${qyjcxx?.ywaqscdjxk==0}">无</option>
+                        <option value="1" th:selected="${qyjcxx?.ywaqscdjxk==1}">有</option>
+                    </select>
+                </div>
+                <label class="col-sm-2 control-label">有无危化品使用情况：</label>
+                <div class="col-sm-4">
+                    <select class="form-control" id="ywwhpsy" name="ywwhpsy">
+                        <option value="-1" th:selected="${qyjcxx?.ywwhpsy==-1}">未填报</option>
+                        <option value="0" th:selected="${qyjcxx?.ywwhpsy==0}">无</option>
+                        <option value="1" th:selected="${qyjcxx?.ywwhpsy==1}">有</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">有无专项治理：</label>
+                <div class="col-sm-4">
+                    <select class="form-control" id="ywzxzl" name="ywzxzl">
+                        <option value="-1" th:selected="${qyjcxx?.ywzxzl==-1}">未填报</option>
+                        <option value="0" th:selected="${qyjcxx?.ywzxzl==0}">无</option>
+                        <option value="1" th:selected="${qyjcxx?.ywzxzl==1}">有</option>
+                    </select>
+                </div>
+                <label class="col-sm-2 control-label">更新时间：</label>
+                <div class="col-sm-4">
+                    <input id="lsgx" name="lsgx" th:field="*{gxsj}" class="form-control" type="text">
+                </div>
+            </div>
+			<div class="form-group">
+				<div class="form-control-static col-sm-offset-9">
+					<button type="submit" class="btn btn-primary">提交</button>
+					<button onclick="$.modal.close()" class="btn btn-danger" type="button">关闭</button>
+				</div>
+			</div>
+		</form>
+    </div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "module/qyjcxx";
+		$("#form-qyjcxx-edit").validate({
+            rules:{
+                scjydwqc:{
+                    required: true,
+                    minlength : 5,
+                    maxlength: 100,
+                    remote: {
+                        url: prefix + "/checkUnique",
+                        type: "post",
+                        dataType: "json",
+                        data: {
+                            "qymc" : function() {
+                                return $.common.trim($("#qymc").val());
+                            },
+                            "id" : function() {
+                                return $.common.trim($("#id").val());
+                            }
+                        },
+                        dataFilter: function(data, type) {
+                            return data;
+                        }
+                    }
+                },
+                xzqh:{
+                    maxlength: 12
+                },
+                fddbr:{
+                    maxlength: 50
+                },
+                frdh:{
+                    maxlength: 100
+                },
+                tyshxydm:{
+                    maxlength: 18,
+                    remote: {
+                        url: prefix + "/checkUnique",
+                        type: "post",
+                        dataType: "json",
+                        data: {
+                            "tyshxydm" : function() {
+                                return $.common.trim($("#tyshxydm").val());
+                            },
+                            "id" : function() {
+                                return $.common.trim($("#id").val());
+                            }
+                        },
+                        dataFilter: function(data, type) {
+                            return data;
+                        }
+                    }
+                },
+                gszch:{
+                    maxlength: 50,
+                    remote: {
+                        url: prefix + "/checkUnique",
+                        type: "post",
+                        dataType: "json",
+                        data: {
+                            "gszch" : function() {
+                                return $.common.trim($("#gszch").val());
+                            },
+                            "id" : function() {
+                                return $.common.trim($("#id").val());
+                            }
+                        },
+                        dataFilter: function(data, type) {
+                            return data;
+                        }
+                    }
+                },
+                jd:{
+                    number:true
+                },
+                wd:{
+                    number:true
+                },
+                nlr:{
+                    number:true,
+                    min:0
+                },
+                zcze:{
+                    number:true,
+                    min:0
+                },
+                zdmj:{
+                    number:true,
+                    min:0
+                },
+            },
+            messages:{
+                zcze:{
+                    number:"资产总额只能为数字",
+                    min:"资产总额不能小于0"
+                },
+                nlr:{
+                    number:"年利润只能为数字",
+                    min:"年利润不能小于0"
+                },
+                lxr:{
+                    maxlength: "联系人不能大于50个字"
+                },
+                frdm:{
+                    maxlength: "法人代码不能大于50个字"
+                },
+                frdh:{
+                    maxlength:"法人电话不能大于100个字"
+                },
+                fddbr:{
+                    maxlength:"法定代表人不能大于50个字"
+                },
+                qymc:{
+                    required: "企业名称不能为空",
+                    minlength: "企业名称不能小于5个字",
+                    maxlength: "企业名称不能大于100个字",
+                    remote: "企业名称已经存在"
+                },
+                js:{
+                    minlength:"企业名称不能小于2个字",
+                    maxlength: "企业名称不能大于50个字"
+                },
+                qybm:{
+                    required:"企业编码不能为空",
+                    maxlength:"企业编码不能大于100个字",
+                    remote: "企业编码已经存在"
+                },
+                qyip:{
+                    maxlength:"企业IP不能大于100个字"
+                },
+                tyshxydm:{
+                    required:"统一社会信用代码不能为空",
+                    maxlength: "统一社会信用代码不能大于18个字",
+                    minlength: "统一社会信用代码不能小于18个字",
+                    remote: "统一社会信用代码已经存在"
+                },
+                gszch:{
+                    maxlength: "工商注册号不能大于50个字",
+                    remote: "工商注册号已经存在"
+                },
+                xzqh:{
+                    maxlength: "行政区划不能大于12个字"
+                },
+                jd:{
+                    number:"经度必须为数字"
+                },
+                wd:{
+                    number:"纬度必须为数字"
+                },
+                cyrysl:{
+                    number:"从业人员数量必须为数字",
+                    min:"从业人员数量不能小于0"
+                },
+                tzzyrysl:{
+                    number:"特种作业人员数量必须为数字",
+                    min:"特种作业人员数量不能小于0"
+                },
+                zzaqscglrysl:{
+                    number:"专职安全生产管理人员数量必须为数字",
+                    min:"专职安全生产管理人员数量不能小于0"
+                },
+                jzaqscglrysl:{
+                    number:"兼职安全生产管理人员数量必须为数字",
+                    min:"兼职安全生产管理人员数量不能小于0"
+                },
+                zzyjglrysl:{
+                    number:"专职应急管理人员数量必须为数字",
+                    min:"专职应急管理人员数量不能小于0"
+                },
+                zcaqgcsrysl:{
+                    number:"注册安全工程师人员数量必须为数字",
+                    min:"注册安全工程师人员数量不能小于0"
+                }
+            },
+			submitHandler: function(form) {
+			    var idVal = $('#id').val();
+			    if(idVal){
+			        $.operate.save(prefix + "/edit", $('#form-qyjcxx-edit').serialize().replace(/(^\s*)|(\s*$)/g, ""));
+			    }else{
+			        $.operate.save(prefix + "/add", $('#form-qyjcxx-edit').serialize().replace(/(^\s*)|(\s*$)/g, ""));
+			    }
+				
+			}
+		});
+        /*菜单管理-新增-选择菜单树*/
+        function selectMenuTree() {
+            var prefix1 = ctx + "system/sysorg/";
+            var menuId = $("#treeId").val();
+            if(menuId > 0) {
+                var url = prefix1 + "selectSysorgTree/" + menuId;
+                $.modal.open("选择菜单", url, '380', '380');
+            }
+            else {
+                var url = prefix1 + "selectSysorgTree/100";
+                $.modal.open("选择菜单", url, '380', '380');
+            }
+        }
+	</script>
+</body>
+</html>

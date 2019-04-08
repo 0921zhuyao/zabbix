@@ -1,0 +1,317 @@
+package com.jd.project.module.admin.enterprise.entity;
+
+import java.util.Date;
+
+import com.jd.framework.web.domain.BasisEntity;
+
+/**
+ * 系统用户表 LS_SYSUSER
+ * 
+ * @author TrevorPhilips
+ * @date 2018-12-28
+ */
+public class SysuserEntity extends BasisEntity {
+	private static final long serialVersionUID = 1L;
+
+	/** 用户ID（关键字） */
+	private String userid;
+	/** 用户名（用户登录时的用户名） */
+	private String username;
+	/** 密码 */
+	private String passwd;
+	/** 用户描述 */
+	private String description;
+	/** 注册时间 */
+	private Date createtime;
+	/** 上次登陆时间 */
+	private Date lastlogontime;
+	/** 上次离开时间 */
+	private Date lastlogofftime;
+	/** 账户锁定状态：0正常，1账户停用 */
+	private String lockstate;
+	/** 账户锁定时间 */
+	private Date locktime;
+	/** 账户解锁时间 */
+	private Date unlocktime;
+	/** 账户锁定原因 */
+	private String lockreason;
+	/** 账户过期时间 */
+	private Date userexpiredate;
+	/** 下次登陆是否修改密码 */
+	private String mustmodifypasswd;
+	/** 密码过期策略：1系统配置周期，2永不过期，3指定日期 */
+	private String passwdexpirepolicy;
+	/** 密码过期时间 */
+	private Date passwdexpiredate;
+	/** 密码上次修改时间 */
+	private Date passwdlastchange;
+	/** 已登陆次数 */
+	private Long loginedcount;
+	/** 授权登陆总次数 */
+	private Long allowloginedcount;
+	/** 授权登陆时间段 */
+	private Date allowloginperiod;
+	/** 是否限制ip */
+	private String checkip;
+	/** 登陆ip限制范围 */
+	private String allowip;
+	/** 拒绝登陆ip列表 */
+	private String rejectip;
+	/** 备注 */
+	private String remark;
+	/** 离开原因 */
+	private String logoffreason;
+	/** 机构id */
+	private String orgid;
+	/** 用户类别,1机构或部门的管理员,2普通用户.(根据网上经办的用户管理设计,适用于根据机构和部门进行分级的用户管理) */
+	private String userkind;
+	/** 真实姓名 */
+	private String realname;
+	/** 手机号码 */
+	private String phone;
+	/** 员工状态，1为在职，0为离职 */
+	private String status;
+	/** 是否企业 */
+	private boolean isQy;
+
+	public boolean getIsQy() {
+		return isQy;
+	}
+
+	public void setIsQy(boolean isQy) {
+		this.isQy = isQy;
+	}
+
+	public String getUserid() {
+		return userid;
+	}
+
+	public void setUserid(String userid) {
+		this.userid = userid;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPasswd() {
+		return passwd;
+	}
+
+	public void setPasswd(String passwd) {
+		this.passwd = passwd;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public Date getCreatetime() {
+		return createtime;
+	}
+
+	public void setCreatetime(Date createtime) {
+		this.createtime = createtime;
+	}
+
+	public Date getLastlogontime() {
+		return lastlogontime;
+	}
+
+	public void setLastlogontime(Date lastlogontime) {
+		this.lastlogontime = lastlogontime;
+	}
+
+	public Date getLastlogofftime() {
+		return lastlogofftime;
+	}
+
+	public void setLastlogofftime(Date lastlogofftime) {
+		this.lastlogofftime = lastlogofftime;
+	}
+
+	public String getLockstate() {
+		return lockstate;
+	}
+
+	public void setLockstate(String lockstate) {
+		this.lockstate = lockstate;
+	}
+
+	public Date getLocktime() {
+		return locktime;
+	}
+
+	public void setLocktime(Date locktime) {
+		this.locktime = locktime;
+	}
+
+	public Date getUnlocktime() {
+		return unlocktime;
+	}
+
+	public void setUnlocktime(Date unlocktime) {
+		this.unlocktime = unlocktime;
+	}
+
+	public String getLockreason() {
+		return lockreason;
+	}
+
+	public void setLockreason(String lockreason) {
+		this.lockreason = lockreason;
+	}
+
+	public Date getUserexpiredate() {
+		return userexpiredate;
+	}
+
+	public void setUserexpiredate(Date userexpiredate) {
+		this.userexpiredate = userexpiredate;
+	}
+
+	public String getMustmodifypasswd() {
+		return mustmodifypasswd;
+	}
+
+	public void setMustmodifypasswd(String mustmodifypasswd) {
+		this.mustmodifypasswd = mustmodifypasswd;
+	}
+
+	public String getPasswdexpirepolicy() {
+		return passwdexpirepolicy;
+	}
+
+	public void setPasswdexpirepolicy(String passwdexpirepolicy) {
+		this.passwdexpirepolicy = passwdexpirepolicy;
+	}
+
+	public Date getPasswdexpiredate() {
+		return passwdexpiredate;
+	}
+
+	public void setPasswdexpiredate(Date passwdexpiredate) {
+		this.passwdexpiredate = passwdexpiredate;
+	}
+
+	public Date getPasswdlastchange() {
+		return passwdlastchange;
+	}
+
+	public void setPasswdlastchange(Date passwdlastchange) {
+		this.passwdlastchange = passwdlastchange;
+	}
+
+	public Long getLoginedcount() {
+		return loginedcount;
+	}
+
+	public void setLoginedcount(Long loginedcount) {
+		this.loginedcount = loginedcount;
+	}
+
+	public Long getAllowloginedcount() {
+		return allowloginedcount;
+	}
+
+	public void setAllowloginedcount(Long allowloginedcount) {
+		this.allowloginedcount = allowloginedcount;
+	}
+
+	public Date getAllowloginperiod() {
+		return allowloginperiod;
+	}
+
+	public void setAllowloginperiod(Date allowloginperiod) {
+		this.allowloginperiod = allowloginperiod;
+	}
+
+	public String getCheckip() {
+		return checkip;
+	}
+
+	public void setCheckip(String checkip) {
+		this.checkip = checkip;
+	}
+
+	public String getAllowip() {
+		return allowip;
+	}
+
+	public void setAllowip(String allowip) {
+		this.allowip = allowip;
+	}
+
+	public String getRejectip() {
+		return rejectip;
+	}
+
+	public void setRejectip(String rejectip) {
+		this.rejectip = rejectip;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public String getLogoffreason() {
+		return logoffreason;
+	}
+
+	public void setLogoffreason(String logoffreason) {
+		this.logoffreason = logoffreason;
+	}
+
+	public String getOrgid() {
+		return orgid;
+	}
+
+	public void setOrgid(String orgid) {
+		this.orgid = orgid;
+	}
+
+	public String getUserkind() {
+		return userkind;
+	}
+
+	public void setUserkind(String userkind) {
+		this.userkind = userkind;
+	}
+
+	public String getRealname() {
+		return realname;
+	}
+
+	public void setRealname(String realname) {
+		this.realname = realname;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+}

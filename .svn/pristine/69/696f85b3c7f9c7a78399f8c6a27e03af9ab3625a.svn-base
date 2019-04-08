@@ -1,0 +1,158 @@
+package com.jd.project.module.admin.standard.entity;
+
+import java.util.Date;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+import org.hibernate.validator.constraints.Length;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.jd.framework.web.domain.BasisEntity;
+
+/**
+ * 检查内容分类表 T_CHECK_CONTENT_TYPE
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-21
+ */
+public class CheckContentTypeEntity extends BasisEntity {
+	private static final long serialVersionUID = 1L;
+
+	/** 基础代码编号 */
+	private Long contentTypeId;
+	/** 分类编码 */
+	@NotEmpty(message="分类编码不能为空")
+	@Length(max=16,message="分类编码长度不能大于16字")
+	private String contentTypeCode;
+	/** 代码名称 */
+	@NotEmpty(message="分类名称不能为空")
+	@Length(max=50,message="分类名称长度不能大于50字")
+	private String contentTypeName;
+	/** 上级节点ID */
+	@NotBlank
+	private Long contentTypeParentId;
+	/** 排序号 */
+	@NotEmpty(message="排序号不能为空")
+	private Long sort;
+	/** 备注 */
+	private String remark;
+	/** 创建人 */
+	private Long createUser;
+	/** 创建时间 */
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date createTime;
+	/** 最后更新人 */
+	private Long updateUser;
+	/** 最后更新时间 */
+	@JsonFormat( timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date updateTime;
+	/** 0 未删 1 已删 */
+	private Integer isDelete;
+
+	public void setContentTypeId(Long contentTypeId) {
+		this.contentTypeId = contentTypeId;
+	}
+
+	public Long getContentTypeId() {
+		return contentTypeId;
+	}
+
+	public void setContentTypeCode(String contentTypeCode) {
+		this.contentTypeCode = contentTypeCode;
+	}
+
+	public String getContentTypeCode() {
+		return contentTypeCode;
+	}
+
+	public void setContentTypeName(String contentTypeName) {
+		this.contentTypeName = contentTypeName;
+	}
+
+	public String getContentTypeName() {
+		return contentTypeName;
+	}
+
+	public void setContentTypeParentId(Long contentTypeParentId) {
+		this.contentTypeParentId = contentTypeParentId;
+	}
+
+	public Long getContentTypeParentId() {
+		return contentTypeParentId;
+	}
+
+	public void setsort(Long sort) {
+		this.sort = sort;
+	}
+
+	public Long getsort() {
+		return sort;
+	}
+
+	public void setremark(String remark) {
+		this.remark = remark;
+	}
+
+	public String getremark() {
+		return remark;
+	}
+
+	public void setCreateUser(Long createUser) {
+		this.createUser = createUser;
+	}
+
+	public Long getCreateUser() {
+		return createUser;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setUpdateUser(Long updateUser) {
+		this.updateUser = updateUser;
+	}
+
+	public Long getUpdateUser() {
+		return updateUser;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
+
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setIsDelete(Integer isDelete) {
+		this.isDelete = isDelete;
+	}
+
+	public Integer getIsDelete() {
+		return isDelete;
+	}
+
+	public String toString() {
+		return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).append("contentTypeId", getContentTypeId())
+				.append("contentTypeCode", getContentTypeCode()).append("contentTypeName", getContentTypeName())
+				.append("contentTypeParentId", getContentTypeParentId()).append("sort", getsort())
+				.append("remark", getremark()).append("createUser", getCreateUser())
+				.append("createTime", getCreateTime()).append("updateUser", getUpdateUser())
+				.append("updateTime", getUpdateTime()).append("isDelete", getIsDelete()).toString();
+	}
+
+	public CheckContentTypeEntity() {
+	}
+
+	public CheckContentTypeEntity(@NotBlank Long contentTypeParentId) {
+		this.contentTypeParentId = contentTypeParentId;
+	}
+}

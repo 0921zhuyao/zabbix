@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" type="text/css" th:href="@{ /css/app/mui.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{ /css/app/reset.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{ /css/app/Nonstandard.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{ /css/app/mui.picker.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{ /css/app/mui.poppicker.css}">
+	<style type="text/css">
+		.action-back {
+			float: left;
+			margin-left: -10px;
+		}
+	</style>
+</head>
+<body>
+	<!--头部内容-->
+	<header id="header" class="mui-bar mui-bar-nav">
+	   	<span class="action-back" onclick="window.history.back()">
+	        <img th:src="@{ /images/return.png}" alt="">
+	    </span>
+	    <h1 class="mui-title" th:if="*{content}==null">动态运行</h1>
+		<h1 class="mui-title" th:if="*{content}!=null" th:text="*{content}">动态运行</h1>
+		<span class="action-search">
+				<img src="../images/search_icon.png" th:src="@{ /images/search_icon.png}" alt="">
+			</span>
+		<div class="input_box">
+			<input type="text" id="searchText">
+		</div>
+	</header>
+	<div class="content-picker">
+		<span class="grey_line"></span>
+		<div class="content_top">
+			<ul>
+				<li><a href="#" id='showTypePicker' class="omg">类型</a></li>
+				<input  id='showTypePicker1Val' type="hidden" value="-1"/>
+				<li><a href="#" id='showStatusPicker' class="omg">状态</a></li>
+				<input  id='showStatusPicker2Val' type="hidden" value="-1"/>
+			</ul>
+		</div>
+	</div>
+</body>
+<script type="text/javascript" th:src="@{ /js/app/jquery-3.0.0.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/app/mui.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/app/mui.picker.js}"></script>
+<script type="text/javascript" th:src="@{/js/app/mui.poppicker.js}"></script>
+<script th:inline="javascript">
+	(function($, doc) {
+	    mui.init({
+	        subpages:[{
+	            url:'/app/companyChecktable/query_list/'+[[${type}]] + "/" + [[${companyId}]],
+				id:"qyjcxx_list",
+	            styles:{
+	                top:'5.8rem',//mui标题栏默认高度为45px；
+	                bottom:'0px'//默认为0px，可不定义；
+	            }
+	        }]
+	    });
+	})(mui, document);
+	$(document).ready(function() {
+		
+        $(".action-search").click(function() {
+            $(".input_box").fadeToggle(100,'swing',function(){
+                if($(this).css("display")=="none"){
+                    query();
+				}
+			});
+        });
+    });
+	//调用子页面的下拉刷新进行数据的查询
+    function query(){
+        $("#qyjcxx_list")[0].contentWindow.pullfreshdown();
+    }
+	
+    (function($, doc) {
+		$.init();
+		$.ready(function() {
+			/**
+			 * 获取对象属性的值
+			 * 主要用于过滤三级联动中，可能出现的最低级的数据不存在的情况，实际开发中需要注意这一点；
+			 * @param {Object} obj 对象
+			 * @param {String} param 属性名
+			 */
+			var _getParam = function(obj, param) {
+				return obj[param] || '';
+			};
+			
+            var type_json=[{value:-1,text:'全部'},{value:0,text:'不符合项'},{value:1,text:'执法检查项'}];
+			var typePicker = new $.PopPicker();
+			typePicker.setData(type_json);
+			var showTypePickerButton = doc.getElementById('showTypePicker');
+			var typeResult = doc.getElementById('showTypePicker');
+			/* if([[${type}]] == 0){
+				typeResult.innerText = "不符合项";
+				document.getElementById("showTypePicker1Val").value=0;
+			}else if([[${type}]] == 1){
+				typeResult.innerText = "执法检查项";
+				document.getElementById("showTypePicker1Val").value=1;
+			} */
+			showTypePickerButton.addEventListener('tap', function(event) {
+				typePicker.show(function(items) {
+					typeResult.innerText = items[0].text;
+					document.getElementById("showTypePicker1Val").value=items[0].value;
+                    query();
+					//返回 false 可以阻止选择框的关闭
+					//return false;
+				});
+			}, false);
+			var status_json = [{value:-1,text:'全部'},{value:0,text:'待处理'},{value:1,text:'待审核'},{value:3,text:'驳回'}];
+			var statusPicker = new $.PopPicker();
+			statusPicker.setData(status_json);
+			var showStatusPickerButton = doc.getElementById('showStatusPicker');
+			var statusResult = doc.getElementById('showStatusPicker');
+			showStatusPickerButton.addEventListener('tap', function(event) {
+				statusPicker.show(function(items) {
+					statusResult.innerText = items[0].text;
+                    document.getElementById("showStatusPicker2Val").value=items[0].value;
+                    query();
+					//返回 false 可以阻止选择框的关闭
+					//return false;
+				});
+			}, false);
+		});
+	})(mui, document);
+</script>
+</html>

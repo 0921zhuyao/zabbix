@@ -1,0 +1,95 @@
+/*
+* @Author: miazhang
+* @Date:   2018-10-29 09:52:56
+* @Last Modified by:   miazhang
+* @Last Modified time: 2018-10-29 11:24:35
+*/
+
+
+/*todo*/
+.todo{
+	margin-top: 45px;
+	margin-bottom:2px;
+	background:#fff;
+	overflow:hidden;
+	
+}
+.todo-hd{
+	height:44px;
+	background: #f0f0f3;
+	position: relative;
+}
+.todo-hd .grey_line{
+	position: absolute;
+	top:11px;
+	left:49%;
+	display: inline-block;
+	width:2px;
+	height: 22px;
+	background: #d2d2d2;
+}
+.todo-hd li{
+	float:left;
+	width:50%;
+	line-height: 44px;
+	text-align:center;
+	
+}
+.todo-hd li a{
+	width:50px;
+	display:inline-block;
+	height:40px;
+	border-bottom:2px solid transparent;
+	line-height: 40px;
+	color: #000;
+	font-size: 16px;
+}
+.todo-hd li.current a{
+	border-bottom-color:#da0808;
+	color: #da0808;
+}
+.todo-bd a{
+	line-height:25px;
+}
+.todo-bd li{
+	display:none;
+}
+.todo-bd li.current{
+	display:block;
+}
+.todo_list{
+	padding:0 17px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	height: 78px;
+	border-bottom: 1px solid #d2d2d2;
+}
+.list_left{
+	width:70%;
+}
+.list_left p.list_title{
+	color: #000;
+	font-size: 15px;
+	font-weight: 600;
+	letter-spacing:1px;
+}
+.list_left p.list_address{
+	color: rgb(160, 160, 160);
+	font-size: 12px;
+	margin-top: 8px;
+}
+
+.list_right{
+	/* flex:1; */
+}
+.list_right button{
+	width:73px;
+	height: 28px;
+	border-radius: 2px;
+	background-image: -webkit-linear-gradient(left, rgb(234,31,31) 0%, rgb(255,72,71) 99%);
+	background-image: -o-linear-gradient(left, rgb(234,31,31) 0%, rgb(255,72,71) 99%);
+	background-image: linear-gradient(to right, rgb(234,31,31) 0%, rgb(255,72,71) 99%);
+	color: #fff;
+}	

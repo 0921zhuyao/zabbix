@@ -1,0 +1,86 @@
+package com.jd.project.module.admin.standard.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.jd.common.support.Convert;
+import com.jd.framework.web.service.BaseService;
+import com.jd.project.module.admin.standard.entity.CheckTableBaseEntity;
+import com.jd.project.module.admin.standard.mapper.CheckTableBaseMapper;
+
+/**
+ * 检查依据 服务层实现
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-21
+ */
+@Service
+@Transactional(rollbackFor = Exception.class)
+public class CheckTableBaseServiceImpl extends BaseService implements CheckTableBaseService {
+	@Autowired
+	private CheckTableBaseMapper checkTableBaseMapper;
+
+	/**
+	 * 查询检查依据信息
+	 * 
+	 * @param ctbId
+	 *            检查依据ID
+	 * @return 检查依据信息
+	 */
+	@Override
+	public CheckTableBaseEntity selectCheckTableBaseById(Long ctbId) {
+		return checkTableBaseMapper.selectCheckTableBaseById(ctbId);
+	}
+
+	/**
+	 * 查询检查依据列表
+	 * 
+	 * @param checkTableBase
+	 *            检查依据信息
+	 * @return 检查依据集合
+	 */
+	@Override
+	public List<CheckTableBaseEntity> selectCheckTableBaseList(CheckTableBaseEntity checkTableBase) {
+		return checkTableBaseMapper.selectCheckTableBaseList(checkTableBase);
+	}
+
+	/**
+	 * 新增检查依据
+	 * 
+	 * @param checkTableBase
+	 *            检查依据信息
+	 * @return 结果
+	 */
+	@Override
+	public int insertCheckTableBase(CheckTableBaseEntity checkTableBase) {
+		return checkTableBaseMapper.insertCheckTableBase(checkTableBase);
+	}
+
+	/**
+	 * 修改检查依据
+	 * 
+	 * @param checkTableBase
+	 *            检查依据信息
+	 * @return 结果
+	 */
+	@Override
+	public int updateCheckTableBase(CheckTableBaseEntity checkTableBase) {
+		return checkTableBaseMapper.updateCheckTableBase(checkTableBase);
+	}
+
+	/**
+	 * 删除检查依据对象
+	 * 
+	 * @param ids
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
+	@Override
+	public int deleteCheckTableBaseByIds(String ids) {
+		return checkTableBaseMapper.deleteCheckTableBaseByIds(Convert.toStrArray(ids));
+	}
+
+}

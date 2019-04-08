@@ -1,0 +1,59 @@
+package com.jd.project.module.admin.standard.service;
+
+import java.util.List;
+
+import com.jd.project.module.admin.standard.entity.IndustryEntity;
+
+/**
+ * 行业分类 服务层
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-21
+ */
+public interface IndustryService {
+	/**
+	 * 查询行业分类信息
+	 * 
+	 * @param industryId
+	 *            行业分类ID
+	 * @return 行业分类信息
+	 */
+	public IndustryEntity selectIndustryById(Long industryId);
+
+	/**
+	 * 查询行业分类列表
+	 * 
+	 * @param industry
+	 *            行业分类信息
+	 * @return 行业分类集合
+	 */
+	public List<IndustryEntity> selectIndustryList(IndustryEntity industry);
+
+	/**
+	 * 新增行业分类
+	 * 
+	 * @param industry
+	 *            行业分类信息
+	 * @return 结果
+	 */
+	public int insertIndustry(IndustryEntity industry);
+
+	/**
+	 * 修改行业分类
+	 * 
+	 * @param industry
+	 *            行业分类信息
+	 * @return 结果
+	 */
+	public int updateIndustry(IndustryEntity industry);
+
+	/**
+	 * 删除行业分类信息
+	 * 
+	 * @param ids
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
+	public int deleteIndustryByIds(String ids);
+
+}

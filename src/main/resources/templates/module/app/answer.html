@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>Title</title>
+</head>
+<link rel="stylesheet" href="../css/answer.css">
+<body>
+<!--头部内容-->
+<header id="header" class="mui-bar mui-bar-nav">
+    <span class="action-back" onclick="window.history.back()">
+        <img src="../images/return.png" alt="">
+    </span>
+    <h1 class="mui-title">安全生产管理机构设置及…</h1>
+    <span class="submit-btn">提交</span>
+</header>
+<div class="content">
+    <p class="question-num">3/20</p>
+    <p class="question">是否已配备一名或一名以上的专职安全生
+        产管理人员？</p>
+    <ul>
+        <li class="right">是</li>
+        <li class="wrong">否</li>
+
+    </ul>
+    <div class="img-box">
+        <a href="javascript:;" class="file">
+            <input type="file" name="" id="">
+        </a>
+        <span class="upload-text">上传文件</span>
+        <span class="upload-info">（文件大小不得超过10M）</span>
+    </div>
+    <textarea name="" id="textarea">备注: （不超过100字）</textarea>
+    <div class="dashed"></div>
+    <p class="question">复评结果</p>
+    <ul>
+        <li class="right">是</li>
+        <li class="wrong">否</li>
+
+    </ul>
+    <div class="img-box">
+        <a href="javascript:;" class="file">
+            <input type="file" name="" id="">
+        </a>
+        <span class="upload-text">上传文件</span>
+        <span class="upload-info">（文件大小不得超过10M）</span>
+    </div>
+    <textarea name="" id="textarea1">备注: （不超过100字）</textarea>
+    <div class="dashed"></div>
+    <p class="question">定级结果</p>
+    <ul>
+        <li class="right">是</li>
+        <li class="wrong">否</li>
+    </ul>
+    
+    <textarea name="" id="textarea2">备注: （不超过100字）</textarea>
+    
+    <button>查看检查方法</button>
+    <button>查看检查依据</button>
+</div>
+</body>
+<script src="../js/jquery-3.0.0.min.js"></script>
+<script>
+    $(function () {
+        var a=0;
+        var b=0;
+        $(".wrong").click(function () {
+            if(b==1){
+                $(".right").css({
+                    "background":"url(\"../images/right.png\") no-repeat",
+                    "backgroundSize":"30px 30px"
+                });
+                b=0;
+            };
+            if(a==0){
+                $(this).css({
+                    "background":"url(\"../images/wrong1.png\") no-repeat",
+                    "backgroundSize":"30px 30px"
+                });
+                a=1;
+            }else {
+                $(this).css({
+                    "background":"url(\"../images/wrong.png\") no-repeat",
+                    "backgroundSize":"30px 30px"
+                });
+                a=0
+            }
+
+        });
+        $(".right").click(function () {
+            if(a==1){
+                $(".wrong").css({
+                    "background":"url(\"../images/wrong.png\") no-repeat",
+                    "backgroundSize":"30px 30px"
+                });
+                a=0;
+            };
+            if(b==0){
+                $(this).css({
+                    "background":"url(\"../images/right1.png\") no-repeat",
+                    "backgroundSize":"30px 30px"
+                });
+                b=1;
+            }else {
+                $(this).css({
+                    "background":"url(\"../images/right.png\") no-repeat",
+                    "backgroundSize":"30px 30px"
+                });
+                b=0
+            }
+        })
+    })
+</script>
+</html>

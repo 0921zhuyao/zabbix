@@ -1,0 +1,120 @@
+package com.jd.project.module.admin.enterprise.controller;
+
+import java.util.List;
+
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.jd.framework.aspectj.lang.annotation.Log;
+import com.jd.framework.aspectj.lang.enums.BusinessType;
+import com.jd.framework.web.controller.BaseController;
+import com.jd.framework.web.domain.Result;
+import com.jd.framework.web.page.TableDataInfo;
+import com.jd.project.module.admin.enterprise.entity.LdsEntity;
+import com.jd.project.module.admin.enterprise.service.LdsService;
+
+/**
+ * 大中小微 信息操作处理
+ * 
+ * @author TrevorPhilips
+ * @date 2018-12-20
+ */
+@Controller
+@RequestMapping("/module/lds")
+public class LdsController extends BaseController {
+	private String prefix = "module/admin/enterprise/identity";
+
+	@Autowired
+	private LdsService ldsService;
+
+	@RequiresPermissions("module:lds:view")
+	@GetMapping()
+	public String initList() {
+		return prefix + "/lds_list";
+	}
+
+	/**
+	 * 查询大中小微列表
+	 */
+	@RequiresPermissions("module:lds:list")
+	@PostMapping("/query")
+	@ResponseBody
+	public TableDataInfo query(LdsEntity lds) {
+		startPage();
+		List<LdsEntity> list = ldsService.selectLdsList(lds);
+		return getDataTable(list);
+	}
+
+	/**
+	 * 新增大中小微
+	 */
+	@GetMapping("/initAdd")
+	public String initAdd(ModelMap mmap) {
+		mmap.put("lds", new LdsEntity());
+		return prefix + "/lds_edit";
+	}
+
+	/**
+	 * 新增保存大中小微
+	 */
+	@RequiresPermissions("module:lds:add")
+	@Log(title = "大中小微", businessType = BusinessType.INSERT)
+	@PostMapping("/add")
+	@ResponseBody
+	public Result add(LdsEntity lds) {
+		return toAjax(ldsService.insertLds(lds));
+	}
+
+	/**
+	 * 修改大中小微
+	 */
+	@GetMapping("/initEdit/{lmsId}")
+	public String initEdit(@PathVariable("lmsId") Long lmsId, ModelMap mmap) {
+		LdsEntity lds = ldsService.selectLdsById(lmsId);
+		mmap.put("lds", lds);
+		return prefix + "/lds_edit";
+	}
+
+	/**
+	 * 修改保存大中小微
+	 */
+	@RequiresPermissions("module:lds:edit")
+	@Log(title = "大中小微", businessType = BusinessType.UPDATE)
+	@PostMapping("/edit")
+	@ResponseBody
+	public Result edit(LdsEntity lds) {
+		return toAjax(ldsService.updateLds(lds));
+	}
+
+	/**
+	 * 删除大中小微
+	 */
+	@RequiresPermissions("module:lds:remove")
+	@Log(title = "大中小微", businessType = BusinessType.DELETE)
+	@PostMapping("/del")
+	@ResponseBody
+	public Result del(String ids) {
+		return toAjax(ldsService.deleteLdsByIds(ids));
+	}
+
+	/**
+	 * 查询大中小微详情
+	 * 
+	 * @param id
+	 * @param mmap
+	 * @return
+	 */
+	@RequiresPermissions("module:lds:list")
+	@GetMapping("/detail/{id}")
+	public String detail(@PathVariable("id") Long id, ModelMap mmap) {
+		mmap.put("id", id);
+		return prefix + "/ldsDetail_list";
+	}
+}

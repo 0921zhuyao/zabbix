@@ -1,0 +1,63 @@
+package com.jd.project.module.admin.message.service;
+
+import com.jd.framework.web.domain.Result;
+import com.jd.project.module.admin.message.entity.MsgEntity;
+import java.util.List;
+
+/**
+ * 消息配置 服务层
+ * 
+ * @author zaq
+ * @date 2018-11-26
+ */
+public interface MsgService {
+	/**
+     * 查询消息配置信息
+     * 
+     * @param id 消息配置ID
+     * @return 消息配置信息
+     */
+	MsgEntity selectMsgRefById(Long id);
+	
+	/**
+     * 查询消息配置列表
+     * 
+     * @param msg 消息配置信息
+     * @return 消息配置集合
+     */
+	List<MsgEntity> selectMsgRefList(MsgEntity msg);
+	
+	/**
+     * 新增消息配置
+     * 
+     * @param msg 消息配置信息
+     * @return 结果
+     */
+	int insertMsgRef(MsgEntity msg);
+
+	/**
+	 * 系统任务完成后发送消息通知
+	 * @param sendId
+	 * @param receiveId
+	 * @param content
+	 * @return
+	 */
+	Result sendMessage(String sendId, String receiveId, String content);
+	
+	/**
+     * 修改消息配置
+     * 
+     * @param msg 消息配置信息
+     * @return 结果
+     */
+	int updateMsgRef(MsgEntity msg);
+		
+	/**
+     * 删除消息配置信息
+     * 
+     * @param ids 需要删除的数据ID
+     * @return 结果
+     */
+	int deleteMsgRefByIds(String ids);
+	
+}

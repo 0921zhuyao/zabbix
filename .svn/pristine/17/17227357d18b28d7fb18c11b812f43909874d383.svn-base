@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jd.project.module.admin.enterprise.mapper.SysuserMapper">
+    
+    <resultMap type="SysuserEntity" id="SysuserResult">
+        <result property="userid"    column="USERID"    />
+        <result property="username"    column="USERNAME"    />
+        <result property="passwd"    column="PASSWD"    />
+        <result property="description"    column="DESCRIPTION"    />
+        <result property="createtime"    column="CREATETIME"    />
+        <result property="lastlogontime"    column="LASTLOGONTIME"    />
+        <result property="lastlogofftime"    column="LASTLOGOFFTIME"    />
+        <result property="lockstate"    column="LOCKSTATE"    />
+        <result property="locktime"    column="LOCKTIME"    />
+        <result property="unlocktime"    column="UNLOCKTIME"    />
+        <result property="lockreason"    column="LOCKREASON"    />
+        <result property="userexpiredate"    column="USEREXPIREDATE"    />
+        <result property="mustmodifypasswd"    column="MUSTMODIFYPASSWD"    />
+        <result property="passwdexpirepolicy"    column="PASSWDEXPIREPOLICY"    />
+        <result property="passwdexpiredate"    column="PASSWDEXPIREDATE"    />
+        <result property="passwdlastchange"    column="PASSWDLASTCHANGE"    />
+        <result property="loginedcount"    column="LOGINEDCOUNT"    />
+        <result property="allowloginedcount"    column="ALLOWLOGINEDCOUNT"    />
+        <result property="allowloginperiod"    column="ALLOWLOGINPERIOD"    />
+        <result property="checkip"    column="CHECKIP"    />
+        <result property="allowip"    column="ALLOWIP"    />
+        <result property="rejectip"    column="REJECTIP"    />
+        <result property="remark"    column="REMARK"    />
+        <result property="logoffreason"    column="LOGOFFREASON"    />
+        <result property="orgid"    column="ORGID"    />
+        <result property="userkind"    column="USERKIND"    />
+        <result property="realname"    column="REALNAME"    />
+        <result property="phone"    column="PHONE"    />
+        <result property="status"    column="STATUS"    />
+    </resultMap>
+	
+	<sql id="selectSysuserVo">
+        SELECT USERID, USERNAME, PASSWD, DESCRIPTION, CREATETIME, LASTLOGONTIME, LASTLOGOFFTIME, LOCKSTATE, LOCKTIME, UNLOCKTIME, LOCKREASON, USEREXPIREDATE, MUSTMODIFYPASSWD, PASSWDEXPIREPOLICY, PASSWDEXPIREDATE, PASSWDLASTCHANGE, LOGINEDCOUNT, ALLOWLOGINEDCOUNT, ALLOWLOGINPERIOD, CHECKIP, ALLOWIP, REJECTIP, REMARK, LOGOFFREASON, ORGID, USERKIND, REALNAME, PHONE, STATUS FROM LS_SYSUSER
+    </sql>
+	
+    <select id="selectSysuserList" parameterType="SysuserEntity" resultMap="SysuserResult">
+        <include refid="selectSysuserVo"/>
+        <where>  
+            <if test="userid != null and userid != ''"> AND USERID = #{userid}</if>
+             <if test="username != null and username != ''"> AND USERNAME = #{username}</if>
+             <if test="passwd != null and passwd != ''"> AND PASSWD = #{passwd}</if>
+             <if test="description != null and description != ''"> AND DESCRIPTION = #{description}</if>
+             <if test="createtime != null and createtime != ''"> AND CREATETIME = #{createtime}</if>
+             <if test="lastlogontime != null and lastlogontime != ''"> AND LASTLOGONTIME = #{lastlogontime}</if>
+             <if test="lastlogofftime != null and lastlogofftime != ''"> AND LASTLOGOFFTIME = #{lastlogofftime}</if>
+             <if test="lockstate != null and lockstate != ''"> AND LOCKSTATE = #{lockstate}</if>
+             <if test="locktime != null and locktime != ''"> AND LOCKTIME = #{locktime}</if>
+             <if test="unlocktime != null and unlocktime != ''"> AND UNLOCKTIME = #{unlocktime}</if>
+             <if test="lockreason != null and lockreason != ''"> AND LOCKREASON = #{lockreason}</if>
+             <if test="userexpiredate != null and userexpiredate != ''"> AND USEREXPIREDATE = #{userexpiredate}</if>
+             <if test="mustmodifypasswd != null and mustmodifypasswd != ''"> AND MUSTMODIFYPASSWD = #{mustmodifypasswd}</if>
+             <if test="passwdexpirepolicy != null and passwdexpirepolicy != ''"> AND PASSWDEXPIREPOLICY = #{passwdexpirepolicy}</if>
+             <if test="passwdexpiredate != null and passwdexpiredate != ''"> AND PASSWDEXPIREDATE = #{passwdexpiredate}</if>
+             <if test="passwdlastchange != null and passwdlastchange != ''"> AND PASSWDLASTCHANGE = #{passwdlastchange}</if>
+             <if test="loginedcount != null and loginedcount != ''"> AND LOGINEDCOUNT = #{loginedcount}</if>
+             <if test="allowloginedcount != null and allowloginedcount != ''"> AND ALLOWLOGINEDCOUNT = #{allowloginedcount}</if>
+             <if test="allowloginperiod != null and allowloginperiod != ''"> AND ALLOWLOGINPERIOD = #{allowloginperiod}</if>
+             <if test="checkip != null and checkip != ''"> AND CHECKIP = #{checkip}</if>
+             <if test="allowip != null and allowip != ''"> AND ALLOWIP = #{allowip}</if>
+             <if test="rejectip != null and rejectip != ''"> AND REJECTIP = #{rejectip}</if>
+             <if test="remark != null and remark != ''"> AND REMARK = #{remark}</if>
+             <if test="logoffreason != null and logoffreason != ''"> AND LOGOFFREASON = #{logoffreason}</if>
+             <if test="orgid != null and orgid != ''"> AND ORGID = #{orgid}</if>
+             <if test="userkind != null and userkind != ''"> AND USERKIND = #{userkind}</if>
+             <if test="realname != null and realname != ''"> AND REALNAME = #{realname}</if>
+             <if test="phone != null and phone != ''"> AND PHONE = #{phone}</if>
+             <if test="status != null and status != ''"> AND STATUS = #{status}</if>
+         </where>
+    </select>
+    
+    <select id="selectSysuserById" parameterType="String" resultMap="SysuserResult">
+        <include refid="selectSysuserVo"/>
+        WHERE USERID = #{userid}
+    </select>
+        
+    <insert id="insertSysuser" parameterType="SysuserEntity">
+        INSERT INTO LS_SYSUSER
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="userid != null and userid != '' ">USERID,</if>
+			<if test="username != null and username != '' ">USERNAME,</if>
+			<if test="passwd != null and passwd != '' ">PASSWD,</if>
+			<if test="description != null and description != '' ">DESCRIPTION,</if>
+			<if test="createtime != null and createtime != '' ">CREATETIME,</if>
+			<if test="lastlogontime != null and lastlogontime != '' ">LASTLOGONTIME,</if>
+			<if test="lastlogofftime != null and lastlogofftime != '' ">LASTLOGOFFTIME,</if>
+			<if test="lockstate != null and lockstate != '' ">LOCKSTATE,</if>
+			<if test="locktime != null and locktime != '' ">LOCKTIME,</if>
+			<if test="unlocktime != null and unlocktime != '' ">UNLOCKTIME,</if>
+			<if test="lockreason != null and lockreason != '' ">LOCKREASON,</if>
+			<if test="userexpiredate != null and userexpiredate != '' ">USEREXPIREDATE,</if>
+			<if test="mustmodifypasswd != null and mustmodifypasswd != '' ">MUSTMODIFYPASSWD,</if>
+			<if test="passwdexpirepolicy != null and passwdexpirepolicy != '' ">PASSWDEXPIREPOLICY,</if>
+			<if test="passwdexpiredate != null and passwdexpiredate != '' ">PASSWDEXPIREDATE,</if>
+			<if test="passwdlastchange != null and passwdlastchange != '' ">PASSWDLASTCHANGE,</if>
+			<if test="loginedcount != null and loginedcount != '' ">LOGINEDCOUNT,</if>
+			<if test="allowloginedcount != null and allowloginedcount != '' ">ALLOWLOGINEDCOUNT,</if>
+			<if test="allowloginperiod != null and allowloginperiod != '' ">ALLOWLOGINPERIOD,</if>
+			<if test="checkip != null and checkip != '' ">CHECKIP,</if>
+			<if test="allowip != null and allowip != '' ">ALLOWIP,</if>
+			<if test="rejectip != null and rejectip != '' ">REJECTIP,</if>
+			<if test="remark != null and remark != '' ">REMARK,</if>
+			<if test="logoffreason != null and logoffreason != '' ">LOGOFFREASON,</if>
+			<if test="orgid != null and orgid != '' ">ORGID,</if>
+			<if test="userkind != null and userkind != '' ">USERKIND,</if>
+			<if test="realname != null and realname != '' ">REALNAME,</if>
+			<if test="phone != null and phone != '' ">PHONE,</if>
+			<if test="status != null and status != '' ">STATUS,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="userid != null and userid != ''">#{userid},</if>
+			<if test="username != null and username != ''">#{username},</if>
+			<if test="passwd != null and passwd != ''">#{passwd},</if>
+			<if test="description != null and description != ''">#{description},</if>
+			<if test="createtime != null and createtime != ''">#{createtime},</if>
+			<if test="lastlogontime != null and lastlogontime != ''">#{lastlogontime},</if>
+			<if test="lastlogofftime != null and lastlogofftime != ''">#{lastlogofftime},</if>
+			<if test="lockstate != null and lockstate != ''">#{lockstate},</if>
+			<if test="locktime != null and locktime != ''">#{locktime},</if>
+			<if test="unlocktime != null and unlocktime != ''">#{unlocktime},</if>
+			<if test="lockreason != null and lockreason != ''">#{lockreason},</if>
+			<if test="userexpiredate != null and userexpiredate != ''">#{userexpiredate},</if>
+			<if test="mustmodifypasswd != null and mustmodifypasswd != ''">#{mustmodifypasswd},</if>
+			<if test="passwdexpirepolicy != null and passwdexpirepolicy != ''">#{passwdexpirepolicy},</if>
+			<if test="passwdexpiredate != null and passwdexpiredate != ''">#{passwdexpiredate},</if>
+			<if test="passwdlastchange != null and passwdlastchange != ''">#{passwdlastchange},</if>
+			<if test="loginedcount != null and loginedcount != ''">#{loginedcount},</if>
+			<if test="allowloginedcount != null and allowloginedcount != ''">#{allowloginedcount},</if>
+			<if test="allowloginperiod != null and allowloginperiod != ''">#{allowloginperiod},</if>
+			<if test="checkip != null and checkip != ''">#{checkip},</if>
+			<if test="allowip != null and allowip != ''">#{allowip},</if>
+			<if test="rejectip != null and rejectip != ''">#{rejectip},</if>
+			<if test="remark != null and remark != ''">#{remark},</if>
+			<if test="logoffreason != null and logoffreason != ''">#{logoffreason},</if>
+			<if test="orgid != null and orgid != ''">#{orgid},</if>
+			<if test="userkind != null and userkind != ''">#{userkind},</if>
+			<if test="realname != null and realname != ''">#{realname},</if>
+			<if test="phone != null and phone != ''">#{phone},</if>
+			<if test="status != null and status != ''">#{status},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateSysuser" parameterType="SysuserEntity">
+        UPDATE LS_SYSUSER
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="username != null  and username != ''  ">USERNAME = #{username},</if>
+            <if test="passwd != null  and passwd != ''  ">PASSWD = #{passwd},</if>
+            <if test="description != null  and description != ''  ">DESCRIPTION = #{description},</if>
+            <if test="createtime != null  ">CREATETIME = #{createtime},</if>
+            <if test="lastlogontime != null  ">LASTLOGONTIME = #{lastlogontime},</if>
+            <if test="lastlogofftime != null  ">LASTLOGOFFTIME = #{lastlogofftime},</if>
+            <if test="lockstate != null  and lockstate != ''  ">LOCKSTATE = #{lockstate},</if>
+            <if test="locktime != null  ">LOCKTIME = #{locktime},</if>
+            <if test="unlocktime != null  ">UNLOCKTIME = #{unlocktime},</if>
+            <if test="lockreason != null  and lockreason != ''  ">LOCKREASON = #{lockreason},</if>
+            <if test="userexpiredate != null  ">USEREXPIREDATE = #{userexpiredate},</if>
+            <if test="mustmodifypasswd != null  and mustmodifypasswd != ''  ">MUSTMODIFYPASSWD = #{mustmodifypasswd},</if>
+            <if test="passwdexpirepolicy != null  and passwdexpirepolicy != ''  ">PASSWDEXPIREPOLICY = #{passwdexpirepolicy},</if>
+            <if test="passwdexpiredate != null  ">PASSWDEXPIREDATE = #{passwdexpiredate},</if>
+            <if test="passwdlastchange != null  ">PASSWDLASTCHANGE = #{passwdlastchange},</if>
+            <if test="loginedcount != null  ">LOGINEDCOUNT = #{loginedcount},</if>
+            <if test="allowloginedcount != null  ">ALLOWLOGINEDCOUNT = #{allowloginedcount},</if>
+            <if test="allowloginperiod != null  ">ALLOWLOGINPERIOD = #{allowloginperiod},</if>
+            <if test="checkip != null  and checkip != ''  ">CHECKIP = #{checkip},</if>
+            <if test="allowip != null  and allowip != ''  ">ALLOWIP = #{allowip},</if>
+            <if test="rejectip != null  and rejectip != ''  ">REJECTIP = #{rejectip},</if>
+            <if test="remark != null  and remark != ''  ">REMARK = #{remark},</if>
+            <if test="logoffreason != null  and logoffreason != ''  ">LOGOFFREASON = #{logoffreason},</if>
+            <if test="orgid != null  and orgid != ''  ">ORGID = #{orgid},</if>
+            <if test="userkind != null  and userkind != ''  ">USERKIND = #{userkind},</if>
+            <if test="realname != null  and realname != ''  ">REALNAME = #{realname},</if>
+            <if test="phone != null  and phone != ''  ">PHONE = #{phone},</if>
+            <if test="status != null  and status != ''  ">STATUS = #{status},</if>
+        </trim>
+        WHERE USERID = #{userid}
+    </update>
+
+	<delete id="deleteSysuserById" parameterType="String">
+        DELETE FROM LS_SYSUSER WHERE USERID = #{userid}
+    </delete>
+	
+    <delete id="deleteSysuserByIds" parameterType="String">
+        DELETE FROM LS_SYSUSER WHERE USERID IN 
+        <foreach item="userid" collection="array" open="(" separator="," close=")">
+            #{userid}
+        </foreach>
+    </delete>
+    
+    <!-- 新增同步莱斯用户数据 -->
+	<insert id="insertLsUser" parameterType="SysuserEntity">
+		INSERT INTO LS_SYSUSER (USERID,USERNAME, PASSWD, DESCRIPTION, CREATETIME, LASTLOGONTIME, LASTLOGOFFTIME, LOCKSTATE, LOCKTIME, UNLOCKTIME, LOCKREASON, USEREXPIREDATE, MUSTMODIFYPASSWD, PASSWDEXPIREPOLICY, PASSWDEXPIREDATE, PASSWDLASTCHANGE, LOGINEDCOUNT, ALLOWLOGINEDCOUNT, ALLOWLOGINPERIOD, CHECKIP, ALLOWIP, REJECTIP, REMARK, LOGOFFREASON, ORGID, USERKIND, REALNAME, PHONE, STATUS)
+		VALUES
+		<foreach collection ="list" item="lsUser" separator =",">
+    	(#{lsUser.userid},#{lsUser.username},#{lsUser.passwd},#{lsUser.description},
+    	#{lsUser.createtime},#{lsUser.lastlogontime},#{lsUser.lastlogofftime},#{lsUser.lockstate},
+    	#{lsUser.locktime},#{lsUser.unlocktime},#{lsUser.lockreason},#{lsUser.userexpiredate},
+    	#{lsUser.mustmodifypasswd},#{lsUser.passwdexpirepolicy},#{lsUser.passwdexpiredate},#{lsUser.passwdlastchange},
+    	#{lsUser.loginedcount},#{lsUser.allowloginedcount},#{lsUser.allowloginperiod},#{lsUser.checkip},
+    	#{lsUser.allowip},#{lsUser.rejectip},#{lsUser.remark},#{lsUser.logoffreason},#{lsUser.orgid},
+    	#{lsUser.userkind},#{lsUser.realname},#{lsUser.phone},#{lsUser.status})
+    	</foreach>
+	</insert>
+	
+	<!-- 批量修改莱斯同步过来的用户信息 -->
+	<update id="updateLsUser" parameterType="SysuserEntity">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+	        UPDATE LS_SYSUSER
+	        <set>
+	            USERNAME = #{item.username}, PASSWD = #{item.passwd}, DESCRIPTION = #{item.description}, 
+	            CREATETIME = #{item.createtime}, LASTLOGONTIME = #{item.lastlogontime}, LASTLOGOFFTIME = #{item.lastlogofftime}, LOCKSTATE = #{item.lockstate}, 
+	            LOCKTIME = #{item.locktime}, UNLOCKTIME = #{item.unlocktime}, LOCKREASON = #{item.lockreason}, 
+	            USEREXPIREDATE = #{item.userexpiredate}, MUSTMODIFYPASSWD = #{item.mustmodifypasswd}, PASSWDEXPIREPOLICY = #{item.passwdexpirepolicy}, 
+	            PASSWDEXPIREDATE = #{item.passwdexpiredate}, PASSWDLASTCHANGE = #{item.passwdlastchange}, LOGINEDCOUNT = #{item.loginedcount}, 
+	            ALLOWLOGINEDCOUNT = #{item.allowloginedcount}, ALLOWLOGINPERIOD = #{item.allowloginperiod}, CHECKIP = #{item.checkip}, 
+	            ALLOWIP = #{item.allowip}, REJECTIP = #{item.rejectip}, REMARK = #{item.remark}, LOGOFFREASON = #{item.logoffreason}, 
+	            ORGID = #{item.orgid}, USERKIND = #{item.userkind}, REALNAME = #{item.realname}, PHONE = #{item.phone}, STATUS = #{item.status}
+	        </set>
+	        WHERE USERID = #{item.userid}
+	    </foreach>
+	</update>
+	
+	<!-- 查询用户信息是否存在 -->
+	<select id="selectUseridList" resultType="String">
+		SELECT USERID FROM LS_SYSUSER
+	</select>
+</mapper>

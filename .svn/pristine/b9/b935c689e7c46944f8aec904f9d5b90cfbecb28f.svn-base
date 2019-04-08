@@ -1,0 +1,203 @@
+package com.jd.project.module.admin.standard.controller;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.jd.framework.aspectj.lang.annotation.Log;
+import com.jd.framework.aspectj.lang.enums.BusinessType;
+import com.jd.framework.web.controller.BaseController;
+import com.jd.framework.web.domain.Result;
+import com.jd.framework.web.page.TableDataInfo;
+import com.jd.project.module.admin.standard.entity.CheckContentTypeEntity;
+import com.jd.project.module.admin.standard.entity.CheckRegulationRefEntity;
+import com.jd.project.module.admin.standard.entity.CheckTableEntity;
+import com.jd.project.module.admin.standard.entity.CheckTableNameEntity;
+import com.jd.project.module.admin.standard.entity.CheckTablePropEntity;
+import com.jd.project.module.admin.standard.entity.RegulationEntity;
+import com.jd.project.module.admin.standard.service.CheckContentTypeService;
+import com.jd.project.module.admin.standard.service.CheckRegulationRefService;
+import com.jd.project.module.admin.standard.service.CheckTableNameService;
+import com.jd.project.module.admin.standard.service.CheckTablePropService;
+import com.jd.project.module.admin.standard.service.CheckTableService;
+import com.jd.project.module.admin.standard.service.RegulationService;
+
+/**
+ * 检查项 信息操作处理
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-21
+ */
+@Controller
+@RequestMapping("/module/checkTable")
+public class CheckTableController extends BaseController {
+	private String prefix = "module/admin/standard/checkTable";
+
+	@Autowired
+	private CheckTableService checkTableService;
+
+	@Autowired
+	private CheckTableNameService checkTableNameService;
+
+	@Autowired
+	private CheckContentTypeService checkContentTypeService;
+
+	@Autowired
+	private RegulationService regulationService;
+
+	@Autowired
+	private CheckRegulationRefService checkRegulationRefService;
+
+	@Autowired
+	private CheckTablePropService checkTablePropService;
+
+	@RequiresPermissions("module:checkTableName:view")
+	@GetMapping()
+	public String initList() {
+		return prefix + "/checkTable_list";
+	}
+
+	/**
+	 * 查询检查项列表
+	 */
+	@RequiresPermissions("module:checkTableName:list")
+	@PostMapping("/query/{checkTableNameId}")
+	@ResponseBody
+	public TableDataInfo query(@PathVariable("checkTableNameId") Long checkTableNameId, CheckTableEntity checkTable) {
+		checkTable.setCheckTableNameId(checkTableNameId);
+		startPage();
+		List<CheckTableEntity> list = checkTableService.selectCheckTableList(checkTable);
+		return getDataTable(list);
+	}
+
+	/**
+	 * 新增检查项
+	 */
+	@GetMapping("/initAdd/{checkTableNameId}")
+	public String initAdd(@PathVariable("checkTableNameId") Long checkTableNameId, ModelMap mmap) {
+		CheckTableEntity checkTable = new CheckTableEntity();
+		checkTable.setCheckTableNameId(checkTableNameId);
+		mmap.put("checkTable", checkTable);
+		CheckTableNameEntity checkTableNameEntity = checkTableNameService.selectCheckTableNameById(checkTableNameId);
+		mmap.put("checkTableName", checkTableNameEntity);
+		// 查询所有检查表信息
+		List<CheckTableNameEntity> list = checkTableNameService.selectCheckTableNameAll();
+		mmap.put("checkTableList", list);
+		// 查询检查项分类类型
+		List<CheckContentTypeEntity> checkContentTypes = checkContentTypeService.selectCheckContentTypeList(null);
+		mmap.put("checkContentType", checkContentTypes);
+		// 查询检查依据
+		List<RegulationEntity> regulations = regulationService.selectRegulationListByNotPid(null);
+		mmap.put("regulations", regulations);
+		mmap.put("checkRegulationRefs", new ArrayList<>());
+		return prefix + "/checkTable_edit";
+	}
+
+	/**
+	 * 新增保存检查项
+	 */
+	@RequiresPermissions("module:checkTableName:add")
+	@Log(title = "检查项", businessType = BusinessType.INSERT)
+	@PostMapping("/add")
+	@ResponseBody
+	public Result add(CheckTableEntity checkTable) {
+		return toAjax(checkTableService.insertCheckTable(checkTable));
+	}
+
+	/**
+	 * 修改检查项
+	 */
+	@GetMapping("/initEdit/{checkTableId}")
+	public String initEdit(@PathVariable("checkTableId") Long checkTableId, ModelMap mmap) {
+		// 查询检查项与检查属性的关联关系
+		CheckTableEntity checkTable = checkTableService.selectCheckTableById(checkTableId);
+		CheckTablePropEntity checkTableProp = new CheckTablePropEntity();
+		checkTableProp.setCheckTableId(checkTableId);
+		checkTableProp.setIsDelete(0L);
+		List<CheckTablePropEntity> checkTableProps = checkTablePropService.selectCheckTablePropList(checkTableProp);
+		if (null != checkTableProps && checkTableProps.size() > 0) {
+			checkTableProps.forEach(x -> {
+				// 从业人数
+				if ("people_number".equals(x.getPropCode())) {
+					mmap.put("peopleNumber", x);
+					// 大中小微
+				} else if ("enterprise_type".equals(x.getPropCode())) {
+					checkTable.setEnterpriseType(String.valueOf(x.getMinValue()));
+					// 企业规模
+				} else if ("scale_situation".equals(x.getPropCode())) {
+					checkTable.setScaleSituation(String.valueOf(x.getMinValue()));
+				}
+			});
+		}
+		mmap.put("checkTable", checkTable);
+		CheckTableNameEntity checkTableNameEntity = checkTableNameService
+				.selectCheckTableNameById(checkTable.getCheckTableNameId());
+		mmap.put("checkTableName", checkTableNameEntity);
+		// 查询所有检查表信息
+		List<CheckTableNameEntity> list = checkTableNameService.selectCheckTableNameAll();
+		mmap.put("checkTableList", list);
+		// 查询检查项分类类型
+		List<CheckContentTypeEntity> checkContentTypes = checkContentTypeService.selectCheckContentTypeList(null);
+		mmap.put("checkContentType", checkContentTypes);
+		// 查询检查依据
+		List<RegulationEntity> regulations = regulationService.selectRegulationListByNotPid(null);
+		mmap.put("regulations", regulations);
+		// 查询当前检查项与检查依据的关联关系
+		CheckRegulationRefEntity checkRegulationRef = new CheckRegulationRefEntity();
+		checkRegulationRef.setCheckTableId(checkTableId);
+		checkRegulationRef.setIsDelete(0L);
+		List<CheckRegulationRefEntity> CheckRegulationRefs = checkRegulationRefService
+				.selectCheckRegulationRefList(checkRegulationRef);
+		List<String> strs = new ArrayList<String>();
+		if (null != CheckRegulationRefs && CheckRegulationRefs.size() > 0) {
+			CheckRegulationRefs.forEach(x -> {
+				strs.add(String.valueOf(x.getfid()));
+			});
+		}
+		mmap.put("checkRegulationRefs", strs);
+		return prefix + "/checkTable_edit";
+	}
+
+	/**
+	 * 修改保存检查项
+	 */
+	@RequiresPermissions("module:checkTableName:edit")
+	@Log(title = "检查项", businessType = BusinessType.UPDATE)
+	@PostMapping("/edit")
+	@ResponseBody
+	public Result edit(CheckTableEntity checkTable) {
+		return toAjax(checkTableService.insertCheckTable(checkTable));
+	}
+
+	/**
+	 * 删除检查项
+	 */
+	@RequiresPermissions("module:checkTableName:remove")
+	@Log(title = "检查项", businessType = BusinessType.DELETE)
+	@PostMapping("/del")
+	@ResponseBody
+	public Result del(String ids) {
+		return toAjax(checkTableService.deleteCheckTableByIds(ids));
+	}
+
+	/**
+	 * 检验检查项编码
+	 * 
+	 * @param checkTable
+	 * @return
+	 */
+	@PostMapping("/checkCheckTableCodeUnique")
+	@ResponseBody
+	public boolean checkCheckTableCodeUnique(CheckTableEntity checkTable) {
+		return checkTableService.checkCheckTableCodeUnique(checkTable);
+	}
+}

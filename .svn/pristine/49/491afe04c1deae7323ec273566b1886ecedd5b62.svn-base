@@ -1,0 +1,247 @@
+package com.jd.project.module.app.register.entity;
+
+import java.util.Date;
+
+import com.jd.framework.web.domain.BaseEntity;
+
+/**
+ * @author HFJ
+ * @date 2019/4/1-11:09
+ */
+public class AccidentRegEntity extends BaseEntity {
+
+    private static final long serialVersionUID = 1L;
+
+    /** */
+    private String id;
+
+    /** 事故发生单位 */
+    private String entId;
+
+    /** 受害者姓名 */
+    private String name;
+
+    /** 性别 */
+    private String sex;
+
+    /** 年龄 */
+    private String age;
+
+    /** 工种 */
+    private String job;
+
+    /** 死亡人数 */
+    private Long deadNum;
+
+    /** 事故类别 */
+    private String accidentType;
+
+    /** 管理分类 */
+    private String manageType;
+
+    /** 所属街道 */
+    private String belongStreet;
+
+    /** 行政处罚 */
+    private String sanction;
+
+    /** 追究刑责 */
+    private String responsibility;
+
+    /** 事故发生日期 */
+    private Date happenDate;
+
+    /** 流程状态 */
+    private String status;
+
+    /** 附件地址 */
+    private String path;
+
+    /** 备注 */
+    private String remark;
+
+    private Long createUser;
+
+    private Date createTime;
+
+    private Long updateUser;
+
+    private Date updateTime;
+
+    /** 0 未删 1 已删 */
+    private int isDelete;
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setEntId(String entId) {
+        this.entId = entId;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public void setAge(String age) {
+        this.age = age;
+    }
+
+    public void setJob(String job) {
+        this.job = job;
+    }
+
+    public void setDeadNum(Long deadNum) {
+        this.deadNum = deadNum;
+    }
+
+    public void setAccidentType(String accidentType) {
+        this.accidentType = accidentType;
+    }
+
+    public void setManageType(String manageType) {
+        this.manageType = manageType;
+    }
+
+    public void setBelongStreet(String belongStreet) {
+        this.belongStreet = belongStreet;
+    }
+
+    public void setSanction(String sanction) {
+        this.sanction = sanction;
+    }
+
+    public void setResponsibility(String responsibility) {
+        this.responsibility = responsibility;
+    }
+
+    public void setHappenDate(Date happenDate) {
+        this.happenDate = happenDate;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    @Override
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public void setCreateUser(Long createUser) {
+        this.createUser = createUser;
+    }
+
+    @Override
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public void setUpdateUser(Long updateUser) {
+        this.updateUser = updateUser;
+    }
+
+    @Override
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public void setIsDelete(int isDelete) {
+        this.isDelete = isDelete;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getEntId() {
+        return entId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public String getAge() {
+        return age;
+    }
+
+    public String getJob() {
+        return job;
+    }
+
+    public Long getDeadNum() {
+        return deadNum;
+    }
+
+    public String getAccidentType() {
+        return accidentType;
+    }
+
+    public String getManageType() {
+        return manageType;
+    }
+
+    public String getBelongStreet() {
+        return belongStreet;
+    }
+
+    public String getSanction() {
+        return sanction;
+    }
+
+    public String getResponsibility() {
+        return responsibility;
+    }
+
+    public Date getHappenDate() {
+        return happenDate;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    @Override
+    public String getRemark() {
+        return remark;
+    }
+
+    public Long getCreateUser() {
+        return createUser;
+    }
+
+    @Override
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public Long getUpdateUser() {
+        return updateUser;
+    }
+
+    @Override
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public int getIsDelete() {
+        return isDelete;
+    }
+}

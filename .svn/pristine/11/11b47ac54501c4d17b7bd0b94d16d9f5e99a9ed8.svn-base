@@ -1,0 +1,115 @@
+package com.jd.project.module.admin.evaluation.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.jd.common.support.Convert;
+import com.jd.framework.web.service.BaseService;
+import com.jd.project.module.admin.evaluation.entity.TaskDetailEntity;
+import com.jd.project.module.admin.evaluation.mapper.TaskDetailMapper;
+
+/**
+ * 任务详情 服务层实现
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-29
+ */
+@Service
+@Transactional(rollbackFor = Exception.class)
+public class TaskDetailServiceImpl extends BaseService implements TaskDetailService {
+	@Autowired
+	private TaskDetailMapper taskDetailMapper;
+
+	/**
+	 * 查询任务详情信息
+	 * 
+	 * @param taskDetailId
+	 *            任务详情ID
+	 * @return 任务详情信息
+	 */
+	@Override
+	public TaskDetailEntity selectTaskDetailById(Long taskDetailId) {
+		return taskDetailMapper.selectTaskDetailById(taskDetailId);
+	}
+
+	/**
+	 * 查询任务详情列表
+	 * 
+	 * @param taskDetail
+	 *            任务详情信息
+	 * @return 任务详情集合
+	 */
+	@Override
+	public List<TaskDetailEntity> selectTaskDetailList(TaskDetailEntity taskDetail) {
+		return taskDetailMapper.selectTaskDetailList(taskDetail);
+	}
+
+	@Override
+	public List<TaskDetailEntity> queryQyjcxxByTaskPlanDetailId(TaskDetailEntity taskDetail) {
+		return taskDetailMapper.queryQyjcxxByTaskPlanDetailId(taskDetail);
+	}
+
+	/**
+	 * 新增任务详情
+	 * 
+	 * @param taskDetail
+	 *            任务详情信息
+	 * @return 结果
+	 */
+	@Override
+	public int insertTaskDetail(TaskDetailEntity taskDetail) {
+		return taskDetailMapper.insertTaskDetail(taskDetail);
+	}
+
+	/**
+	 * 修改任务详情
+	 * 
+	 * @param taskDetail
+	 *            任务详情信息
+	 * @return 结果
+	 */
+	@Override
+	public int updateTaskDetail(TaskDetailEntity taskDetail) {
+		return taskDetailMapper.updateTaskDetail(taskDetail);
+	}
+
+	/**
+	 * 删除任务详情对象
+	 * 
+	 * @param ids
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
+	@Override
+	public int deleteTaskDetailByIds(String ids) {
+		return taskDetailMapper.deleteTaskDetailByIds(Convert.toStrArray(ids));
+	}
+
+	/**
+	 * 根据企业ID查询属于其的任务详情ID
+	 */
+	@Override
+	public TaskDetailEntity queryTaskDetailByCompanyId(String companyId) {
+		List<TaskDetailEntity> detailEntities = taskDetailMapper.queryTaskDetailByCompanyId(companyId);
+		return null != detailEntities && detailEntities.size() > 0 ? detailEntities.get(0) : null;
+	}
+
+	/**
+	 * 修改企业自评状态
+	 */
+	@Override
+	public int updateChecktableStatus(TaskDetailEntity taskDetail) {
+		return taskDetailMapper.updateChecktableStatus(taskDetail);
+	}
+
+	/**
+	 * 通过企业ID查询任务详情信息
+	 */
+	@Override
+	public TaskDetailEntity findTaskDetailByCompanyId(String enterpriseId) {
+		return taskDetailMapper.findTaskDetailByCompanyId(enterpriseId);
+	}
+}

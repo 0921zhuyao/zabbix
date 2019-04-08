@@ -1,0 +1,31 @@
+*{
+    margin: 0;
+    dding: 0;
+}
+body{
+    background: #fff;
+}
+.content{
+    width:100%;
+    margin:45px auto 0; 
+}
+.input{
+    width:100%;
+    display: inline-block;
+    /* margin: 0 auto; */
+    text-align: center;
+}
+.input input{
+    width: 85%;
+    height:61px;
+    background: #FFF3F3;
+    margin: 50px auto 20px;
+    font-size: 22px;
+    padding-left: 20px;
+    font-weight: bold;
+}
+.input p{    
+    width:100%;
+    display: inline-block;
+    
+}

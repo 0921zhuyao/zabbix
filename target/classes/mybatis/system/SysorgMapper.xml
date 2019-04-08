@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jd.project.system.sysorg.mapper.SysorgMapper">
+    
+    <resultMap type="SysorgEntity" id="sysorgResult">
+        <result property="orgid"    column="ORGID"    />
+        <result property="orgname"    column="ORGNAME"    />
+        <result property="shortname"    column="SHORTNAME"    />
+        <result property="orgdesc"    column="ORGDESC"    />
+        <result property="parent"    column="PARENT"    />
+        <result property="address"    column="ADDRESS"    />
+        <result property="principal"    column="PRINCIPAL"    />
+        <result property="linkman"    column="LINKMAN"    />
+        <result property="tel"    column="TEL"    />
+        <result property="orgkind"    column="ORGKIND"    />
+        <result property="orgcode"    column="ORGCODE"    />
+        <result property="orderno"    column="ORDERNO"    />
+        <result property="districtid"    column="districtid"    />
+        <result property="isdel"    column="isdel"    />
+        <result property="crtTime"    column="CRT_TIME"    />
+        <result property="crtUser"    column="CRT_USER"    />
+        <result property="updTime"    column="UPD_TIME"    />
+        <result property="updUser"    column="UPD_USER"    />
+        <result property="org_code"    column="ORG_CODE"    />
+    </resultMap>
+	
+	<sql id="selectsysorgVo">
+        select ORGID, ORGNAME, SHORTNAME, ORGDESC, PARENT, ADDRESS, PRINCIPAL, LINKMAN, TEL,ORGKIND,ORGCODE,ORDERNO,districtid,isdel,CRT_TIME,CRT_USER,UPD_TIME,UPD_USER,ORG_CODE  from LS_SYSORG o
+    </sql>
+
+    <select id="selectSysorgAll" resultMap="sysorgResult">
+        <include refid="selectsysorgVo"/>
+        WHERE PARENT = 'c09cd1a7111f4f11b6046d880eef3af2'
+    </select>
+	
+	 <select id="selectsysorgTop" parameterType="String" resultMap="sysorgResult">
+        <include refid="selectsysorgVo"/>
+        where PARENT=0
+    </select>
+	
+    <select id="selectsysorgList" parameterType="SysorgEntity" resultMap="sysorgResult">
+        <include refid="selectsysorgVo"/>
+        <where>  
+            <if test="orgid != null and orgid != ''"> and ORGID = #{orgid}</if>
+             <if test="orgname != null and orgname != ''"> and ORGNAME  like CONCAT('%',#{orgname},'%')</if>
+             <if test="shortname != null and shortname != ''"> and SHORTNAME = #{shortname}</if>
+             <if test="orgdesc != null and orgdesc != ''"> and ORGDESC = #{orgdesc}</if>
+             <if test="parent != null and parent != ''"> and PARENT = #{parent}</if>
+             <if test="address != null and address != ''"> and ADDRESS = #{address}</if>
+             <if test="principal != null and principal != ''"> and PRINCIPAL = #{principal}</if>
+             <if test="linkman != null and linkman != ''"> and LINKMAN = #{linkman}</if>
+             <if test="tel != null and tel != ''"> and TEL = #{tel}</if>
+             <if test="orgkind != null and orgkind != ''"> and ORGKIND = #{orgkind}</if>
+             <if test="orgcode != null and orgcode != ''"> and ORGCODE = #{orgcode}</if>
+             <if test="org_code != null and org_code != ''"> and ORG_CODE like concat('%',#{org_code},'%')</if>
+             <if test="orderno != null and orderno != ''"> and ORDERNO = #{orderno}</if>
+             <if test="districtid != null and districtid != ''"> and districtid = #{districtid}</if>
+             <if test="isdel != null and isdel != ''"> and isdel = #{isdel}</if>
+             <if test="crtTime != null and crtTime != ''"> and CRT_TIME = #{crtTime}</if>
+             <if test="crtUser != null and crtUser != ''"> and CRT_USER = #{crtUser}</if>
+             <if test="updTime != null and updTime != ''"> and UPD_TIME = #{updTime}</if>
+             <if test="updUser != null and updUser != ''"> and UPD_USER = #{updUser}</if>
+         </where>
+    </select>
+    
+    <select id="selectsysorgById" parameterType="String" resultMap="sysorgResult">
+        <include refid="selectsysorgVo"/>
+        where ORGID = #{id}
+    </select>
+
+    <insert id="insertsysorg" parameterType="SysorgEntity">
+        insert into LS_SYSORG
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="orgid != null and orgid != '' ">ORGID,</if>
+			<if test="orgname != null and orgname != '' ">ORGNAME,</if>
+			<if test="shortname != null and shortname != '' ">SHORTNAME,</if>
+			<if test="orgdesc != null and orgdesc != '' ">ORGDESC,</if>
+			<if test="parent != null and parent != '' ">PARENT,</if>
+			<if test="address != null and address != '' ">ADDRESS,</if>
+			<if test="principal != null and principal != '' ">PRINCIPAL,</if>
+			<if test="linkman != null and linkman != '' ">LINKMAN,</if>
+			<if test="tel != null and tel != '' ">TEL,</if>
+			<if test="orgkind != null and orgkind != '' ">ORGKIND,</if>
+			<if test="orgcode != null and orgcode != '' ">ORGCODE,</if>
+            <if test="org_code != null and org_code != ''">ORG_CODE,</if>
+			<if test="orderno != null and orderno != '' ">ORDERNO,</if>
+			<if test="districtid != null and districtid != '' ">districtid,</if>
+			<if test="isdel != null and isdel != '' ">isdel,</if>
+			<if test="crtTime != null and crtTime != '' ">CRT_TIME,</if>
+			<if test="crtUser != null and crtUser != '' ">CRT_USER,</if>
+			<if test="updTime != null and updTime != '' ">UPD_TIME,</if>
+			<if test="updUser != null and updUser != '' ">UPD_USER,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="orgid != null and orgid != ''">#{orgid},</if>
+			<if test="orgname != null and orgname != ''">#{orgname},</if>
+			<if test="shortname != null and shortname != ''">#{shortname},</if>
+			<if test="orgdesc != null and orgdesc != ''">#{orgdesc},</if>
+			<if test="parent != null and parent != ''">#{parent},</if>
+			<if test="address != null and address != ''">#{address},</if>
+			<if test="principal != null and principal != ''">#{principal},</if>
+			<if test="linkman != null and linkman != ''">#{linkman},</if>
+			<if test="tel != null and tel != ''">#{tel},</if>
+			<if test="orgkind != null and orgkind != ''">#{orgkind},</if>
+			<if test="orgcode != null and orgcode != ''">#{orgcode},</if>
+            <if test="org_code != null and org_code != ''"> #{org_code,</if>
+			<if test="orderno != null and orderno != ''">#{orderno},</if>
+			<if test="districtid != null and districtid != ''">#{districtid},</if>
+			<if test="isdel != null and isdel != ''">#{isdel},</if>
+			<if test="crtTime != null and crtTime != ''">#{crtTime},</if>
+			<if test="crtUser != null and crtUser != ''">#{crtUser},</if>
+			<if test="updTime != null and updTime != ''">#{updTime},</if>
+			<if test="updUser != null and updUser != ''">#{updUser},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updatesysorg" parameterType="SysorgEntity">
+        update LS_SYSORG
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orgname != null  and orgname != ''  ">ORGNAME = #{orgname},</if>
+            <if test="shortname != null  and shortname != ''  ">SHORTNAME = #{shortname},</if>
+            <if test="orgdesc != null  and orgdesc != ''  ">ORGDESC = #{orgdesc},</if>
+            <if test="parent != null  and parent != ''  ">PARENT = #{parent},</if>
+            <if test="address != null  and address != ''  ">ADDRESS = #{address},</if>
+            <if test="principal != null  and principal != ''  ">PRINCIPAL = #{principal},</if>
+            <if test="linkman != null  and linkman != ''  ">LINKMAN = #{linkman},</if>
+            <if test="tel != null  and tel != ''  ">TEL = #{tel},</if>
+            <if test="orgkind != null  and orgkind != ''  ">ORGKIND = #{orgkind},</if>
+            <if test="orgcode != null  and orgcode != ''  ">ORGCODE = #{orgcode},</if>
+            <if test="org_code != null and org_code != ''">ORG_CODE = #{org_code},</if>
+            <if test="orderno != null  ">ORDERNO = #{orderno},</if>
+            <if test="districtid != null  and districtid != ''  ">districtid = #{districtid},</if>
+            <if test="isdel != null  and isdel != ''  ">isdel = #{isdel},</if>
+            <if test="crtTime != null  ">CRT_TIME = #{crtTime},</if>
+            <if test="crtUser != null  ">CRT_USER = #{crtUser},</if>
+            <if test="updTime != null  ">UPD_TIME = #{updTime},</if>
+            <if test="updUser != null  ">UPD_USER = #{updUser},</if>
+        </trim>
+        where ORGID = #{orgid}
+    </update>
+
+	<delete id="deletesysorgById" parameterType="String">
+        delete from LS_SYSORG where ORGID = #{orgid}
+    </delete>
+	
+    <delete id="deletesysorgByIds" parameterType="String">
+        delete from LS_SYSORG where ORGID in
+        <foreach item="orgid" collection="array" open="(" separator="," close=")">
+            #{orgid}
+        </foreach>
+    </delete>
+
+    <select id="selectOrgById" parameterType="String" resultMap="sysorgResult">
+        select t.orgid, t.parent,t.orgname, t.orderno,
+        (select orgname from LS_SYSORG where orgid = t.parent) parent_name
+        from LS_SYSORG t
+        where orgid = #{orgId}
+    </select>
+
+    <select id="selectSysOrgCodeById" resultMap="sysorgResult">
+        select ORGID,ORG_CODE
+        from LS_SYSORG
+        where orgid = #{orgId}
+    </select>
+
+      <update id="updateOrgCode" parameterType="SysorgEntity">
+      update LS_SYSORG set ORG_CODE = #{org_code}  where ORGID = #{orgid}
+      commit;
+    </update>
+    
+    <!-- 同步莱斯组织信息 -->
+    <insert id="insertLsOrg" parameterType="SysorgEntity">
+    	INSERT INTO LS_SYSORG (ORGID, ORGNAME, SHORTNAME, ORGDESC, PARENT, ADDRESS, PRINCIPAL, LINKMAN, TEL, ORGKIND, ORGCODE, ORDERNO, districtid, isdel, CRT_TIME, CRT_USER, UPD_TIME, UPD_USER,ORG_CODE)
+    	VALUES
+    	<foreach collection ="list" item="org" separator =",">
+    	(#{org.orgid},#{org.orgname},#{org.shortname},#{org.orgdesc},#{org.parent},#{org.address},#{org.principal},#{org.linkman},#{org.tel},#{org.orgkind},#{org.orgcode},#{org.orderno},#{org.districtid},#{org.isdel},sysdate(),#{org.crtUser},sysdate(),#{org.updUser},#{org.org_code})
+    	</foreach>
+    </insert>
+    
+    <!-- 修改莱斯同步的组织信息 -->
+    <update id="updateLsOrg" parameterType="SysorgEntity">
+    	<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+	        UPDATE LS_SYSORG
+	        <set>
+	            ORGNAME = #{item.orgname}, SHORTNAME = #{item.shortname}, ORGDESC = #{item.orgdesc}, 
+	            PARENT = #{item.parent}, ADDRESS = #{item.address}, PRINCIPAL = #{item.principal}, LINKMAN = #{item.linkman}, 
+	            TEL = #{item.tel}, ORGKIND = #{item.orgkind}, ORGCODE = #{item.orgcode}, 
+	            ORDERNO = #{item.orderno}, districtid = #{item.districtid}, isdel = #{item.isdel}, 
+	            UPD_TIME = sysdate(), UPD_USER = #{item.updUser}, ORG_CODE = #{item.org_code}
+	        </set>
+	        WHERE ORGID = #{item.orgid}
+	    </foreach>
+    </update>
+    
+    <!-- 查询组织ID -->
+    <select id="selectOrgidList" resultType="String">
+    	SELECT ORGID FROM LS_SYSORG
+    </select>
+</mapper>

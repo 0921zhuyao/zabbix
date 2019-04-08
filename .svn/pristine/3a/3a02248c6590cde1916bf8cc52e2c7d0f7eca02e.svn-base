@@ -1,0 +1,300 @@
+package com.jd.project.module.app.enterprise.controller;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.alibaba.fastjson.JSONArray;
+import com.github.pagehelper.PageInfo;
+import com.jd.common.utils.StringUtils;
+import com.jd.common.utils.http.HttpUtils;
+import com.jd.common.utils.security.ShiroUtils;
+import com.jd.framework.aspectj.lang.annotation.Log;
+import com.jd.framework.aspectj.lang.enums.BusinessType;
+import com.jd.framework.web.controller.BaseController;
+import com.jd.framework.web.domain.Result;
+import com.jd.project.module.admin.enterprise.entity.QyjcxxEntity;
+import com.jd.project.module.admin.enterprise.entity.SpecialTreatmentEntity;
+import com.jd.project.module.admin.enterprise.service.DmJglbZgbmService;
+import com.jd.project.module.admin.enterprise.service.DmJnajHylxService;
+import com.jd.project.module.admin.enterprise.service.LdsService;
+import com.jd.project.module.admin.enterprise.service.QyjcxxService;
+import com.jd.project.module.ws.InterfaceAddress;
+import com.jd.project.system.sysorg.service.SysorgService;
+import com.jd.project.system.user.domain.User;
+
+/**
+ * 企业基础 信息操作处理
+ *
+ * @author xml
+ * @date 2018-11-23
+ */
+@Controller
+@RequestMapping("/app/qyjcxx")
+public class QyjcxxMoblieController extends BaseController {
+	private String prefix = "module/app/enterprise";
+
+	@Autowired
+	private QyjcxxService qyjcxxService;
+
+	@Autowired
+	private SysorgService sysorgService;
+
+	@Autowired
+	private LdsService ldsService;
+
+	@Autowired
+	private DmJnajHylxService dmJnajHylxService;
+
+	@Autowired
+	private DmJglbZgbmService dmJglbZgbmService;
+
+	/**
+	 * 跳转到企业列表 返回html页面
+	 */
+	@GetMapping("/initList")
+	public String initList() {
+		return prefix + "/Co_info";
+	}
+
+	/**
+	 * 企业列表页面，列表和查询条件页面分离
+	 * 
+	 * @return
+	 */
+	@GetMapping("/query_list")
+	public String query_list(@RequestParam(value = "type", required = false) String type,
+			@RequestParam(value = "taskPlanId", required = false) String taskPlanId, Map<String, String> map) {
+		map.put("type", type);
+		map.put("taskPlanId", taskPlanId);
+		return prefix + "/Co_info_list";
+	}
+
+	/**
+	 * 查询企业列表信息
+	 */
+	@PostMapping("/initListData")
+	@ResponseBody
+	public Map<String, Object> initListData(QyjcxxEntity qyjcxx) {
+		Map<String, Object> result = new HashMap<>();
+		User user = ShiroUtils.getUser();
+		if (null != user) {
+			if (StringUtils.isNotEmpty(user.getLsEnterpriseId())) {
+				List<String> orgCodes=sysorgService.selectSysOrgCodesById(user.getLsEnterpriseId());
+                qyjcxx.setOrgIds(orgCodes.toArray(new String[orgCodes.size()]));
+			}
+		} else {
+			return null;
+		}
+		startPage();
+		List<QyjcxxEntity> list = qyjcxxService.selectMobileQyjcxxList(qyjcxx);
+		// 查询分页信息
+		PageInfo<QyjcxxEntity> pageInfo = new PageInfo<QyjcxxEntity>(list);
+		resultInit(result, list);
+		result.put("totalPage", pageInfo.getPages());
+		return result;
+	}
+
+	/**
+	 * 企业信息编辑页面
+	 */
+	@GetMapping("/editPage/{enterpriseId}")
+	public String editPage(@PathVariable("enterpriseId") String enterpriseId, Map<String, Object> mmap) {
+		QyjcxxEntity qyjcxxEntity = qyjcxxService.selectqyjcxxById(enterpriseId);
+		List<SpecialTreatmentEntity> specialTreatmentEntities = qyjcxxService
+				.querySpecialTreatmentCodeBycompanyId(enterpriseId);
+		// 校验企业信息填写完全
+		int flag = 0;
+		//首先同步企业信息
+		StringBuffer sb = new StringBuffer("qyid=");
+		sb.append(enterpriseId);
+		String json = HttpUtils.
+				sendPost(InterfaceAddress.getAppUrl()+"jnaj/facade/jd/queryYhxxByUsername",
+						sb.toString(),"Bearer " + HttpUtils.token);
+		JSONArray jarr = null;
+		try {
+			jarr = JSONArray.parseArray(json);
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		//更新企业专项治理信息
+		if(jarr.size() >0){
+			qyjcxxEntity.setSpecialTreatmentStr(null != jarr.getJSONObject(0).get("zxzllx")?
+					jarr.getJSONObject(0).get("zxzllx").toString():"");
+			//更新企业信息
+			qyjcxxService.updateqyjcxxForMobile(qyjcxxEntity);
+            mmap.put("specialId",jarr.getJSONObject(0).get("id"));
+		}
+		/*
+		 * if (StringUtils.isNotEmpty(qyjcxxEntity.getScjydz()) &&
+		 * StringUtils.isNotEmpty(qyjcxxEntity.getNxssr()) &&
+		 * StringUtils.isNotNull(qyjcxxEntity.getCyrysl()) &&
+		 * StringUtils.isNotEmpty(qyjcxxEntity.getQyjyzt()) &&
+		 * StringUtils.isNotEmpty(qyjcxxEntity.getGmqk()) &&
+		 * StringUtils.isNotEmpty(qyjcxxEntity.getQygm()) &&
+		 * specialTreatmentEntities.size() > 0) { flag = 1; }
+		 */
+//		if (null != qyjcxxEntity) {
+//			List<Map<String, Object>> ldss = ldsService.findLdsByNationallEconomyId("G58");
+//			mmap.put("ldss", ldss);
+//		}
+		mmap.put("specialTreatmentCode", specialTreatmentEntities);
+
+		mmap.put("qyjcxxEntity", qyjcxxEntity);
+		mmap.put("companyFlag", flag);
+		//获取行业类别下拉框数据
+		mmap.put("djh",dmJnajHylxService.selectDmJnajHylxList(null));
+		//获取监管类别下拉框数据
+		mmap.put("djz",dmJglbZgbmService.selectDmJglbZgbmList(null));
+		return prefix + "/edit_page";
+	}
+
+	/**
+	 * 修改保存企业基础
+	 */
+	@Log(title = "企业基础", businessType = BusinessType.UPDATE)
+	@PostMapping("/edit")
+	@ResponseBody
+	public Result edit(@Validated QyjcxxEntity qyjcxx) {
+		//同步修改莱斯企业信息
+        StringBuffer sb = new StringBuffer("qyid=");
+        sb.append(qyjcxx.getId());
+        sb.append("&hylb=");
+        sb.append(qyjcxx.getHylb());
+        sb.append("&jglb");
+        StringBuffer ssb = new StringBuffer(qyjcxx.getJglb());
+        ssb.insert(4,"-");
+        sb.append(ssb.toString());
+        sb.append("&zyywsr");
+        sb.append(qyjcxx.getZyywsr());
+        sb.append("&cyrysl");
+        sb.append(qyjcxx.getCyrysl());
+        sb.append("&qygmqk");
+        sb.append(qyjcxx.getQygmqk());
+        sb.append("&qygm");
+        sb.append(qyjcxx.getQygm());
+        sb.append("&zgbm");
+        sb.append(qyjcxx.getZgbm());
+        sb.append("&szdq");
+        sb.append(qyjcxx.getSzdq());
+        String json = HttpUtils.
+                sendPost(InterfaceAddress.getAppUrl()+"/jnaj/facade/jd/updateQyxxByQyid",
+                        sb.toString(),"Bearer " + HttpUtils.token);
+        json = "["+ json +"]";
+        JSONArray jarr = null;
+        try {
+            jarr = JSONArray.parseArray(json);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+	    return toAjax(qyjcxxService.updateqyjcxxForMobile(qyjcxx));
+	}
+
+	/**
+	 * 查询企业详细信息
+	 */
+	@GetMapping("/detail/{enterpriseId}")
+	public String detail(@PathVariable("enterpriseId") String enterpriseId, Map<String, Object> result) {
+		QyjcxxEntity qe = qyjcxxService.selectqyjcxxById(enterpriseId);
+		resultInit(result, qe);
+		return prefix + "/Co_details";
+	}
+
+	/**
+	 * 封装移动端企业查询结果
+	 * 
+	 * @return
+	 */
+	private void resultInit(Map<String, Object> result, Object obj) {
+		if (obj != null) {
+			if (obj instanceof List) {
+				List list = (List) obj;
+				if (list.size() > 0) {
+					result.put("status", "success");
+					result.put("result", obj);
+					return;
+				}
+			} else {
+				result.put("status", "success");
+				result.put("result", obj);
+				return;
+			}
+		}
+		result.put("status", "false");
+		result.put("msg", "未查到数据");
+	}
+
+	/**
+	 * 动态匹配企业的大中小微
+	 * 
+	 * @param qyjcxx
+	 * @return
+	 */
+	@PostMapping("/getEnterprisesScale")
+	@ResponseBody
+	public String getEnterprisesScale(@Validated QyjcxxEntity qyjcxx) {
+		StringBuffer sb = new StringBuffer("cyrysl=");
+		sb.append(qyjcxx.getCyrysl());
+		sb.append("&zyywsr=");
+		sb.append(qyjcxx.getZyywsr());
+		String json = HttpUtils.
+				sendPost(InterfaceAddress.getAppUrl()+"/jnaj/facade/jd/queryDzxw",
+						sb.toString(),"Bearer " + HttpUtils.token);
+		json = "[" + json + "]";
+		JSONArray jarr = null;
+		try {
+			jarr = JSONArray.parseArray(json);
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		if(jarr.size() >0)
+			return jarr.getJSONObject(0).get("id").toString();
+		return null;
+	}
+
+	@PostMapping("/getZgbm")
+	@ResponseBody
+	public Object getZgbm(String parameter){
+		StringBuffer sb = new StringBuffer("hylx=");
+		sb.append(parameter);
+		String json = HttpUtils.
+				sendPost(InterfaceAddress.getAppUrl()+"/jnaj/facade/jd/queryJglbByHylx",
+						sb.toString(),"Bearer " + HttpUtils.token);
+		JSONArray jarr = null;
+		try {
+			jarr = JSONArray.parseArray(json);
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		if(jarr.size() >0){
+			if("0003".equals(null != jarr.getJSONObject(0).get("zgbm")?jarr.getJSONObject(0).get("zgbm").toString():"")){
+				//获取企业信息
+				StringBuffer sbSzdq = new StringBuffer("szdq=");
+				sbSzdq.append(jarr.getJSONObject(0).get("zgbm"));
+				String jsonSzdq = HttpUtils.
+						sendPost(InterfaceAddress.getAppUrl()+"/jnaj/facade/jd/queryZgbmValueByZgbm",
+								sbSzdq.toString(),"Bearer " + HttpUtils.token);
+				JSONArray jarrSzdq = null;
+				try {
+					jarrSzdq = JSONArray.parseArray(jsonSzdq);
+				}catch (Exception e){
+					e.printStackTrace();
+				}
+				if(jarrSzdq.size() > 0)
+					jarr.getJSONObject(0).put("zgbmmc",jarrSzdq.getJSONObject(0).get("zgbmmc"));
+			}
+			return jarr.getJSONObject(0);
+		}
+		return null;
+	}
+}

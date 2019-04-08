@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jd.project.module.admin.evaluation.mapper.TaskPlanMapper">
+    
+    <resultMap type="TaskPlanEntity" id="TaskPlanResult">
+        <result property="planId"    column="PLAN_ID"    />
+        <result property="planName"    column="PLAN_NAME"    />
+        <result property="planStartTime"    column="PLAN_START_TIME"    />
+        <result property="planStatus"    column="PLAN_STATUS"    />
+        <result property="auditContent"    column="AUDIT_CONTENT"    />
+        <result property="remark"    column="REMARK"    />
+        <result property="sort"    column="SORT"    />
+        <result property="createUser"    column="CREATE_USER"    />
+        <result property="createTime"    column="CREATE_TIME"    />
+        <result property="updateUser"    column="UPDATE_USER"    />
+        <result property="updateTime"    column="UPDATE_TIME"    />
+        <result property="isDelete"    column="IS_DELETE"    />
+        <result property="detailCount"    column="DETAILCOUNT"    />
+        <result property="finishCheck"    column="FINISH_CHECK"    />
+    </resultMap>
+	
+	<sql id="selectTaskPlanVo">
+        SELECT PLAN_ID, PLAN_NAME, PLAN_START_TIME, PLAN_STATUS, AUDIT_CONTENT, REMARK, SORT, CREATE_USER, CREATE_TIME, UPDATE_USER, UPDATE_TIME, IS_DELETE FROM T_TASK_PLAN
+    </sql>
+
+    <select id="selectTaskPlanListForMbile" parameterType="TaskPlanEntity" resultMap="TaskPlanResult">
+        SELECT PLAN_ID,
+                PLAN_NAME,
+                PLAN_START_TIME,
+                PLAN_STATUS,
+                count(d.TASK_DETAIL_ID) DETAILCOUNT,
+                count(IF(d.CHECKTABLE_STATUS=4, d.TASK_DETAIL_ID, null)) FINISH_CHECK,
+                p.IS_DELETE,
+                p.CREATE_USER
+                FROM T_TASK_PLAN p
+                LEFT JOIN T_TASK_DETAIL d ON p.PLAN_ID = d.TASK_PLAN_ID
+                GROUP BY p.PLAN_ID
+        HAVING
+                p.IS_DELETE = 0
+               <if test="createUser != null and createUser != ''"> and p.CREATE_USER = #{createUser}</if>
+                ORDER BY PLAN_START_TIME desc,SORT ASC
+    </select>
+
+    <select id="selectTaskPlanList" parameterType="TaskPlanEntity" resultMap="TaskPlanResult">
+        <include refid="selectTaskPlanVo"/>
+        <where>  
+             <if test="planName != null and planName != ''"> AND PLAN_NAME LIKE CONCAT('%', #{planName}, '%')</if>
+             <if test="planStartTime != null and planStartTime != ''"> AND PLAN_START_TIME = #{planStartTime}</if>
+             <if test="planStatus != null and planStatus != ''"> AND PLAN_STATUS = #{planStatus}</if>
+             <if test="auditContent != null and auditContent != ''"> AND AUDIT_CONTENT LIKE CONCAT('%', #{auditContent}, '%')</if>
+             <if test="remark != null and remark != ''"> AND REMARK = #{remark}</if>
+             <if test="sort != null and sort != ''"> AND SORT = #{sort}</if>
+             <if test="createUser != null and createUser != ''"> AND CREATE_USER = #{createUser}</if>
+             <if test="createTime != null">
+                AND date_format(CREATE_TIME,'%y%m%d') &gt;= date_format(#{createTime},'%y%m%d')
+             </if>
+             <if test="updateUser != null and updateUser != ''"> AND UPDATE_USER = #{updateUser}</if>
+             <if test="updateTime != null"> 
+                AND date_format(UPDATE_TIME,'%y%m%d') &lt;= date_format(#{updateTime},'%y%m%d')
+             </if>
+             AND IS_DELETE = 0
+         </where>
+    </select>
+    
+    <select id="selectTaskPlanById" parameterType="Long" resultMap="TaskPlanResult">
+        <include refid="selectTaskPlanVo"/>
+        WHERE PLAN_ID = #{planId}
+    </select>
+        
+    <insert id="insertTaskPlan" parameterType="TaskPlanEntity" useGeneratedKeys="true" keyProperty="planId">
+        INSERT INTO T_TASK_PLAN
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="planName != null and planName != '' ">PLAN_NAME,</if>
+			<if test="planStartTime != null">PLAN_START_TIME,</if>
+			<if test="planStatus != null and planStatus != '' ">PLAN_STATUS,</if>
+			<if test="auditContent != null and auditContent != '' ">AUDIT_CONTENT,</if>
+			<if test="remark != null and remark != '' ">REMARK,</if>
+			<if test="sort != null and sort != '' ">SORT,</if>
+			<if test="createUser != null and createUser != '' ">CREATE_USER,</if>
+			CREATE_TIME,
+			<if test="updateUser != null and updateUser != '' ">UPDATE_USER,</if>
+			UPDATE_TIME,
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="planName != null and planName != ''">#{planName},</if>
+			<if test="planStartTime != null">#{planStartTime},</if>
+			<if test="planStatus != null and planStatus != ''">#{planStatus},</if>
+			<if test="auditContent != null and auditContent != ''">#{auditContent},</if>
+			<if test="remark != null and remark != ''">#{remark},</if>
+			<if test="sort != null and sort != ''">#{sort},</if>
+			<if test="createUser != null and createUser != ''">#{createUser},</if>
+			sysdate(),
+			<if test="updateUser != null and updateUser != ''">#{updateUser},</if>
+			sysdate(),
+         </trim>
+    </insert>
+	 
+    <update id="updateTaskPlan" parameterType="TaskPlanEntity">
+        UPDATE T_TASK_PLAN
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="planName != null  and planName != ''  ">PLAN_NAME = #{planName},</if>
+            <if test="planStartTime != null  ">PLAN_START_TIME = #{planStartTime},</if>
+            <if test="planStatus != null  ">PLAN_STATUS = #{planStatus},</if>
+            <if test="auditContent != null  and auditContent != ''  ">AUDIT_CONTENT = #{auditContent},</if>
+            <if test="remark != null  and remark != ''  ">REMARK = #{remark},</if>
+            <if test="sort != null  ">SORT = #{sort},</if>
+            <if test="updateUser != null  ">UPDATE_USER = #{updateUser},</if>
+            UPDATE_TIME = sysdate(),
+        </trim>
+        WHERE PLAN_ID = #{planId}
+    </update>
+
+	<delete id="deleteTaskPlanById" parameterType="Long">
+        UPDATE T_TASK_PLAN SET IS_DELETE = 1 WHERE PLAN_ID = #{planId}
+    </delete>
+	
+    <delete id="deleteTaskPlanByIds" parameterType="String">
+        UPDATE T_TASK_PLAN SET IS_DELETE = 1 WHERE PLAN_ID IN 
+        <foreach item="planId" collection="array" open="(" separator="," close=")">
+            #{planId}
+        </foreach>
+    </delete>
+    
+    <!-- 查询企业关联信息 -->
+	<select id="selectQyjcxxsByTaskDetailId" parameterType="TaskPlanEntity" resultType="QyjcxxEntity">
+		SELECT d.TASK_DETAIL_ID taskDetailId,q.id, q.scjydwqc FROM qyxx_zc q 
+		LEFT JOIN T_TASK_DETAIL d ON d.COMPANY_ID = q.id
+		WHERE d.IS_DELETE = 0 AND d.TASK_PLAN_ID = #{planId}
+	</select>
+	
+	<!-- 审核自评计划任务 -->
+	<update id="updateTaskPlanAuditeStatus" parameterType="TaskPlanEntity">
+		UPDATE T_TASK_PLAN SET PLAN_STATUS = #{planStatus},AUDIT_CONTENT = #{auditContent},UPDATE_USER = #{updateUser},UPDATE_TIME = sysdate() WHERE PLAN_ID = #{planId}
+	</update>
+</mapper>

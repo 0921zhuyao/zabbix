@@ -1,0 +1,105 @@
+package com.jd.project.module.admin.enterprise.controller;
+
+import java.util.List;
+
+import com.jd.project.module.admin.enterprise.entity.DmJglbZgbmEntity;
+import com.jd.project.module.admin.enterprise.service.DmJglbZgbmService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import com.jd.framework.aspectj.lang.annotation.Log;
+import com.jd.framework.aspectj.lang.enums.BusinessType;
+import com.jd.framework.web.controller.BaseController;
+import com.jd.framework.web.page.TableDataInfo;
+import com.jd.framework.web.domain.Result;
+
+/**
+ * 主管部门 信息操作处理
+ * 
+ * @author TrevorPhilips
+ * @date 2019-01-04
+ */
+@Controller
+@RequestMapping("/module/dmJglbZgbm")
+public class DmJglbZgbmController extends BaseController{
+    private String prefix = "module/dmJglbZgbm";
+	
+	@Autowired
+	private DmJglbZgbmService dmJglbZgbmService;
+	
+	@RequiresPermissions("module:dmJglbZgbm:view")
+	@GetMapping()
+	public String initList() {
+	    return prefix + "/dmJglbZgbm_list";
+	}
+	
+	/**
+	 * 查询主管部门列表
+	 */
+	@RequiresPermissions("module:dmJglbZgbm:list")
+	@PostMapping("/query")
+	@ResponseBody
+	public TableDataInfo query(DmJglbZgbmEntity dmJglbZgbm) {
+		startPage();
+        List<DmJglbZgbmEntity> list = dmJglbZgbmService.selectDmJglbZgbmList(dmJglbZgbm);
+		return getDataTable(list);
+	}
+	
+	/**
+	 * 新增主管部门
+	 */
+	@GetMapping("/initAdd")
+	public String initAdd(ModelMap mmap) {
+	    mmap.put("dmJglbZgbm",new DmJglbZgbmEntity());
+	    return prefix + "/dmJglbZgbm_edit";
+	}
+	
+	/**
+	 * 新增保存主管部门
+	 */
+	@RequiresPermissions("module:dmJglbZgbm:add")
+	@Log(title = "主管部门", businessType = BusinessType.INSERT)
+	@PostMapping("/add")
+	@ResponseBody
+	public Result add(DmJglbZgbmEntity dmJglbZgbm) {		
+		return toAjax(dmJglbZgbmService.insertDmJglbZgbm(dmJglbZgbm));
+	}
+
+	/**
+	 * 修改主管部门
+	 */
+	@GetMapping("/initEdit/{id}")
+	public String initEdit(@PathVariable("id") Long id, ModelMap mmap) {
+		DmJglbZgbmEntity dmJglbZgbm = dmJglbZgbmService.selectDmJglbZgbmById(id);
+		mmap.put("dmJglbZgbm", dmJglbZgbm);
+	    return prefix + "/dmJglbZgbm_edit";
+	}
+	
+	/**
+	 * 修改保存主管部门
+	 */
+	@RequiresPermissions("module:dmJglbZgbm:edit")
+	@Log(title = "主管部门", businessType = BusinessType.UPDATE)
+	@PostMapping("/edit")
+	@ResponseBody
+	public Result edit(DmJglbZgbmEntity dmJglbZgbm) {		
+		return toAjax(dmJglbZgbmService.updateDmJglbZgbm(dmJglbZgbm));
+	}
+	
+	/**
+	 * 删除主管部门
+	 */
+	@RequiresPermissions("module:dmJglbZgbm:remove")
+	@Log(title = "主管部门", businessType = BusinessType.DELETE)
+	@PostMapping( "/del")
+	@ResponseBody
+	public Result del(String ids) {		
+		return toAjax(dmJglbZgbmService.deleteDmJglbZgbmByIds(ids));
+	}
+}

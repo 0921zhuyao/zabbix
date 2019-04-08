@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jd.project.module.admin.standard.mapper.CheckTableBaseMapper">
+    
+    <resultMap type="CheckTableBaseEntity" id="CheckTableBaseResult">
+        <result property="ctbId"    column="CTB_ID"    />
+        <result property="checkTableId"    column="CHECK_TABLE_ID"    />
+        <result property="ctbTitle"    column="CTB_TITLE"    />
+        <result property="ctbContent"    column="CTB_CONTENT"    />
+        <result property="sort"    column="SORT"    />
+        <result property="remark"    column="REMARK"    />
+        <result property="createUser"    column="CREATE_USER"    />
+        <result property="createTime"    column="CREATE_TIME"    />
+        <result property="updateUser"    column="UPDATE_USER"    />
+        <result property="updateTime"    column="UPDATE_TIME"    />
+        <result property="isDelete"    column="IS_DELETE"    />
+    </resultMap>
+	
+	<sql id="selectCheckTableBaseVo">
+        select CTB_ID, CHECK_TABLE_ID, CTB_TITLE, CTB_CONTENT, SORT, REMARK, CREATE_USER, CREATE_TIME, UPDATE_USER, UPDATE_TIME, IS_DELETE from T_CHECK_TABLE_BASE
+    </sql>
+	
+    <select id="selectCheckTableBaseList" parameterType="CheckTableBaseEntity" resultMap="CheckTableBaseResult">
+        <include refid="selectCheckTableBaseVo"/>
+        <where>  
+            <if test="ctbId != null and ctbId != ''"> and CTB_ID = #{ctbId}</if>
+             <if test="checkTableId != null and checkTableId != ''"> and CHECK_TABLE_ID = #{checkTableId}</if>
+             <if test="ctbTitle != null and ctbTitle != ''"> and CTB_TITLE = #{ctbTitle}</if>
+             <if test="ctbContent != null and ctbContent != ''"> and CTB_CONTENT = #{ctbContent}</if>
+             <if test="sort != null and sort != ''"> and SORT = #{sort}</if>
+             <if test="remark != null and remark != ''"> and REMARK = #{remark}</if>
+             <if test="createUser != null and createUser != ''"> and CREATE_USER = #{createUser}</if>
+             <if test="createTime != null and createTime != ''"> and CREATE_TIME = #{createTime}</if>
+             <if test="updateUser != null and updateUser != ''"> and UPDATE_USER = #{updateUser}</if>
+             <if test="updateTime != null and updateTime != ''"> and UPDATE_TIME = #{updateTime}</if>
+             <if test="isDelete != null and isDelete != ''"> and IS_DELETE = #{isDelete}</if>
+         </where>
+    </select>
+    
+    <select id="selectCheckTableBaseById" parameterType="Long" resultMap="CheckTableBaseResult">
+        <include refid="selectCheckTableBaseVo"/>
+        where CTB_ID = #{ctbId}
+    </select>
+        
+    <insert id="insertCheckTableBase" parameterType="CheckTableBaseEntity">
+        insert into T_CHECK_TABLE_BASE
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="ctbId != null and ctbId != '' ">CTB_ID,</if>
+			<if test="checkTableId != null and checkTableId != '' ">CHECK_TABLE_ID,</if>
+			<if test="ctbTitle != null and ctbTitle != '' ">CTB_TITLE,</if>
+			<if test="ctbContent != null and ctbContent != '' ">CTB_CONTENT,</if>
+			<if test="sort != null and sort != '' ">SORT,</if>
+			<if test="remark != null and remark != '' ">REMARK,</if>
+			<if test="createUser != null and createUser != '' ">CREATE_USER,</if>
+			<if test="createTime != null and createTime != '' ">CREATE_TIME,</if>
+			<if test="updateUser != null and updateUser != '' ">UPDATE_USER,</if>
+			<if test="updateTime != null and updateTime != '' ">UPDATE_TIME,</if>
+			<if test="isDelete != null and isDelete != '' ">IS_DELETE,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="ctbId != null and ctbId != ''">#{ctbId},</if>
+			<if test="checkTableId != null and checkTableId != ''">#{checkTableId},</if>
+			<if test="ctbTitle != null and ctbTitle != ''">#{ctbTitle},</if>
+			<if test="ctbContent != null and ctbContent != ''">#{ctbContent},</if>
+			<if test="sort != null and sort != ''">#{sort},</if>
+			<if test="remark != null and remark != ''">#{remark},</if>
+			<if test="createUser != null and createUser != ''">#{createUser},</if>
+			<if test="createTime != null and createTime != ''">#{createTime},</if>
+			<if test="updateUser != null and updateUser != ''">#{updateUser},</if>
+			<if test="updateTime != null and updateTime != ''">#{updateTime},</if>
+			<if test="isDelete != null and isDelete != ''">#{isDelete},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateCheckTableBase" parameterType="CheckTableBaseEntity">
+        update T_CHECK_TABLE_BASE
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="checkTableId != null  ">CHECK_TABLE_ID = #{checkTableId},</if>
+            <if test="ctbTitle != null  and ctbTitle != ''  ">CTB_TITLE = #{ctbTitle},</if>
+            <if test="ctbContent != null  and ctbContent != ''  ">CTB_CONTENT = #{ctbContent},</if>
+            <if test="sort != null  ">SORT = #{sort},</if>
+            <if test="remark != null  and remark != ''  ">REMARK = #{remark},</if>
+            <if test="createUser != null  ">CREATE_USER = #{createUser},</if>
+            <if test="createTime != null  ">CREATE_TIME = #{createTime},</if>
+            <if test="updateUser != null  ">UPDATE_USER = #{updateUser},</if>
+            <if test="updateTime != null  ">UPDATE_TIME = #{updateTime},</if>
+            <if test="isDelete != null  ">IS_DELETE = #{isDelete},</if>
+        </trim>
+        where CTB_ID = #{ctbId}
+    </update>
+
+	<delete id="deleteCheckTableBaseById" parameterType="Long">
+        delete from T_CHECK_TABLE_BASE where CTB_ID = #{ctbId}
+    </delete>
+	
+    <delete id="deleteCheckTableBaseByIds" parameterType="String">
+        delete from T_CHECK_TABLE_BASE where CTB_ID in 
+        <foreach item="ctbId" collection="array" open="(" separator="," close=")">
+            #{ctbId}
+        </foreach>
+    </delete>
+    
+</mapper>

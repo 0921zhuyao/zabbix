@@ -1,0 +1,13 @@
+package com.jd.project.module.app.register.service;
+
+import com.jd.project.module.app.register.entity.AccidentRegEntity;
+
+/**
+ * @author HFJ
+ * @date 2019/4/1-11:35
+ */
+public interface AccidentRegService {
+
+	void insertAllResult(AccidentRegEntity accidentRegEntity);
+	
+}

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jd.project.module.admin.message.mapper.MsgMapper">
+    
+    <resultMap type="MsgEntity" id="MsgRefResult">
+        <result property="id"    column="id"    />
+        <result property="sendId"    column="SEND_ID"    />
+        <result property="receiveId"    column="RECEIVE_ID"    />
+        <result property="status"    column="STATUS"    />
+        <result property="crtTime"    column="CREATE_TIME"    />
+        <result property="crtUser"    column="CREATE_USER"    />
+        <result property="updTime"    column="UPDATE_TIME"    />
+        <result property="updUser"    column="UPDATE_USER"    />
+        <result property="delFlag"    column="IS_DELETE"    />
+        <result property="title"    column="TITLE"    />
+        <result property="content"    column="CONTENT"    />
+    </resultMap>
+	
+	<sql id="selectMsgRefVo">
+        select id, SEND_ID, RECEIVE_ID, STATUS, CREATE_TIME, CREATE_USER, UPDATE_TIME, UPDATE_USER, IS_DELETE,title,CONTENT from T_MSG
+    </sql>
+	
+    <select id="selectMsgRefList" parameterType="MsgEntity" resultMap="MsgRefResult">
+        <include refid="selectMsgRefVo"/>
+        <where>
+            IS_DELETE = 0
+            <if test="id != null and id != ''"> and id = #{id}</if>
+             <if test="sendId != null and sendId != ''"> and SEND_ID = #{sendId}</if>
+             <if test="receiveId != null and receiveId != ''"> and RECEIVE_ID = #{receiveId}</if>
+             <if test="status != null"> and STATUS = #{status}</if>
+             <if test="crtTime != null and crtTime != ''"> and CREATE_TIME = #{crtTime}</if>
+             <if test="crtUser != null and crtUser != ''"> and CREATE_USER = #{crtUser}</if>
+             <if test="updTime != null and updTime != ''"> and UPDATE_TIME = #{updTime}</if>
+             <if test="updUser != null and updUser != ''"> and UPDATE_USER = #{updUser}</if>
+             <if test="delFlag != null and delFlag != ''"> and IS_DELETE = #{delFlag}</if>
+         </where>
+        ORDER BY CREATE_TIME DESC
+    </select>
+    
+    <select id="selectMsgRefById" parameterType="Long" resultMap="MsgRefResult">
+        <include refid="selectMsgRefVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertMsgRef" parameterType="MsgEntity">
+        insert into T_MSG
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != '' ">id,</if>
+			<if test="sendId != null and sendId != '' ">SEND_ID,</if>
+			<if test="receiveId != null and receiveId != '' ">RECEIVE_ID,</if>
+			<if test="status != null">STATUS,</if>
+			CREATE_TIME,
+			<if test="crtUser != null and crtUser != '' ">CREATE_USER,</if>
+			UPDATE_TIME,
+			<if test="updUser != null and updUser != '' ">UPDATE_USER,</if>
+			<if test="delFlag != null and delFlag != '' ">IS_DELETE,</if>
+			<if test="title != null and title != '' ">TITLE,</if>
+			<if test="content != null and content != '' ">CONTENT,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != ''">#{id},</if>
+			<if test="sendId != null and sendId != ''">#{sendId},</if>
+			<if test="receiveId != null and receiveId != ''">#{receiveId},</if>
+			<if test="status != null">#{status},</if>
+			sysdate(),
+			<if test="crtUser != null and crtUser != ''">#{crtUser},</if>
+            sysdate(),
+			<if test="updUser != null and updUser != ''">#{updUser},</if>
+			<if test="delFlag != null and delFlag != ''">#{delFlag},</if>
+            <if test="title != null and title != '' ">#{title},</if>
+            <if test="content != null and content != '' ">#{content},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateMsgRef" parameterType="MsgEntity">
+        update T_MSG
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="sendId != null  ">SEND_ID = #{sendId},</if>
+            <if test="receiveId != null  ">RECEIVE_ID = #{receiveId},</if>
+            <if test="status != null ">STATUS = #{status},</if>
+            UPDATE_TIME = sysdate(),
+            <if test="updUser != null  ">UPDATE_USER = #{updUser},</if>
+            <if test="delFlag != null  ">IS_DELETE = #{delFlag},</if>
+            <if test="title != null  ">TITLE = #{title},</if>
+            <if test="content != null  ">CONTENT = #{content},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteMsgRefById" parameterType="Long">
+        delete from T_MSG where id = #{id}
+    </delete>
+	
+    <delete id="deleteMsgRefByIds" parameterType="String">
+        update T_MSG set IS_DELETE = 1 where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -1,0 +1,108 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+    <div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 select-info">
+                    <form id="checkContentType-form">
+                        <div class="select-list">
+                            <ul>
+                                <li>
+                                                                                                         分类编码：<input type="text" name="contentTypeCode"/>
+                                    <input type="hidden" name="contentTypeParentId" value="0"/>
+                                </li>
+                                <li>
+                                                                                                           分类名称：<input type="text" name="contentTypeName"/>
+                                </li>
+                                <li class="select-time">
+                                    <label>创建时间： </label>
+                                    <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="createTime"/>
+                                    <span>-</span>
+                                    <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="updateTime"/>
+                                </li>
+                                <li>
+                                    <a class="btn btn-primary  btn-sm" onclick="searchGrid()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                    <a class="btn btn-warning  btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </form>
+                </div>
+		<div class="btn-group hidden-xs" id="toolbar" role="group">
+			<a class="btn btn-outline btn-sm btn-success " onclick="$.operate.add()" shiro:hasPermission="module:checkContentType:add">
+				<i class="fa fa-plus"></i> 新增
+			</a>
+			<a class="btn btn-outline btn-sm btn-danger " onclick="$.operate.removeAll()" shiro:hasPermission="module:checkContentType:remove">
+				<i class="fa fa-trash-o"></i> 删除
+			</a>
+		</div>
+			
+		<div class="col-sm-12 select-table table-striped">
+			<table id="bootstrap-table" data-mobile-responsive="true"></table>
+		</div>
+	</div>
+    </div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('module:checkContentType:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('module:checkContentType:remove')}]];
+        var listFlag = [[${@permission.hasPermi('module:checkContentType:list')}]];
+        var prefix = ctx + "module/checkContentType"
+
+        $(function() {
+            var options = {
+                url: prefix + "/query/0",
+                createUrl: prefix + "/initAdd/0",
+                updateUrl: prefix + "/initEdit/{id}",
+                removeUrl: prefix + "/del",
+                modalName: "检查内容分类",
+                sortName: "sort",
+                sortOrder: "asc",
+                search: false,
+                showExport: false,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'contentTypeCode',
+					title : '分类编码' 
+				},
+				{
+					field : 'contentTypeName', 
+					title : '分类名称'
+				},
+				{
+					field : 'sort', 
+					title : '排序号' 
+				},
+				{
+					field : 'remark', 
+					title : '备注' 
+				},
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+		            	 actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.contentTypeId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        /* actions.push('<a class="btn btn-info btn-xs ' + listFlag + '" href="#" onclick="detail(\'' + row.contentTypeId + '\')"><i class="fa fa-list-ul"></i>列表</a> '); */
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.contentTypeId + '\')"><i class="fa fa-remove"></i>删除</a>');
+						return actions.join('');
+		            }
+		        }]
+            };
+            $.table.init(options);
+        });
+        
+        function searchGrid(){
+            $.table.search("checkContentType-form");
+        }
+        function detail(id) {
+            var url = prefix + '/detail/' + id;
+            createMenuItem(url, "检查表内容分类详情");
+        }
+    </script>
+</body>
+</html>

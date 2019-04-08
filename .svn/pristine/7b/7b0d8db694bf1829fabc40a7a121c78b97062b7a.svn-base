@@ -1,0 +1,188 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+#header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 45px;
+    background: #333333;
+    width: 100%;
+    overflow: hidden;
+    z-index:999999;
+}
+
+.action-back {
+    float: left;
+}
+
+.action-back img {
+    width: 11px;
+    margin: 14px 0 0 17px;
+}
+
+.mui-title {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 44px;
+    position: absolute;
+    display: block;
+    width: 70%;
+    margin: 0 -10px;
+    padding: 0;
+    text-align: center;
+    white-space: nowrap;
+    color: #fff;
+    right: 40px;
+    left: 40px;
+    display: inline-block;
+    overflow: hidden;
+    width: auto;
+    margin: 0;
+    text-overflow: ellipsis;
+}
+
+.submit-btn {
+    float: right;
+    height: 45px;
+    line-height: 48px;
+    margin-right: 18px;
+    font-size: 15px;
+    text-decoration: underline;
+    color: #fff;
+}
+
+.space {
+    width: 100%;
+    height: 5px;
+    margin-top: 45px;
+    background: #f8f8fb;
+}
+
+.space1 {
+    width: 100%;
+    height: 5px;
+    background: #f8f8fb;
+}
+
+.list {
+    list-style: none;
+    width: 100%;
+    background: #fff;
+}
+
+.list li {
+    width: 100%;
+    border-bottom: 1px solid #d2d2d2;
+    height: 54px;
+    line-height: 54px;
+    overflow: hidden;
+    position:relative;
+}
+
+.list li:last-child {
+    border-bottom: none;
+}
+
+.list li .list-icon {
+    width: 17px;
+    margin: 19px 0 0 18px;
+    float: left;
+}
+
+.list li span {
+    display: inline-block;
+    width: 60%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    float: left;
+    margin-left: 10px;
+    font-size: 16px;
+}
+@media screen and (max-width: 350px) {
+    .list li span {
+    display: inline-block;
+    width: 74%;
+}
+}
+.list li .arrow {
+    float: right;
+    width: 7px;
+    margin: 23px 18px 0 13px;
+}
+
+.list li button {
+    float: right;
+    width: 55px;
+    height: 28.25px;
+    line-height: 28.25px;
+    font-size: 14px;
+    -webkit-transform: scale(0.8);
+    background: #fff;
+    margin-top: 14px;
+}
+
+.finish {
+    border: 1px solid #21a61a;
+    color: #21a61a;
+}
+
+.no-finish {
+    border: 1px solid #ff2f2f;
+    color: #ff2f2f;
+}
+
+button {
+    position: fixed;
+    right: 14%;
+    z-index: 9999;
+    display: block;
+    width: 70%;
+    height: 40px;
+    background: #ff3636;
+    border: none;
+    margin: 0 auto;
+    border-radius: 6px;
+    font-size: 16px;
+    color: #fff;
+}
+body{
+    margin-bottom: 110px;
+}
+.list li {
+    width: 100%;
+    border-bottom: 1px solid #d2d2d2;
+    height: 54px;
+    line-height: 54px;
+    overflow: hidden;
+    position: relative;
+}
+.finish {
+    margin: 0 auto;
+    border: 1px solid #21a61a;
+    color: #21a61a;
+    position:absolute;
+}
+.no-start {
+    background:#fff;
+    border: 1px solid #ff2f2f;
+    color: #ff2f2f;
+    position:absolute;
+}
+.beging{
+    background:#fff;
+    border: 1px solid #a0a0a0;
+    color: #a0a0a0;
+    position:absolute;
+}
+.butt{
+	background-color:#ffffff;
+	width:100%;
+	height:8%;
+	position:fixed;
+	left:0;
+	bottom:0;
+}

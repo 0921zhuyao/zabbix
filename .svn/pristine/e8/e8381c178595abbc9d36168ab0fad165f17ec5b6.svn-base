@@ -1,0 +1,130 @@
+package com.jd.project.module.admin.enterprise.service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.jd.common.support.Convert;
+import com.jd.common.utils.security.ShiroUtils;
+import com.jd.framework.web.service.BaseService;
+import com.jd.project.module.admin.enterprise.entity.NationallEconomyEntity;
+import com.jd.project.module.admin.enterprise.mapper.NationallEconomyMapper;
+
+/**
+ * 国民经济行业分类 服务层实现
+ * 
+ * @author TrevorPhilips
+ * @date 2018-12-20
+ */
+@Service
+@Transactional(rollbackFor = Exception.class)
+public class NationallEconomyServiceImpl extends BaseService implements NationallEconomyService {
+	@Autowired
+	private NationallEconomyMapper nationallEconomyMapper;
+
+	/**
+	 * 查询国民经济行业分类信息
+	 * 
+	 * @param nationallEconomyId
+	 *            国民经济行业分类ID
+	 * @return 国民经济行业分类信息
+	 */
+	@Override
+	public NationallEconomyEntity selectNationallEconomyById(String nationallEconomyId) {
+		return nationallEconomyMapper.selectNationallEconomyById(nationallEconomyId);
+	}
+
+	/**
+	 * 查询国民经济行业分类列表
+	 * 
+	 * @param nationallEconomy
+	 *            国民经济行业分类信息
+	 * @return 国民经济行业分类集合
+	 */
+	@Override
+	public List<NationallEconomyEntity> selectNationallEconomyList(NationallEconomyEntity nationallEconomy) {
+		return nationallEconomyMapper.selectNationallEconomyList(nationallEconomy);
+	}
+
+	/**
+	 * 新增国民经济行业分类
+	 * 
+	 * @param nationallEconomy
+	 *            国民经济行业分类信息
+	 * @return 结果
+	 */
+	@Override
+	public int insertNationallEconomy(NationallEconomyEntity nationallEconomy) {
+		nationallEconomy.setCreateUser(ShiroUtils.getUserId());
+		nationallEconomy.setUpdateUser(ShiroUtils.getUserId());
+		return nationallEconomyMapper.insertNationallEconomy(nationallEconomy);
+	}
+
+	/**
+	 * 修改国民经济行业分类
+	 * 
+	 * @param nationallEconomy
+	 *            国民经济行业分类信息
+	 * @return 结果
+	 */
+	@Override
+	public int updateNationallEconomy(NationallEconomyEntity nationallEconomy) {
+		nationallEconomy.setUpdateUser(ShiroUtils.getUserId());
+		return nationallEconomyMapper.updateNationallEconomy(nationallEconomy);
+	}
+
+	/**
+	 * 删除国民经济行业分类对象
+	 * 
+	 * @param ids
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
+	@Override
+	public int deleteNationallEconomyByIds(String ids) {
+		return nationallEconomyMapper.deleteNationallEconomyByIds(Convert.toStrArray(ids));
+	}
+
+	/**
+	 * 查询所有国民经济行业
+	 */
+	@Override
+	public List<Map<String, Object>> industryTreeData() {
+		List<Map<String, Object>> trees = new ArrayList<Map<String, Object>>();
+		List<NationallEconomyEntity> industryList = nationallEconomyMapper.selectIndustryAll();
+		trees = getTrees(industryList, false, null, false);
+		return trees;
+	}
+
+	/**
+	 * 对象转菜单树
+	 *
+	 * @param menuList
+	 *            菜单列表
+	 * @param isCheck
+	 *            是否需要选中
+	 * @param roleMenuList
+	 *            角色已存在菜单列表
+	 * @param permsFlag
+	 *            是否需要显示权限标识
+	 * @return
+	 */
+	public List<Map<String, Object>> getTrees(List<NationallEconomyEntity> industryList, boolean isCheck,
+			List<String> roleMenuList, boolean permsFlag) {
+		List<Map<String, Object>> trees = new ArrayList<Map<String, Object>>();
+		industryList.forEach(x -> {
+			Map<String, Object> industryMap = new HashMap<String, Object>();
+			industryMap.put("id", x.getNationallEconomyId());
+			industryMap.put("pId", x.getParentNationallEconomyId());
+			industryMap.put("name", x.getNationallEconomyName());
+			industryMap.put("title", x.getNationallEconomyName());
+			trees.add(industryMap);
+		});
+		return trees;
+	}
+}

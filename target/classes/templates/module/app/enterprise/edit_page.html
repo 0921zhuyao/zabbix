@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>企业信息</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<link rel="stylesheet" type="text/css" th:href="@{ /css/app/mui.min.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{ /css/app/reset.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{ /css/app/edit-page.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{ /css/app/easyui.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{ /css/app/jquery.mloading.css}">
+</head>
+<style>
+	.action-back {
+		float: left;
+		margin-left: -10px;
+	}
+	.submit-btn {
+		float: right;
+		height: 45px;
+		line-height: 48px;
+		margin-right: 0px;
+		font-size: 15px;
+		color: #fff;
+		text-decoration: none;
+		display: none;
+	}
+	.mui-title{
+		width: 250px !important;
+	}
+	label{
+		font-size: 16px;
+	}
+	.title-choose{
+		width: 60%;
+	}
+	.choose{
+		position: relative;
+		float: right;
+        width: 25%;
+        top: 5px;
+	}
+    .choose-checkbox{
+        width: 50%;
+    }
+
+	.cut-off-rule{
+		width:88%;
+		margin:0 auto;
+		border: 0;
+		height: 2px;
+		border-top: 1px solid rgba(0, 0, 0, 0.20);
+		border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+	}
+    .mui-switch.mui-active:before{content: '是';}
+    .mui-switch:before{content: '否';}
+    .input-box1 p{
+		line-height: 40px;
+		background: white;
+		position: relative;
+		float: right;
+		/* right: 8%; */
+		width: 30%;
+		height: 40px;
+    }
+</style>
+<body>
+<!--头部内容-->
+<header id="header" class="mui-bar mui-bar-nav">
+    <span class="action-back" onclick="window.history.back()">
+        <img th:src="@{ /images/return.png}" alt="">
+    </span>
+	<h1 class="mui-title" style="left: 60px;">[[${qyjcxxEntity.scjydwqc}]]</h1>
+	<span class="submit-btn">下一步</span>
+</header>
+	<div class="content" th:object="${qyjcxxEntity}">
+		<form id="enterprise">
+			<input id="id" name="id" th:field="*{id}"  type="hidden">
+			<input id="specialTreatmentStr" name="specialTreatmentStr" th:field="*{specialTreatmentStr}"  type="hidden">
+			<input id="hylb" name="hylb" th:field="*{hylb}"  type="hidden">
+			<input id="jglb" name="jglb" th:field="*{jglb}"  type="hidden">
+
+			<div class="table-box-1" style="height: auto;">
+				<div class="input-box">
+					<div class="input-list" style="height: auto;">
+						<fieldset id="industry_type" style="padding-left: 0px;">
+							<div class="finish-icon">
+								<img th:src="@{/images/finish-icon.png}" alt="">
+							</div>
+							<legend>企业分类: &nbsp;</legend>
+
+							<p>门类：<select class="first"  disabled="disabled"></select></p>
+
+							<p>大类：<select class="second" value="" onchange="handleData(this.value)" data-value="" disabled="disabled"></select></p>
+
+							<p>中类：<select class="third"  value="" onchange="handleData(this.value)" data-value="" disabled="disabled"></select></p>
+
+							<p>小类：<select class="fourth" value="" onchange="handleData(this.value)" data-value="" disabled="disabled"></select></p>
+
+						</fieldset>
+					</div>
+					<div class="input-list" style="height: auto;">
+						<fieldset id="supervise_type" style="padding-left: 0px;">
+							<div class="finish-icon">
+								<img th:src="@{/images/finish-icon.png}" alt="">
+							</div>
+							<legend>监管类别: &nbsp;</legend>
+
+							<p><select class="first" value="" disabled="disabled" style="width: 100%;"></select></p>
+
+							<p><select class="second" value="" disabled="disabled" style="width: 100%;"></select></p>
+
+						</fieldset>
+					</div>
+				</div>
+			</div>
+			<div class="table-box-1">
+				<div class="input-box">
+					<div  class="input-list wid">
+						<div class="finish-icon">
+							<img th:src="@{/images/finish-icon.png}" alt="">
+						</div>
+						<span>主营业务收入(万元) : &nbsp;</span>
+						<div class="input input2">
+							<input name="zyywsr" type="text" class="input1" th:field="*{zyywsr}" >
+						</div>
+					</div>
+					<div  class="input-list wid">
+						<div class="finish-icon">
+							<img th:src="@{/images/finish-icon.png}" alt="">
+						</div>
+						<span>从业人员数量 : &nbsp;</span>
+						<div class="input input2">
+							<input name="cyrysl" type="text" class="input1" th:field="*{cyrysl}" >
+						</div>
+					</div>
+                </div>
+            </div>
+	<div class="table-box-1">
+		<div class="input-box1">
+            <div class="input-list">
+                <div class="finish-icon">
+                    <img th:src="@{/images/finish-icon.png}" alt="" style="display: block;">
+                </div>
+                <span>大中小微 : &nbsp;</span>
+                <p id="scale" ></p>
+                <input name="qygm" type="hidden" th:value="${qyjcxxEntity?.qygm}">
+            </div>
+			<div class="input-list">
+				<div class="finish-icon">
+					<img th:src="@{/images/finish-icon.png}" alt="">
+				</div>
+				<span>企业规模: &nbsp;</span>
+                <p id="size"  ></p>
+				<input name="gmqk" type="hidden" th:value="${qyjcxxEntity?.gmqk}">
+			</div>
+			<div class="input-list">
+				<div class="finish-icon">
+					<img th:src="@{/images/finish-icon.png}" alt="">
+				</div>
+				<span>主管部门: &nbsp;</span>
+                <p id="zgbm"  ></p>
+				<input name="zgbm" type="hidden" th:value="${qyjcxxEntity?.zgbm}">
+			</div>
+		</div>
+	</div>
+	<div class="table-box-1" style="height: 250px">
+            <div  class="input-list title-choose-ridio">
+				<div class="title-choose ">
+					<div class="finish-icon">
+						<img th:src="@{/images/finish-icon.png}" alt="" style="display: block;">
+					</div>
+					<span>有无重大危险源: &nbsp;</span>
+				</div>
+				<div class="choose">
+                    <div id="zdwxy" class="mui-switch" data-value="1">
+                        <div class="mui-switch-handle"></div>
+                    </div>
+                </div>
+            </div>
+			<div  class="input-list title-choose-ridio">
+				<div class="title-choose">
+					<div class="finish-icon">
+						<img th:src="@{/images/finish-icon.png}" alt="" style="display: block;">
+					</div>
+					<span>有无道路危险品运输: &nbsp;</span>
+				</div>
+				<div class="choose">
+                    <div id="dlwxp" class="mui-switch" data-value="6">
+                        <div class="mui-switch-handle"></div>
+                    </div>
+				</div>
+            </div>
+			<div class="input-list" style="height: 50%">
+				<div class="title-choose">
+					<div class="finish-icon">
+						<img th:src="@{/images/finish-icon.png}" alt="" style="display: block;">
+					</div>
+					<span>涉及的专项治理 : &nbsp;</span>
+				</div>
+				<div class="choose choose-checkbox">
+					<div class="mui-input-row mui-checkbox">
+						<label>涉氨</label>
+						<input name="zxzl" value="2" type="checkbox" >
+					</div>
+					<div class="mui-input-row mui-checkbox">
+						<label>有限空间</label>
+						<input name="zxzl" value="3" type="checkbox" >
+					</div>
+					<div class="mui-input-row mui-checkbox">
+						<label>涉氯</label>
+						<input name="zxzl" value="4" type="checkbox" >
+					</div>
+					<div class="mui-input-row mui-checkbox">
+						<label>涉爆粉尘</label>
+						<input name="zxzl" value="5" type="checkbox" >
+					</div>
+				</div>
+			</div>
+	</div>
+
+<img th:src="@{/images/sure.png}" alt="" class="confirm" style="width: 70%;margin: 40px 15% 10px">
+</form>
+</div>
+</body>
+<script type="text/javascript" th:src="@{ /js/app/jquery-3.0.0.min.js}"></script>
+<script type="text/javascript" th:src="@{ /js/app/jquery.easyui.min.js}"></script>
+<script type="text/javascript" th:src="@{ /js/app/mui.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/app/jquery.mloading.js}"></script>
+<script type="text/javascript" th:src="@{/js/app/jquery.cxselect.js}"></script>
+<script th:inline="javascript">
+    var prefix = "/app/qyjcxx";
+    var qyjcxxEntity = [[${qyjcxxEntity}]];
+    var specialTreatmentCode = [[${specialTreatmentCode}]];
+    $(document).ready(function() {
+
+        init();
+        //初始化页面数据
+        function init() {
+            //获取企业对象数据
+            if(null != qyjcxxEntity){
+                //设置行业类别初始化数据
+                if( null != qyjcxxEntity.hylb &&
+                    "" != qyjcxxEntity.hylb && qyjcxxEntity.hylb.length == 5){
+                    $("#industry_type .first").attr("data-value",qyjcxxEntity.hylb.substring(0,1));
+                    $("#industry_type .second").attr("data-value",qyjcxxEntity.hylb.substring(1,3));
+                    $("#industry_type .third").attr("data-value",qyjcxxEntity.hylb.substring(1,4));
+                    $("#industry_type .fourth").attr("data-value",qyjcxxEntity.hylb.substring(1));
+                }
+                //设置监管类别初始化数据
+                if(null != qyjcxxEntity.jglb &&
+                    "" != qyjcxxEntity.jglb && qyjcxxEntity.jglb.length == 8){
+                    $("#supervise_type .first").attr("data-value",qyjcxxEntity.jglb.substring(0,4));
+                    $("#supervise_type .second").attr("data-value",qyjcxxEntity.jglb.substring(4));
+                }
+                //初始化大中小微和企业规模
+                replaceHtml(null, qyjcxxEntity.gmqk);
+                if(specialTreatmentCode.length > 0){
+                    //遍历初始化专项治理
+                    specialTreatmentCode.forEach(item =>{
+                        replaceSpecialHtml(item.code);
+                    })
+                }
+            }
+            ajaxEnterpriseSacle();
+        }
+        var getJsonTree=function(data,parentId){
+            var itemArr=[];
+            for(var i=0;i<data.length;i++){
+                var node=data[i];
+                //data.splice(i, 1)
+                if(i==0)
+                itemArr.push({'v':"",'n':"请选择",'s':parentId})
+                if(node.pid == parentId ){
+                    var newNode={'v':node.dmx,'n':node.ms,'s':getJsonTree(data,node.dmx)};
+                    itemArr.push(newNode);
+                }
+            }
+            return itemArr;
+        }
+		//行业类别
+        var jsonArray = getJsonTree([[${djh}]],'0');
+
+        $('#industry_type').cxSelect({
+
+            selects: ['first', 'second', 'third', 'fourth'],
+
+            required: true,
+
+            url: jsonArray
+        })
+        var getSuperviceArray=function(data,parentId){
+            var itemArr=[];
+            for(var i=0;i<data.length;i++){
+                var node=data[i];
+                //data.splice(i, 1)
+				if(i==0)
+				    itemArr.push({'v':"",'n':"请选择",'s':parentId})
+                if(node.pid == parentId ){
+                    var newNode={'v':node.dmxbm,'n':node.mc,'s':getSuperviceArray(data,node.dmxbm)};
+                    itemArr.push(newNode);
+                }
+            }
+            return itemArr;
+        }
+        //监管类别
+        var superviceArray = getSuperviceArray([[${djz}]],'0');
+
+        $('#supervise_type').cxSelect({
+
+            selects: ['first', 'second'],
+
+            required: true,
+
+            url: superviceArray
+        })
+        
+        $('.submit-btn').css('display','none');
+        var companyFlag = [[${companyFlag}]];
+        if(companyFlag == 1){
+        	$(".confirm").attr("src","/images/sure-click.png");
+//            $('.submit-btn').css('display','inline');
+            afterClickNext();
+        }
+        $(".submit-btn").click(function () {
+            window.location.replace("/app/companyChecktable/selfJudge/" + [[${qyjcxxEntity.id}]]);
+        });
+
+        $(".confirm").click(function(){
+        	if(companyFlag == 1){
+        		return;
+        	}
+        	//校验数据是否为空
+			if("" == $("#industry_type .first").val() || null == $("#industry_type .first").val()) return mui.toast("请选择企业分类的门类！")
+			if("" == $("#industry_type .second").val() || null == $("#industry_type .second").val()) return mui.toast("请选择企业分类的大类！")
+			if("" == $("#industry_type .third").val() || null == $("#industry_type .third").val()) return mui.toast("请选择企业分类的中类！")
+			if("" == $("#industry_type .fourth").val() || null == $("#industry_type .fourth").val()) return mui.toast("请选择企业分类的小类！")
+
+            if("" == $("#supervise_type .first").val() || null == $("#supervise_type .first").val()) return mui.toast("请选择监管类别的大类！")
+            if("" == $("#supervise_type .second").val() || null == $("#supervise_type .second").val()) return mui.toast("请选择监管类别的小类！")
+
+            if("" == $("input[name='zyywsr']").val() || null == $("input[name='zyywsr']").val()) return mui.toast("主营业务收入不能为空！")
+            if("" == $("input[name='cyrysl']").val() || null == $("input[name='cyrysl']").val()) return mui.toast("从业人员数量不能为空！")
+        	//获取行业类别
+            $("#hylb").val($("#industry_type").find(".first").val() +
+                            $("#industry_type").find(".fourth").val() + '');
+            //获取监管类别
+            $("#jglb").val($("#supervise_type").find(".first").val() +
+                            $("#supervise_type").find(".second").val() + '');
+            //获取专项治理
+            var sValues = new Array();
+        	$(".mui-switch.mui-active").each(function () {
+                sValues.push($(this).attr("data-value"));
+            })
+            $(".mui-checkbox :checked").each(function () {
+                sValues.push($(this).val());
+            })
+             if(sValues && sValues.length>0){
+                $('#specialTreatmentStr').val(sValues.join(','));
+            }
+            $("body").mLoading("show");
+            //同步的ajax请求
+            $.ajax({
+                url: prefix + "/edit",
+                type: "post",
+                dataType: "json",
+                data: $('#enterprise').serialize(),
+                success: function(result) {
+                    $("body").mLoading("hide");
+                    if(result.code == 0){
+                        $(".confirm").attr("src","/images/sure-click.png");
+//                        $('.submit-btn').css('display','inline');
+
+                        var btnArray = ['否', '是'];
+                        mui.confirm('是否立即评估？', '提示', btnArray, function(e) {
+                            if (e.index == 1) {
+                                window.location.replace("/app/companyChecktable/selfJudge/" + [[${qyjcxxEntity.id}]]);
+                            } else {
+                                window.history.back();
+                            }
+                        })
+                    }else{
+                        mui.toast("保存失败<br>请联系管理人员或重新登录");
+                    }
+                }
+            });
+        });
+
+        // $(".status").click(function(){
+        //     $(this).parent().parent().parent().next().val($(this).attr("value"))
+        // })
+        
+        $("input[name='cyrysl']").blur(function(){
+        	ajaxEnterpriseSacle();
+        });
+        
+        $("input[name='zyywsr']").blur(function(){
+        	ajaxEnterpriseSacle();
+        });
+        
+        function ajaxEnterpriseSacle(){
+        	var reg = /^[1-9]\d*$/;
+        	var nxssrVal = $('input[name="zyywsr"]').val();
+        	var cyryslVal = $('input[name="cyrysl"]').val();
+        	//当营业收入变化时，变更企业规模
+            if(nxssrVal && reg.test(nxssrVal)){
+                if(nxssrVal < 2000)
+                    replaceHtml(null, 0);
+                else
+                    replaceHtml(null, 1);
+                //当营业收入和从业人数都不为空时，动态变更大中小微
+                if(cyryslVal && reg.test(cyryslVal)){
+                    $.ajax({
+                        url: prefix + '/getEnterprisesScale',
+                        type: "post",
+                        dataType: "json",
+                        data: $('#enterprise').serialize(),
+                        success: function(result) {
+                            replaceHtml(result, null);
+                        }
+                    });
+                }
+            }
+
+        }
+    });
+
+        function replaceHtml(type,gmtype){
+            console.log(type + "---" + gmtype)
+            if(null != type){
+                if(type == '4'){
+                    $('#scale').html('大型');
+                    $('input[name="qygm"]').val(type);
+                }else if(type == '3'){
+                    $('#scale').html('中型');
+                    $('input[name="qygm"]').val(type);
+                }else if(type == '2'){
+                    $('#scale').html('小型');
+                    $('input[name="qygm"]').val(type);
+                }else if(type == '1'){
+                    $('#scale').html('微型');
+                    $('input[name="qygm"]').val(type);
+                }else{
+                    $('#scale').html('其他');
+                    $('input[name="qygm"]').val(type);
+                }
+            }
+            if(null != gmtype){
+                if(gmtype == 0){
+                    $('#size').html('规模以下');
+                    $('input[name="gmqk"]').val(gmtype);
+                }else if(gmtype == 1){
+                    $('#size').html('规模以上');
+                    $('input[name="gmqk"]').val(gmtype);
+                }else {
+                    $('#size').html('其他');
+                    $('input[name="gmqk"]').val(gmtype)
+                }
+            }
+        }
+        function replaceSpecialHtml(code){
+            if(null != code){
+                //重大危险源
+                if(code == 1){
+                    $("#zdwxy").addClass("mui-active")
+                }else if(code == 2){
+                    $("input[name='zxzl']:eq(0)").attr('checked',true);
+                }else if(code == 3){
+                    $("input[name='zxzl']:eq(2)").attr('checked',true);
+                }else if(code == 4){
+                    $("input[name='zxzl']:eq(3)").attr('checked',true);
+                }else if(code == 5){
+                    $("input[name='zxzl']:eq(4)").attr('checked',true);
+                }else if(code == 6){
+                    $("#dlwxp").addClass("mui-active")
+                }else {
+
+                }
+            }
+        }
+        //行业类别变更时，实时更新监管类别和主管部门
+        function handleData(code) {
+			if(null != code && "" != code){
+                $.ajax({
+                    url: prefix + '/getZgbm',
+                    type: "post",
+                    dataType: "json",
+                    data: {
+                        parameter:code
+					},
+                    success: function(result) {
+                        console.log(result);
+                        console.log(typeof result);
+                        if(null != result){
+                            if(null != result.jglbdl && "" != result.jglbdl){
+                                $("#supervise_type .first").val(result.jglbdl);
+                                $("#supervise_type .first").trigger("change")
+                            }
+                            if(null != result.jglbxl && "" != result.jglbxl){
+//                                $('#industry_type').cxSelect().cxSelect.selectChange("second");
+                                $("#supervise_type .second").val(result.jglbxl);
+                            }
+                            if(null != result.zgbmmc && "" != result.zgbmmc)
+                                $("#zgbm").text(result.zgbmmc);
+						}
+                    }
+                });
+			}
+        }
+</script>
+</html>

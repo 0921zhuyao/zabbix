@@ -1,0 +1,105 @@
+package com.jd.project.module.admin.evaluation.controller;
+
+import java.util.List;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import com.jd.framework.aspectj.lang.annotation.Log;
+import com.jd.framework.aspectj.lang.enums.BusinessType;
+import com.jd.framework.web.controller.BaseController;
+import com.jd.framework.web.page.TableDataInfo;
+import com.jd.project.module.admin.evaluation.entity.CompanyChecktablesEntity;
+import com.jd.project.module.admin.evaluation.service.CompanyChecktablesService;
+import com.jd.framework.web.domain.Result;
+
+/**
+ * 企业检查关联 信息操作处理
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-29
+ */
+@Controller
+@RequestMapping("/module/companyChecktables")
+public class CompanyChecktablesController extends BaseController{
+    private String prefix = "module/companyChecktables";
+	
+	@Autowired
+	private CompanyChecktablesService companyChecktablesService;
+	
+	@RequiresPermissions("module:companyChecktables:view")
+	@GetMapping()
+	public String initList() {
+	    return prefix + "/companyChecktables_list";
+	}
+	
+	/**
+	 * 查询企业检查关联列表
+	 */
+	@RequiresPermissions("module:companyChecktables:list")
+	@PostMapping("/query")
+	@ResponseBody
+	public TableDataInfo query(CompanyChecktablesEntity companyChecktables) {
+		startPage();
+        List<CompanyChecktablesEntity> list = companyChecktablesService.selectCompanyChecktablesList(companyChecktables);
+		return getDataTable(list);
+	}
+	
+	/**
+	 * 新增企业检查关联
+	 */
+	@GetMapping("/initAdd")
+	public String initAdd(ModelMap mmap) {
+	    mmap.put("companyChecktables",new CompanyChecktablesEntity());
+	    return prefix + "/companyChecktables_edit";
+	}
+	
+	/**
+	 * 新增保存企业检查关联
+	 */
+	@RequiresPermissions("module:companyChecktables:add")
+	@Log(title = "企业检查关联", businessType = BusinessType.INSERT)
+	@PostMapping("/add")
+	@ResponseBody
+	public Result add(CompanyChecktablesEntity companyChecktables) {		
+		return toAjax(companyChecktablesService.insertCompanyChecktables(companyChecktables));
+	}
+
+	/**
+	 * 修改企业检查关联
+	 */
+	@GetMapping("/initEdit/{checktablesId}")
+	public String initEdit(@PathVariable("checktablesId") Long checktablesId, ModelMap mmap) {
+		CompanyChecktablesEntity companyChecktables = companyChecktablesService.selectCompanyChecktablesById(checktablesId);
+		mmap.put("companyChecktables", companyChecktables);
+	    return prefix + "/companyChecktables_edit";
+	}
+	
+	/**
+	 * 修改保存企业检查关联
+	 */
+	@RequiresPermissions("module:companyChecktables:edit")
+	@Log(title = "企业检查关联", businessType = BusinessType.UPDATE)
+	@PostMapping("/edit")
+	@ResponseBody
+	public Result edit(CompanyChecktablesEntity companyChecktables) {		
+		return toAjax(companyChecktablesService.updateCompanyChecktables(companyChecktables));
+	}
+	
+	/**
+	 * 删除企业检查关联
+	 */
+	@RequiresPermissions("module:companyChecktables:remove")
+	@Log(title = "企业检查关联", businessType = BusinessType.DELETE)
+	@PostMapping( "/del")
+	@ResponseBody
+	public Result del(String ids) {		
+		return toAjax(companyChecktablesService.deleteCompanyChecktablesByIds(ids));
+	}
+	
+}

@@ -1,0 +1,59 @@
+package com.jd.project.module.admin.standard.service;
+
+import java.util.List;
+
+import com.jd.project.module.admin.standard.entity.CheckRegulationRefEntity;
+
+/**
+ * 检查依据配置 服务层
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-22
+ */
+public interface CheckRegulationRefService {
+	/**
+	 * 查询检查依据配置信息
+	 * 
+	 * @param id
+	 *            检查依据配置ID
+	 * @return 检查依据配置信息
+	 */
+	public CheckRegulationRefEntity selectCheckRegulationRefById(Long id);
+
+	/**
+	 * 查询检查依据配置列表
+	 * 
+	 * @param checkRegulationRef
+	 *            检查依据配置信息
+	 * @return 检查依据配置集合
+	 */
+	public List<CheckRegulationRefEntity> selectCheckRegulationRefList(CheckRegulationRefEntity checkRegulationRef);
+
+	/**
+	 * 新增检查依据配置
+	 * 
+	 * @param checkRegulationRef
+	 *            检查依据配置信息
+	 * @return 结果
+	 */
+	public int insertCheckRegulationRef(CheckRegulationRefEntity checkRegulationRef);
+
+	/**
+	 * 修改检查依据配置
+	 * 
+	 * @param checkRegulationRef
+	 *            检查依据配置信息
+	 * @return 结果
+	 */
+	public int updateCheckRegulationRef(CheckRegulationRefEntity checkRegulationRef);
+
+	/**
+	 * 删除检查依据配置信息
+	 * 
+	 * @param ids
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
+	public int deleteCheckRegulationRefByIds(String ids);
+
+}

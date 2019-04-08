@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name = "format-detection" content = "telephone=no">
+    <title>Title</title>
+    <style type="text/css">
+    .begin-btn{
+    	margin: 26px 60px;
+    	position: fixed;
+    	bottom: 0px;
+    }
+    </style>
+</head>
+<link rel="stylesheet" th:href="@{/css/app/mui.min.css}">
+<link rel="stylesheet" th:href="@{/css/app/result.css}">
+<link rel="stylesheet" type="text/css" th:href="@{ /css/app/alert.css}">
+<body>
+<!--头部内容-->
+<header id="header" class="mui-bar mui-bar-nav">
+    <span class="action-back" onclick="window.history.back()">
+        <img th:src="@{/images/return.png}" alt="">
+    </span>
+    <h1 class="mui-title" th:text="${userType}== '1' ?'企业自评':'复评'">企业自评</h1>
+</header>
+<div class="banner">
+    <span class="banner-text1">已  答</span>
+    <span class="banner-num">[[${answered}]]</span>
+    <span class="banner-text2">道 / [[${session.total}]] 道</span>
+</div>
+<ul class="list">
+    <li th:each="checkTable, checkTableStatus : ${checkTableEntities}" th:onclick="'javascript:answereCheckTable('+${checkTable.checkTableId}+','+${checkTableStatus.index + 1}+');'">
+    	<span th:id="${checkTable.checkTableId}" th:class="${checkTable.isAnswered eq 1} ? 'right' : 'black'">[[${checkTableStatus.index + 1}]]</span>
+    </li>
+</ul>
+<button class="begin-btn" th:onclick="'javascript:beginAnswere();'">开 始</button>
+</body>
+<script type="text/javascript" th:src="@{ /js/app/jquery-3.0.0.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/app/mui.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/app/alert.min.js}"></script>
+<script th:inline="javascript">
+    var height=$(window).height();
+    $(".banner").height(height*230/667);
+    function answereCheckTable(checkTableId, index){
+		var companyId=[[${companyId}]];
+		var mask = mui.createMask(function(){return false});//callback为用户点击蒙版时自动执行的回调；
+        mask.show();//显示遮罩
+        history.replaceState('a',null,'/app/companyChecktable/answereCheckTable/' + checkTableId + '/' + companyId + '/' + index);
+        window.location.reload();
+    }
+    //页面一加载时到顶部，用于解决location.reload()导致的滚动条下移问题
+    $(function () { window.scrollTo(0,0);});
+    function beginAnswere(){
+    	var size = $('.black').length;
+    	if(size == 0){
+    		$('.right').each(function(key,value){
+    			if(key == 0){
+    				var checkTableId = $(this).attr('id');
+    				var index = $(this).text();
+    				answereCheckTable(checkTableId, index);
+    			}
+        	});
+    	}
+    	$('.black').each(function(key,value){
+			if(key == 0){
+				var checkTableId = $(this).attr('id');
+				var index = $(this).text();
+				answereCheckTable(checkTableId, index);
+			}
+    	});
+    }
+    function msgAlert(msg){
+   		jqueryAlert({
+	        'content' : msg,
+	        'closeTime' : 1500,
+	    })
+   	}
+</script>
+</html>

@@ -1,0 +1,76 @@
+package com.jd.project.module.admin.standard.service;
+
+import java.util.List;
+import java.util.Map;
+
+import com.jd.project.module.admin.standard.entity.CheckTableEntity;
+
+/**
+ * 检查项 服务层
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-21
+ */
+public interface CheckTableService {
+	/**
+	 * 查询检查项信息
+	 * 
+	 * @param checkTableId
+	 *            检查项ID
+	 * @return 检查项信息
+	 */
+	public CheckTableEntity selectCheckTableById(Long checkTableId);
+
+	/**
+	 * 查询检查项列表
+	 * 
+	 * @param checkTable
+	 *            检查项信息
+	 * @return 检查项集合
+	 */
+	public List<CheckTableEntity> selectCheckTableList(CheckTableEntity checkTable);
+
+	/**
+	 * 新增检查项
+	 * 
+	 * @param checkTable
+	 *            检查项信息
+	 * @return 结果
+	 */
+	public int insertCheckTable(CheckTableEntity checkTable);
+
+	/**
+	 * 修改检查项
+	 * 
+	 * @param checkTable
+	 *            检查项信息
+	 * @return 结果
+	 */
+	public int updateCheckTable(CheckTableEntity checkTable);
+
+	/**
+	 * 删除检查项信息
+	 * 
+	 * @param ids
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
+	public int deleteCheckTableByIds(String ids);
+
+	/**
+	 * 检验检查项编码
+	 * 
+	 * @param checkTable
+	 * @return
+	 */
+	public boolean checkCheckTableCodeUnique(CheckTableEntity checkTable);
+
+	/**
+	 * 查询检查表的检查项
+	 * 
+	 * @param tableNameId
+	 * @return
+	 */
+	public List<Map<String, Object>> selectCheckTableIdsByCheckTableNameId(Map<String, Object> paramsMap);
+
+}

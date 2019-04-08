@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<style>
+    #badge {
+        width: 20px;
+        height: 20px;
+        line-height: 20px;  /* 数值与height相同，使数字垂直居中 */
+        text-align: center;  /* 使数字水平居中 */
+        background-color: red;
+        color: white;
+        font-size: 12px;
+        font-weight: 700;
+        border-radius: 50%;  /* 使正方形变圆形，矩形变椭圆形 */
+        position: relative;
+        left: -20px;
+    }
+</style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" th:href="@{ /css/app/mui.min.css}">
+    <link th:href="@{/css/app/reset.css}" rel="stylesheet"/>
+    <link th:href="@{/css/app/Organization.css}" rel="stylesheet"/>
+    <link th:href="@{/css/app/info-notic.css}" rel="stylesheet"/>
+    <script type="text/javascript" src="/js/jquery-3.0.0.min.js" th:src="@{ /js/app/jquery-3.0.0.min.js}"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="mui-content wrappers">
+        <div  id="pullrefresh" class="mui-scroll-wrapper main selected" >
+            <div class="mui-scroll " style="transform: translate3d(0px, 0px, 0px) translateZ(0px);">
+                <ul id="OA_task_1" class="mui-table-view">
+
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" th:src="@{/js/app/mui.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/app/message.js}"></script>
+
+
+    <script>
+        mui.init({
+            gestureConfig:{
+                tap: true, //默认为true
+                doubletap: true, //默认为false
+                longtap: true, //默认为false
+                swipe: true, //默认为true
+                drag: true, //默认为true
+                hold:true,//默认为false，不监听
+                release:false//默认为false，不监听
+            },
+            pullRefresh : {
+                container:"#pullrefresh",//下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
+                up : {
+                    style:'circle',//必选，下拉刷新样式，目前支持原生5+ ‘circle’ 样式
+                    color:'#2BD009', //可选，默认“#2BD009” 下拉刷新控件颜色
+                    height:'50px',//可选,默认50px.下拉刷新控件的高度,
+                    range:'100px', //可选 默认100px,控件可下拉拖拽的范围
+                    offset:'0px', //可选 默认0px,下拉刷新控件的起始位置
+                    auto: false,//可选,默认false.首次加载自动上拉刷新一次
+                    height:'50px',//可选.默认50.触发上拉加载拖动距离
+                    callback :pullfresh //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+                },
+
+                down : {
+                    auto:false,
+                    contentrefresh : "正在加载...",
+                    offset:'0px', //可选 默认0px,下拉刷新控件的起始位置
+                    callback :pullfreshdown //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+                }
+            }
+        });
+        /**
+         * 下拉
+         */
+        function pullfreshdown() {
+            message.pageNum=1;
+            //带父页面的搜索条件进行搜索
+            message.getParentParam();
+            mui('#pullrefresh').pullRefresh().endPulldownToRefresh(true)
+        }
+        /**
+         * 上拉
+         */
+        function pullfresh() {
+            message.searchNextPage();
+        }
+
+        initNotice({
+            "listUrl":"[[@{/app/userCenter/messageList}]]",
+            "htmlTextDom":$("#OA_task_1"),
+            "infoUrl":"[[@{/app/userCenter/message/info}]]"
+        });
+    </script>
+</body>
+</html>

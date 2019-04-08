@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>Title</title>
+</head>
+<link rel="stylesheet" th:href="@{/css/app/mui.min.css}">
+<link rel="stylesheet" th:href="@{/css/app/reset.css}">
+<link rel="stylesheet" th:href="@{/css/app/plan-manage.css}">
+<body>
+<style>
+    .action-back {
+        float: left;
+        margin-left: -10px;
+    }
+</style>
+<!--头部内容-->
+<header id="header" class="mui-bar mui-bar-nav">
+    <span class="action-back" onclick="window.history.back()">
+        <img src="../images/return.png" th:src="@{/images/return.png}" alt="">
+    </span>
+    <h1 class="mui-title">计划管理</h1>
+</header>
+<div class="space"></div>
+ <script th:src="@{/js/app/mui.min.js}"></script>
+<script type="text/javascript" charset="utf-8"> 
+
+		(function($, doc) {
+			mui.init({
+			    subpages:[{
+			      url: "/app/taskplan/initQuery",
+			      id:'initQuery',
+			      styles:{
+			        top:'3rem',//mui标题栏默认高度为45px；
+			        bottom:'0px'//默认为0px，可不定义；
+			      }
+			    }]
+			  });
+		})(mui, document);
+		</script>
+</body>
+
+</html>

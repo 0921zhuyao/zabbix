@@ -1,0 +1,127 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<style type="text/css">
+#auditContent-error{
+	top:114px;
+}
+</style>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-taskPlan-audite" th:object="${taskPlan}">
+            <input id="planId" name="planId" th:field="*{planId}"  type="hidden">
+            <input id="planStatus" name="planStatus" th:field="*{planStatus}" type="hidden">
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">任务名称：</label>
+                <div class="col-sm-8">
+                    <input id="planName" name="planName" th:field="*{planName}" class="form-control" type="text" disabled="disabled">
+                </div>
+            </div>
+            <div class="form-group select-date-time">	
+                <label class="col-sm-3 control-label">任务开始时间：</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" id="startDateTime" placeholder="任务开始时间" name="planStartTime" disabled="disabled"/>
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">企业：</label>
+                <div class="col-sm-8 select-table table-striped" style='width:63%;margin-left:254px;margin-top: -15px;'>
+                    <table id="enterprise" class="table table-hover"></table>
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">审核意见：</label>
+                <div class="col-sm-8">
+                    <textarea cols="10" rows="5" id="auditContent" name="auditContent" th:field="*{auditContent}" class="form-control"></textarea>
+                </div>
+            </div>
+			<div class="form-group">
+				<div class="form-control-static col-sm-offset-8">
+					<button type="button" onclick="auditePlan(1)" class="btn btn-primary">审核通过</button>
+					<button type="button" onclick="auditePlan(2)" class="btn btn-danger">驳回</button>
+					<button onclick="$.modal.close()" class="btn btn-info" type="button">关闭</button>
+				</div>
+			</div>
+		</form>
+    </div>
+    <div th:include="include::footer"></div>
+    <script th:inline="javascript">
+		var prefix = ctx + "module/taskPlan"
+	    var planDetails = [[${taskPlan.enterprises}]];
+		$("#form-taskPlan-audite").validate({
+			rules:{
+				auditContent:{
+					required:true,
+					maxlength:250
+				},
+			},
+			messages:{
+				auditContent:{
+                    required:"审核内容不能为空",
+                    maxlength:"审核内容长度不能大于250个字"
+                },
+            }
+		});
+		
+		function auditePlan(status){
+			var flag = $("#form-taskPlan-audite").valid();
+		    if(!flag){
+		        //没有通过验证
+		        return;
+		    }
+		    $('#planStatus').val(status);
+		    $.modal.loading("正在处理中，请稍后...");
+        	var config = {
+    	        url: prefix + "/audite",
+    	        type: "post",
+    	        dataType: "json",
+    	        data: $('#form-taskPlan-audite').serialize(),
+    	        success: function(result) {
+    	        	$.operate.saveSuccess(result);
+    	        }
+    	    };
+    	    $.ajax(config);
+		}
+		
+		$(function(){
+			var planStartTime = [[${taskPlan.planStartTimeStr}]];
+			$('#startDateTime').val(planStartTime);
+			if ($(".select-date-time").length > 0) {
+		        layui.use('laydate', function() {
+		            var laydate = layui.laydate;
+		            laydate.render({ elem: '#startDateTime',type: 'datetime',value:planStartTime, theme: 'molv',istime:true,done: function(value, date, endDate){//控件选择完毕后的回调---点击日期、清空、现在、确定均会触发。
+		                console.log(value); //得到日期生成的值，如：2017-08-18
+		                console.log(date); //得到日期时间对象：{year: 2017, month: 8, date: 18, hours: 0, minutes: 0, seconds: 0}
+		                console.log(endDate); //得结束的日期时间对象，开启范围选择（range: true）才会返回。对象成员同上。
+		                
+		              } });
+		        });
+		    }
+		});
+
+        $(function() {
+            initEnterpriseHtml(planDetails);
+        });
+        
+        function searchGrid(){
+            $.table.search("qyjcxx-form");
+        }
+        
+        function initEnterpriseHtml(enterpriseArr){
+        	if(null != enterpriseArr && enterpriseArr.length > 0){
+	        	var thead = '<thead><tr><th style="text-align: center; " data-field="qymc" tabindex="0"><div class="th-inner sortable both">企业名称</div><div class="fht-cell"></div></th></tr></thead><tbody>'
+	        		$('#enterprise').append(thead);
+	        		for(var i = 0; i < enterpriseArr.length; i++){
+	        			var tr ='';
+	        			tr+='<tr data-index="'+i+'" id="'+i+'"><td style="text-align: center; ">'+enterpriseArr[i].qymc+'</td>';
+	        			tr+= '<td style="text-align: center; "></td></tr>';
+	        			$('#enterprise').append(tr);
+	        		}
+	        		$('#enterprise').append('</tbody>');
+        		
+        	}
+        }
+	</script>
+</body>
+</html>

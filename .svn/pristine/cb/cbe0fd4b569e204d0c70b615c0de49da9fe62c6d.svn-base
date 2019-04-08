@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<link rel="stylesheet" type="text/css" href="../css/mui.min.css" th:href="@{ /css/app/mui.min.css}">
+	<link rel="stylesheet" type="text/css" href="../css/reset.css"th:href="@{ /css/app/reset.css}">
+	<link rel="stylesheet" type="text/css" href="../css/mui.picker.css"th:href="@{ /css/app/mui.picker.css}">
+	<link rel="stylesheet" type="text/css" href="../css/mui.poppicker.css"th:href="@{ /css/app/mui.poppicker.css}">
+	<link rel="stylesheet" type="text/css"  href="../css/Co_info.css"th:href="@{ /css/app/Co_info.css}">
+	<script type="text/javascript" src="../js/jquery-3.0.0.min.js" th:src="@{ /js/app/jquery-3.0.0.min.js}"></script>
+</head>
+<style>
+	.action-back {
+		float: left;
+		margin-left: -10px;
+	}
+</style>
+<body>
+<div id="alert-box" class="alert-box alert-boxInfo"></div>
+	<!--头部内容-->
+	<header id="header" class="mui-bar mui-bar-nav">
+			<span class="action-back" onclick="mui.back()">
+				<img src="../images/return.png" th:src="@{ /images/return.png}" alt="">
+			</span>
+		<h1 class="mui-title" th:if="*{planName}==null">企业信息</h1>
+		<h1 class="mui-title" th:if="*{planName}!=null" th:text="*{planName}">企业信息</h1>
+		<span class="action-search">
+				<img src="../images/search_icon.png" th:src="@{ /images/search_icon.png}" alt="">
+			</span>
+		<div class="input_box">
+			<input type="text" id="searchText">
+		</div>
+	</header>
+	<div class="content">
+		<span class="grey_line"></span>
+		<span class="grey_line2"></span>
+		<div class="content_top">
+			<ul>
+				<li><a href="#" id='showUserPicker1' class="omg">所属行业</a></li>
+				<input  id='showUserPicker1Val' type="hidden"/>
+				<li><a href="#" id='showCityPicker2' class="omg">所属社区</a></li>
+				<input  id='showUserPicker2Val' type="hidden"/>
+				<li><a href="#" id='showUserPicker3' class="omg">企业规模</a></li>
+				<input  id='showUserPicker3Val' type="hidden"/>
+				<li><a href="#" id='showUserPicker4' class="omg">大中小微</a></li>
+				<input  id='showUserPicker4Val' type="hidden"/>
+			</ul>
+		</div>
+	</div>
+	<script type="text/javascript" th:src="@{/js/app/mui.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/app/mui.picker.js}"></script>
+	<script type="text/javascript" th:src="@{/js/app/mui.poppicker.js}"></script>
+	<script type="text/javascript" th:src="@{/js/app/json.data.js}"></script>
+	<script>
+        function qyInfo(url){
+            $("#alert-box").load(url,function() {
+                $("#alert-box").css("display","block")
+            });
+        }
+        //从公司查询进入(后期在扩展)
+        var pagetype=1;
+        var taskPlanId='[[*{taskPlanId}]]';
+        var dynamic='[[*{dynamic}]]';
+        if('[[*{taskPlanId}!=null]]'=='true'){//从自评页面进入
+            pagetype=2;
+        }
+        if('[[*{dynamic}!=null]]'=='true'){//从自评页面进入
+            pagetype=3;
+        }
+        //调用子页面的下拉刷新进行数据的查询
+        function query(){
+            $("#qyjcxx_list")[0].contentWindow.pullfreshdown();
+        }
+		mui.init({
+			subpages:[{
+				url:'[[@{/app/qyjcxx/query_list}]]'+'?type='+pagetype+"&taskPlanId="+taskPlanId,
+				id:"qyjcxx_list",
+				styles:{
+					top:'5.6rem',//mui标题栏默认高度为45px；
+					bottom:'0px'//默认为0px，可不定义；
+				}
+			}]
+		})();
+		(function($, doc) {
+			$.ready(function() {
+				setTimeout(function(){
+					/**
+					 * 获取对象属性的值
+					 * 主要用于过滤三级联动中，可能出现的最低级的数据不存在的情况，实际开发中需要注意这一点；
+					 * @param {Object} obj 对象
+					 * @param {String} param 属性名
+					 */
+					var _getParam = function(obj, param) {
+						return obj[param] || '';
+					};
+					//所属行业 轻工行业   商贸行业   教育行业  纺织行业  旅游业
+					var HY_json=JsonDate({
+						"dic":"industry_code"
+					});
+					var userPicker1 = new $.PopPicker();
+					userPicker1.setData(HY_json);
+					var showUserPickerButton = doc.getElementById('showUserPicker1');
+					var userResult1 = doc.getElementById('showUserPicker1');
+					showUserPickerButton.addEventListener('tap', function(event) {
+						userPicker3.hide();
+						cityPicker3.hide();
+						userPicker1.show(function(items) {
+							userResult1.innerText = items[0].text;
+							document.getElementById("showUserPicker1Val").value=items[0].value;
+							query();
+							//返回 false 可以阻止选择框的关闭
+							//return false;
+						});
+					}, false);
+					// 所属街道
+					var JD_json=JsonDate({
+						"dic":"subordinate_streets"
+					});
+					var cityPicker3 = new $.PopPicker({layer: 3});
+					cityPicker3.setData(JD_json);
+					var showCityPickerButton = doc.getElementById('showCityPicker2');
+					var cityResult3 = doc.getElementById('showCityPicker2');
+					showCityPickerButton.addEventListener('tap', function(event) {
+						userPicker1.hide();
+						userPicker3.hide();
+						cityPicker3.show(function(items) {
+							cityResult3.innerText = _getParam(items[0], 'text') + " " + _getParam(items[1], 'text') + " " + _getParam(items[2], 'text');
+							document.getElementById("showUserPicker2Val").value=items[2].value || items[1].value || items[0].value;
+							query();
+							//返回 false 可以阻止选择框的关闭
+							//return false;
+						});
+					}, false);
+					// 企业规模
+					var GM_json=JsonDate({
+						"dic":"scale_situation"
+					});
+					var userPicker3 = new $.PopPicker();
+					userPicker3.setData(GM_json);
+					var showUserPickerButton = doc.getElementById('showUserPicker3');
+					var userResult3 = doc.getElementById('showUserPicker3');
+					showUserPickerButton.addEventListener('tap', function(event) {
+						userPicker1.hide();
+						cityPicker3.hide();
+						userPicker3.show(function(items) {
+							userResult3.innerText = items[0].text;
+							document.getElementById("showUserPicker3Val").value=items[0].value;
+							query();
+							//返回 false 可以阻止选择框的关闭
+							//return false;
+						});
+					}, false);
+					// 企业规模
+					var ENTERPRISE_SCALE=JsonDate({
+						"dic":"enterprise_scale"
+					});
+					var userPicker4 = new $.PopPicker();
+					userPicker4.setData(ENTERPRISE_SCALE);
+					var showUserPickerButton = doc.getElementById('showUserPicker4');
+					var userResult4 = doc.getElementById('showUserPicker4');
+					showUserPickerButton.addEventListener('tap', function(event) {
+						userPicker1.hide();
+						cityPicker3.hide();
+						userPicker4.show(function(items) {
+							userResult4.innerText = items[0].text;
+							document.getElementById("showUserPicker4Val").value=items[0].value;
+							query();
+							//返回 false 可以阻止选择框的关闭
+							//return false;
+						});
+					}, false);
+				},500)
+			});
+		})(mui, document);
+		$(".action-search").click(function() {
+			$(".input_box").fadeToggle(100,'swing',function(){
+				if($(this).css("display")=="none"){
+					query();
+				}
+			});
+		});
+	</script>
+</body>
+</html>

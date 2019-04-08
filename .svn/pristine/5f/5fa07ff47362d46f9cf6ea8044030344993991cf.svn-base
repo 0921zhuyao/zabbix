@@ -1,0 +1,175 @@
+package com.jd.project.module.admin.standard.service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.alibaba.fastjson.JSONObject;
+import com.jd.common.support.Convert;
+import com.jd.common.utils.StringUtils;
+import com.jd.common.utils.security.ShiroUtils;
+import com.jd.framework.web.service.BaseService;
+import com.jd.project.module.admin.standard.entity.CheckRegulationRefEntity;
+import com.jd.project.module.admin.standard.entity.CheckTableEntity;
+import com.jd.project.module.admin.standard.entity.CheckTablePropEntity;
+import com.jd.project.module.admin.standard.mapper.CheckRegulationRefMapper;
+import com.jd.project.module.admin.standard.mapper.CheckTableMapper;
+import com.jd.project.module.admin.standard.mapper.CheckTablePropMapper;
+
+/**
+ * 检查项 服务层实现
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-21
+ */
+@Service
+@Transactional(rollbackFor = Exception.class)
+public class CheckTableServiceImpl extends BaseService implements CheckTableService {
+	@Autowired
+	private CheckTableMapper checkTableMapper;
+
+	@Autowired
+	private CheckTablePropMapper checkTablePropMapper;
+
+	@Autowired
+	private CheckRegulationRefMapper checkRegulationRefMapper;
+
+	/**
+	 * 查询检查项信息
+	 * 
+	 * @param checkTableId
+	 *            检查项ID
+	 * @return 检查项信息
+	 */
+	@Override
+	public CheckTableEntity selectCheckTableById(Long checkTableId) {
+		return checkTableMapper.selectCheckTableById(checkTableId);
+	}
+
+	/**
+	 * 查询检查项列表
+	 * 
+	 * @param checkTable
+	 *            检查项信息
+	 * @return 检查项集合
+	 */
+	@Override
+	public List<CheckTableEntity> selectCheckTableList(CheckTableEntity checkTable) {
+		return checkTableMapper.selectCheckTableList(checkTable);
+	}
+
+	/**
+	 * 新增检查项
+	 * 
+	 * @param checkTable
+	 *            检查项信息
+	 * @return 结果
+	 */
+	@Override
+	public int insertCheckTable(CheckTableEntity checkTable) {
+		checkTable.setCreateBy(ShiroUtils.getLoginName());
+		checkTable.setCreateUser(ShiroUtils.getUserId());
+		checkTable.setUpdateBy(ShiroUtils.getLoginName());
+		checkTable.setUpdateUser(ShiroUtils.getUserId());
+		if (null != checkTable.getCheckTableId()) {
+			checkTableMapper.updateCheckTable(checkTable);
+		} else {
+			checkTableMapper.insertCheckTable(checkTable);
+		}
+		Long checkTableId = checkTable.getCheckTableId();
+		String str = checkTable.getRegulationStr();
+		String propStr = checkTable.getPropJsonStr();
+		int flag = 1;
+		// 新增检查依据表T_CHECK_REGULATION_REF关联信息
+		if (!StringUtils.isEmpty(str)) {
+			if (null != checkTableId) {
+				// 删除原有关联关系
+				flag = checkRegulationRefMapper.deleteCheckRegulationRefByCheckTableId(checkTableId);
+			}
+			Long[] regulationIds = Convert.toLongArray(str);
+			List<CheckRegulationRefEntity> reList = new ArrayList<>();
+			CheckRegulationRefEntity entity = null;
+			for (int i = 0; i < regulationIds.length; i++) {
+				entity = new CheckRegulationRefEntity();
+				entity.setCheckTableId(checkTable.getCheckTableId());
+				entity.setfid(regulationIds[i]);
+				entity.setCrtUser(ShiroUtils.getUserId());
+				entity.setUpdUser(ShiroUtils.getUserId());
+				reList.add(entity);
+			}
+			flag = checkTableMapper.insertCheckRegulations(reList);
+
+		}
+		// 新增检查属性表T_CHECK_TABLE_PROP关联信息
+		if (StringUtils.isNotEmpty(propStr)) {
+			if (null != checkTableId) {
+				// 删除原有关联关系
+				flag = checkTablePropMapper.deletCheckTablePropByCheckTableId(checkTableId);
+			}
+			// 解析json数组字符串
+			List<CheckTablePropEntity> propList = JSONObject.parseArray(propStr, CheckTablePropEntity.class);
+			propList.forEach(x -> {
+				x.setCheckTableId(checkTable.getCheckTableId());
+				x.setCreateUser(ShiroUtils.getUserId());
+				x.setUpdateUser(ShiroUtils.getUserId());
+			});
+			flag = checkTablePropMapper.insertCheckTableProps(propList);
+		}
+		return flag;
+	}
+
+	/**
+	 * 修改检查项
+	 * 
+	 * @param checkTable
+	 *            检查项信息
+	 * @return 结果
+	 */
+	@Override
+	public int updateCheckTable(CheckTableEntity checkTable) {
+		checkTable.setUpdateBy(ShiroUtils.getLoginName());
+		checkTable.setUpdateUser(ShiroUtils.getUserId());
+		return checkTableMapper.updateCheckTable(checkTable);
+	}
+
+	/**
+	 * 删除检查项对象
+	 * 
+	 * @param ids
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
+	@Override
+	public int deleteCheckTableByIds(String ids) {
+		return checkTableMapper.deleteCheckTableByIds(Convert.toStrArray(ids));
+	}
+
+	/**
+	 * 校验检查项编码
+	 * 
+	 * @param checkTable
+	 * @return
+	 */
+	@Override
+	public boolean checkCheckTableCodeUnique(CheckTableEntity checkTab) {
+		Long checkTableId = StringUtils.isNull(checkTab.getCheckTableId()) ? -1L : checkTab.getCheckTableId();
+		CheckTableEntity checkTable = checkTableMapper.checkCheckTableCodeUnique(checkTab.getCheckTableCode());
+		if (StringUtils.isNotNull(checkTable) && checkTable.getCheckTableId().longValue() != checkTableId.longValue()) {
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * 查询检查表的检查项
+	 */
+	@Override
+	public List<Map<String, Object>> selectCheckTableIdsByCheckTableNameId(Map<String, Object> paramsMap) {
+		return checkTableMapper.selectCheckTableIdsByCheckTableNameId(paramsMap);
+	}
+
+}

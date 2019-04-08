@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" type="text/css" href="../css/reset.css">
+    <link rel="stylesheet" type="text/css" href="../css/Todo.css">
+</head>
+<body>
+	<!--头部内容-->
+	<header id="header" class="mui-bar mui-bar-nav">
+	    <span class="action-back">
+	        <img src="../images/return.png" alt="">
+	    </span>
+	    <h1 class="mui-title">待办事项</h1>
+	</header>
+	<div class="content">
+		<!--todo-->
+        <div class="todo">
+        	<div class="todo-hd">
+        		<span class="grey_line"></span>
+            	<ul class="clearfix" id="tabNav">
+                	<li class="current"><a href="#">待处理</a></li>
+                    <li><a href="#">已处理</a></li>
+                </ul>
+            </div>
+            <div class="todo-bd">
+            	<ul id="tabList">
+                	<li class="current">
+						<div class="todo_list">
+							<div class="list_left">
+								<p class="list_title">南京江宁申江有限公司</p>
+								<p class="omg list_address">地址：南京市江宁区马田路萨古哈街道南京市江宁区马田路萨古哈街道</p>
+							</div>
+							<div class="list_right">
+								<button>查看详情</button>
+							</div>
+						</div>
+						<div class="todo_list">
+							<div class="list_left">
+								<p class="list_title">南京江宁申江有限公司</p>
+								<p class="omg list_address">地址：南京市江宁区马田路萨古哈街道南京市江宁区马田路萨古哈街道</p>
+							</div>
+							<div class="list_right">
+								<button>查看详情</button>
+							</div>
+						</div>
+						<div class="todo_list">
+							<div class="list_left">
+								<p class="list_title">南京江宁申江有限公司</p>
+								<p class="omg list_address">地址：南京市江宁区马田路萨古哈街道南京市江宁区马田路萨古哈街道</p>
+							</div>
+							<div class="list_right">
+								<button>查看详情</button>
+							</div>
+						</div>
+						<div class="todo_list">
+							<div class="list_left">
+								<p class="list_title">南京江宁申江有限公司</p>
+								<p class="omg list_address">地址：南京市江宁区马田路萨古哈街道南京市江宁区马田路萨古哈街道</p>
+							</div>
+							<div class="list_right">
+								<button>查看详情</button>
+							</div>
+						</div>
+                    </li>
+                    <li>
+                    	<div class="todo_list">
+							<div class="list_left">
+								<p class="list_title">南京江宁申江有限公司</p>
+								<p class="omg list_address">地址：南京市江宁区马田路萨古哈街道南京市江宁区马田路萨古哈街道</p>
+							</div>
+							<div class="list_right">
+								<button>查看详情</button>
+							</div>
+						</div>
+						<div class="todo_list">
+							<div class="list_left">
+								<p class="list_title">南京江宁申江有限公司</p>
+								<p class="omg list_address">地址：南京市江宁区马田路萨古哈街道南京市江宁区马田路萨古哈街道</p>
+							</div>
+							<div class="list_right">
+								<button>查看详情</button>
+							</div>
+						</div>
+						<div class="todo_list">
+							<div class="list_left">
+								<p class="list_title">南京江宁申江有限公司</p>
+								<p class="omg list_address">地址：南京市江宁区马田路萨古哈街道南京市江宁区马田路萨古哈街道</p>
+							</div>
+							<div class="list_right">
+								<button>查看详情</button>
+							</div>
+						</div>
+						<div class="todo_list">
+							<div class="list_left">
+								<p class="list_title">南京江宁申江有限公司</p>
+								<p class="omg list_address">地址：南京市江宁区马田路萨古哈街道南京市江宁区马田路萨古哈街道</p>
+							</div>
+							<div class="list_right">
+								<button>查看详情</button>
+							</div>
+						</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+	</div>
+</body>
+<script type="text/javascript">
+    window.onload=function(){
+        var tabNav= document.getElementById('tabNav').getElementsByTagName('li');
+        var tabList= document.getElementById('tabList').getElementsByTagName('li');
+        for(var i=0;i<tabNav.length;i++){
+            tabNav[i].index=i;
+            tabNav[i].onmouseenter=function(){
+                for(var j=0;j<tabNav.length;j++){
+                 tabNav[j].className=''; 
+                 tabList[j].className='';                
+                }
+                this.className='current';
+                tabList[this.index].className='current';
+            }
+        }
+    }
+</script>
+</html>

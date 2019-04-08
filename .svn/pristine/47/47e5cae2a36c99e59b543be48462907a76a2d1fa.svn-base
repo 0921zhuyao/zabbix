@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>答题</title>
+    <style type="text/css">
+    .fa{
+    	margin-left: 14rem;
+		float: right;
+    }
+    .fa-angle-down{
+    	margin-top: 1rem;
+    }
+    .fa-angle-up{
+    	margin-top: -3rem;
+    }
+    </style>
+</head>
+<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+<link rel="stylesheet" th:href="@{/css/app/mui.min.css}">
+<link rel="stylesheet" th:href="@{/css/app/alert.css}">
+<link rel="stylesheet" th:href="@{/css/app/ziping.css}">
+<link rel="stylesheet" type="text/css" th:href="@{ /css/app/jquery.mloading.css}">
+<link th:href="@{ /css/font-awesome.min.css}" rel="stylesheet">
+<body>
+    <!--头部内容-->
+    <header id="header" class="mui-bar mui-bar-nav">
+        <span class="action-back" onclick="goback()">
+        <img th:src="@{/images/return.png}" alt="">
+    </span>
+        <h1 class="mui-title" th:text="${userType}== '1' ?'企业自评':'复评'">企业自评</h1>
+        <span class="submit-btn" id="next-btn">跳过</span>
+        <!--<span class="home-btn">目录</span>-->
+    </header>
+    <div class="content">
+        <p class="question-num">[[${num}]]/[[${session.total}]]</p>
+        <p class="question">[[${checkTableEntities?.checkTableTypeContent}]]</p>
+        <div class="checkButtom">
+            <div class="ff checkTableType">检查方法</div>
+            <div class="yj">检查依据</div>
+        </div>
+        <div class="space"></div>
+            <div th:each="companyChecktable : ${companyChecktableEntity}">
+                <form th:if="${companyChecktable?.type} eq '0'" id="companyCheckTableForm1">
+                    <input id="checktableId" type="hidden" name="checktableId" th:value="${companyChecktable?.checktableId}">
+                    <input id="selfResult" type="hidden" name="selfResult" th:value="${companyChecktable?.selfResult}">
+                    <input type="hidden" name="taskDetailId" th:value="${taskDetail?.taskDetailId}">
+                    <input type="hidden" name="companyId" th:value="${companyId}">
+                    <input type="hidden" name="checkTableNameId" th:value="${checkTableEntities?.checkTableNameId}">
+                    <input type="hidden" name="checkTableId" th:value="${checkTableEntities?.checkTableId}">
+                    <p class="question question_title">自评结果
+	                    <span>
+	                    	<i class="fa fa-angle-down"></i>
+                    		<i class="fa fa-angle-up invisible"></i>
+	                    </span>
+                    </p>
+                    <div class="info">
+                        <div class="info_children">
+                            <ul id="qydt">
+                                <li class="self-right">是</li>
+                                <li class="self-wrong">否</li>
+                            </ul>
+                            <div class="dashed"></div>
+                            <textarea name="selfRemark" id="selfRemark" placeholder="备注: （不超过100字）">[[${companyChecktable.selfRemark}]]</textarea>
+                            <div class="img-box" th:if="!${#lists.isEmpty(companyChecktable.companyChecktableFilesEntity)}" th:each="file:${companyChecktable.companyChecktableFilesEntity}">
+                                <img th:if="${#strings.indexOf(file.filePath,'.jpg')}!=-1 or ${#strings.indexOf(file.filePath,'.png')}!=-1 or ${#strings.indexOf(file.filePath,'.jpeg')}!=-1"  th:src="'http:\\vfile\\'+*{file.filePath}"  th:fileId="*{file.checktableFilesId}">
+                                <img th:if="${#strings.indexOf(file.filePath,'.jpg')}==-1 and ${#strings.indexOf(file.filePath,'.png')}==-1 and ${#strings.indexOf(file.filePath,'.jpeg')}==-1"  th:src="${#httpServletRequest.getContextPath()} + '/images/wenjian.jpg'" th:fileId="*{file.checktableFilesId}">
+                                <div class="removeFile" onclick="removeFile(this)"></div>
+                            </div>
+                            <div class="img-box">
+                                <label>
+                                    <a href="javascript:;" class="file">
+                                        <input type="file" name="file" onchange="afterChangeFile(this)">
+                                    </a>
+                                    <span class="upload-text">上传文件</span>
+                                    <span class="upload-info">（文件大小不得超过10M）</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+	                <div class="space"></div>
+                </form>
+                <form id="queryCourseForm" method="get"><input name="url" id="fileUrl" type="hidden" value=""></form>
+                <form th:if="${companyChecktable.type} eq '1'" id="companyCheckTableForm2">
+                    <input id="checktableId" type="hidden" name="checktableId" th:value="${companyChecktable.checktableId}">
+                    <input id="reviewResult" type="hidden" name="reviewResult" th:value="${companyChecktable.reviewResult}">
+                    <input type="hidden" name="taskDetailId" th:value="${taskDetail?.taskDetailId}">
+                    <input type="hidden" name="companyId" th:value="${companyId}">
+                    <input type="hidden" name="checkTableNameId" th:value="${checkTableEntities?.checkTableNameId}">
+                    <input type="hidden" name="checkTableId" th:value="${checkTableEntities?.checkTableId}">
+                    <p class="question question_title">复评结果
+                    	<span>
+                    	<i class="fa fa-angle-down invisible"></i>
+                    	<i class="fa fa-angle-up"></i>
+                    	</span>
+                    </p>
+                    <div class="info">
+                        <div class="info_children">
+                            <ul id="jdfp">
+                                <li class="review-right">是</li>
+                                <li class="review-wrong">否</li>
+                            </ul>
+                            <div class="dashed"></div>
+                            <textarea name="reviewRemark" id="reviewRemark" placeholder="备注: （不超过100字）">[[${companyChecktable.reviewRemark}]]</textarea>
+                            <div class="img-box" th:if="!${#lists.isEmpty(companyChecktable.companyChecktableFilesEntity)}" th:each="file:${companyChecktable.companyChecktableFilesEntity}">
+                                <img th:if="${#strings.indexOf(file.filePath,'.jpg')}!=-1 or ${#strings.indexOf(file.filePath,'.png')}!=-1 or ${#strings.indexOf(file.filePath,'.jpeg')}!=-1"  th:src="'http:\\vfile\\'+*{file.filePath}"  th:fileId="*{file.checktableFilesId}">
+                                <img th:if="${#strings.indexOf(file.filePath,'.jpg')}==-1 and ${#strings.indexOf(file.filePath,'.png')}==-1 and ${#strings.indexOf(file.filePath,'.jpeg')}==-1"  th:src="${#httpServletRequest.getContextPath()} + '/images/wenjian.jpg'" th:fileId="*{file.checktableFilesId}">
+                                <div class="removeFile" onclick="removeFile(this)"></div>
+                            </div>
+                            <div class="img-box">
+                                <label>
+                                <a href="javascript:;" class="file">
+                                    <input type="file" name="file" th:if="${userType}==0" onchange="afterChangeFile(this)">
+                                </a>
+                                <span class="upload-text">上传文件</span>
+                                <span class="upload-info">（文件大小不得超过10M）</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <input type="hidden" name="tempFileId" id="tempFileId">
+            <div class="space"></div>
+        <button id="submit-btn">保存</button>
+        <div class="mui-popup-backdrop mui-active" style="display: none;"></div>
+        <input type="hidden" th:value="*{session.questions}">
+    </div>
+</body>
+<script type="text/javascript" th:src="@{ /js/app/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{ /js/app/alert.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/app/mui.min.js}"></script>
+<script type="text/javascript" th:src="@{ /js/app/upLoad.js}"></script>
+<script type="text/javascript" th:src="@{ /js/app/answer.js}"></script>
+<script type="text/javascript" th:src="@{/js/app/jquery.mloading.js}"></script>
+<script type="text/javascript" th:src="@{ /js/app/jquery.serializejson.min.js}"></script>
+<script th:inline="javascript">
+
+    //页面一加载时到顶部，用于解决location.reload()导致的滚动条下移问题
+    $(function () { window.scrollTo(0,0);});
+    //判断用户类型
+    var userType='[[${userType}]]';
+    var companyId= [[${companyId}]];
+    var nowNum=parseInt('[[${num}]]');
+    var questions=[[${session.questions}]].split(",");
+    var totalNum=parseInt('[[${session.total}]]');
+    var taskStatus = [[${taskDetail?.checktableStatus}]];
+    var regArray = [[${regulations}]];
+    var checkTableType = [[${checkTableEntities?.checkTableType}]];
+    answer.setInitParam({"type":userType});
+
+    function getFile(data){
+        $("#fileUrl").val($(data).attr("value_url"))
+        $("#queryCourseForm").attr("action","/app/taskplan/getPlanUpLoadFile");
+        $("#queryCourseForm").submit();//提交表单
+    }
+
+    
+    	$(".question").click(function () {
+    		$(this).children("span").children('.fa-angle-down').toggleClass('invisible');
+    		$(this).children("span").children('.fa-angle-up').toggleClass('invisible');
+            var dom=this;
+            var height=$(this).next().children(".info_children").height();
+            if ($(this).next().css("height") != '0px') {
+                $(this).next().css("height", height);
+                setTimeout(function () {
+                    $(dom).next().css("height", "0px")
+                }, 50)
+            } else {
+                $(dom).next().css("height", height);
+                setTimeout(function () {
+                    $(dom).next().css("height", "auto")
+                }, 500)
+            }
+        })
+
+</script>
+
+</html>

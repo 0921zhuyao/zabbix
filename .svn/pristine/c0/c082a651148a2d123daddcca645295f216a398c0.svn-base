@@ -1,0 +1,13 @@
+package com.jd.project.module.app.register.mapper;
+
+import com.jd.framework.web.mapper.BaseMapper;
+import com.jd.project.module.app.register.entity.AdministrativeSanctionEntity;
+
+/**
+ * @author HFJ
+ * @date 2019/4/1-11:19
+ */
+public interface AdministrativeMapper extends BaseMapper<AdministrativeSanctionEntity> {
+
+    void insertAllResult(AdministrativeSanctionEntity administrativeSanctionEntity);
+}

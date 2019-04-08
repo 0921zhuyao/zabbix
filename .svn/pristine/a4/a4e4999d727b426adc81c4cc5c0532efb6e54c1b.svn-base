@@ -1,0 +1,333 @@
+package com.jd.project.module.app.evaluation.controller;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.github.pagehelper.PageInfo;
+import com.jd.common.utils.security.ShiroUtils;
+import com.jd.framework.aspectj.lang.annotation.Log;
+import com.jd.framework.aspectj.lang.enums.BusinessType;
+import com.jd.framework.web.controller.BaseController;
+import com.jd.framework.web.domain.Result;
+import com.jd.project.module.admin.enterprise.entity.QyjcxxEntity;
+import com.jd.project.module.admin.enterprise.service.QyjcxxService;
+import com.jd.project.module.admin.evaluation.entity.CompanyChecktableEntity;
+import com.jd.project.module.admin.evaluation.entity.DynamicEntity;
+import com.jd.project.module.admin.evaluation.entity.TaskDetailEntity;
+import com.jd.project.module.admin.evaluation.service.CompanyChecktableService;
+import com.jd.project.module.admin.evaluation.service.DynamicService;
+import com.jd.project.module.admin.evaluation.service.TaskDetailService;
+import com.jd.project.module.admin.standard.entity.CheckTableEntity;
+import com.jd.project.module.admin.standard.entity.CheckTableNameEntity;
+import com.jd.project.module.admin.standard.entity.RegulationEntity;
+import com.jd.project.module.admin.standard.service.CheckTableService;
+import com.jd.project.module.admin.standard.service.RegulationService;
+
+/**
+ * 企业自评记录 信息操作处理
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-29
+ */
+@Controller
+@RequestMapping("/app/companyChecktable")
+public class EvaluationPlanController extends BaseController {
+	private String prefix = "module/app/evaluation";
+
+	@Autowired
+	private CompanyChecktableService companyChecktableService;
+
+	@Autowired
+
+	private QyjcxxService qyjcxxService;
+
+	@Autowired
+	private CheckTableService checkTableService;
+
+	@Autowired
+	private RegulationService reualtionService;
+
+	@Autowired
+	private TaskDetailService taskDetailService;
+
+	@Autowired
+	private DynamicService dynamicService;
+
+	@GetMapping("/initList/{type}/{companyId}")
+	public String initList(@PathVariable("type") String type, @PathVariable("companyId") String companyId,
+			ModelMap map) {
+		map.put("type", type);
+		return prefix + "/nonstandard";
+	}
+
+	@GetMapping("/query_list/{type}/{companyId}")
+	public String query_list(@PathVariable("type") String type, @PathVariable("companyId") String companyId,
+			Map<String, String> map) {
+		map.put("type", type);
+		map.put("companyId", companyId);
+		return prefix + "/nonstandard_list";
+	}
+
+	/**
+	 * 查询不符合项、执法检查项列表
+	 */
+	@PostMapping("/query")
+	@ResponseBody
+	public Map<String, Object> query(DynamicEntity dynamicEntity) {
+		Map<String, Object> result = new HashMap<>();
+		startPage();
+		List<Map<String, Object>> list = dynamicService.selectCompanyChecktableList(dynamicEntity);
+		// 查询分页信息
+		PageInfo<Map<String, Object>> pageInfo = new PageInfo<Map<String, Object>>(list);
+		result.put("totalPage", pageInfo.getPages());
+		if (null != list && list.size() > 0) {
+			result.put("status", "success");
+			result.put("result", list);
+		} else {
+			result.put("status", "false");
+			result.put("msg", "未查到数据");
+		}
+		return result;
+	}
+
+	/**
+	 * 新增企业自评记录
+	 */
+	@GetMapping("/initAdd")
+	public String initAdd(ModelMap mmap) {
+		mmap.put("companyChecktable", new CompanyChecktableEntity());
+		return prefix + "/companyChecktable_edit";
+	}
+
+	/**
+	 * 新增保存企业自评记录
+	 */
+	@Log(title = "企业自评记录", businessType = BusinessType.INSERT)
+	@PostMapping("/add")
+	@ResponseBody
+	public Result add(CompanyChecktableEntity companyChecktable,@RequestParam(value = "tempFileId", required = false) String tempFileId) {
+		return toAjax(companyChecktableService.insertOrUpDateCompanyChecktableWithFile(tempFileId, companyChecktable));
+	}
+
+	/**
+	 * 修改企业自评记录
+	 */
+	@GetMapping("/initEdit/{checktableId}")
+	public String initEdit(@PathVariable("checktableId") Long checktableId, ModelMap mmap) {
+		CompanyChecktableEntity companyChecktable = companyChecktableService.selectCompanyChecktableById(checktableId);
+		mmap.put("companyChecktable", companyChecktable);
+		return prefix + "/companyChecktable_edit";
+	}
+
+	/**
+	 * 修改保存企业自评记录
+	 */
+	@Log(title = "企业自评记录", businessType = BusinessType.UPDATE)
+	@PostMapping("/edit")
+	@ResponseBody
+	public Result edit(CompanyChecktableEntity companyChecktable,@RequestParam(value = "tempFileId", required = false) String tempFileId) {
+		return toAjax(companyChecktableService.insertOrUpDateCompanyChecktableWithFile(tempFileId, companyChecktable));
+	}
+
+	/**
+	 * 删除企业自评记录
+	 */
+	@Log(title = "企业自评记录", businessType = BusinessType.DELETE)
+	@PostMapping("/del")
+	@ResponseBody
+	public Result del(String ids) {
+		return toAjax(companyChecktableService.deleteCompanyChecktableByIds(ids));
+	}
+
+	/**
+	 * 企业检查表页面
+	 * 
+	 * @param enterpriseId
+	 * @param mmap
+	 * @return
+	 */
+	@GetMapping("/selfJudge/{enterpriseId}")
+	public String selfJudge(@PathVariable("enterpriseId") String enterpriseId, Map<String, Object> mmap) {
+		// 是否企业 0 不是 1 是
+		Long userType = ShiroUtils.getUser().getLsIsEnterprise();
+		QyjcxxEntity qyjcxxEntity = qyjcxxService.selectqyjcxxById(enterpriseId);
+		// 查询与企业相关的检查表
+		List<CheckTableNameEntity> checkTableNameEntities = companyChecktableService
+				.queryCheckTablesByCompany(enterpriseId);
+		// 查询检查表填写状态
+		if (checkTableNameEntities.size() > 0) {
+			Map<String, Object> paramsMap = new HashMap<>();
+			// 查询企业检查表的检查项完成情况// 查询街道检查表的检查项完成情况
+			paramsMap.put("userType", userType);
+			checkTableNameEntities.forEach(e -> {
+				paramsMap.put("checkTableNameId", e.getCheckTableNameId());
+				paramsMap.put("companyId", enterpriseId);
+				// 查询企业或者街道的检查表对应得检查项作答情况
+				List<CompanyChecktableEntity> checktableEntities = companyChecktableService
+						.selectCompanyChecktablesFlished(paramsMap);
+				// 查询检查表对应得检查项总数
+				CheckTableEntity checkTable = new CheckTableEntity();
+				checkTable.setCheckTableNameId(e.getCheckTableNameId());
+				List<CheckTableEntity> tableEntities = checkTableService.selectCheckTableList(checkTable);
+				if (checktableEntities.size() == 0) {
+					e.setStatus(0);
+				} else if (tableEntities.size() > checktableEntities.size()) {
+					e.setStatus(1);
+				} else if (tableEntities.size() == checktableEntities.size()) {
+					e.setStatus(2);
+				}
+			});
+		}
+		// 点击下一步操作时，只有当是企业用户时，并且状态为未开始时，修改企业自评状态为进行中
+		TaskDetailEntity detailEntity = taskDetailService.findTaskDetailByCompanyId(enterpriseId);
+		int statusFlag = 0;
+		if (null != detailEntity) {
+			if (userType == 1) {
+				if (detailEntity.getChecktableStatus() == 0) {
+					TaskDetailEntity taskDetail = new TaskDetailEntity();
+					taskDetail.setChecktableStatus(1);
+					taskDetail.setCompanyId(enterpriseId);
+					taskDetailService.updateChecktableStatus(taskDetail);
+				}
+				if (0 <= detailEntity.getChecktableStatus() && detailEntity.getChecktableStatus() < 2) {
+					statusFlag = 1;
+				}
+
+			} else {
+				if (detailEntity.getChecktableStatus() == 2) {
+					statusFlag = 2;
+				}
+			}
+		}
+
+		mmap.put("statusFlag", statusFlag);
+		mmap.put("qyjcxxEntity", qyjcxxEntity);
+		mmap.put("checkTableNameEntities", checkTableNameEntities);
+		return prefix + "/self-judge";
+	}
+
+	/**
+	 * 检查项答题首页
+	 * 
+	 * @param tableNameId
+	 * @param mmap
+	 * @return
+	 */
+	@GetMapping("/detail/{tableNameId}/{companyId}")
+	public String detail(@PathVariable("tableNameId") Long tableNameId, @PathVariable("companyId") String companyId,
+			Map<String, Object> mmap) {
+		// 是否企业 0 不是 1 是
+		Long userType = ShiroUtils.getUser().getLsIsEnterprise();
+		Map<String, Object> paramsMap = new HashMap<>();
+		paramsMap.put("userType", userType);
+		paramsMap.put("checkTableNameId", tableNameId);
+		paramsMap.put("companyId", companyId);
+		List<Map<String, Object>> checkTableEntities = companyChecktableService
+				.queryCompanyCheckTableByCheckTableNameId(paramsMap);
+		int answeredNum = 0;
+		if (checkTableEntities.size() > 0) {
+			// 查询已完成答题数
+			answeredNum = (int) checkTableEntities.stream()
+					.filter(x -> Integer.valueOf(x.get("isAnswered").toString()) == 1).count();
+		}
+		// 已完成答题数
+		mmap.put("answered", answeredNum);
+		// 总答题数
+		ShiroUtils.getSession().setAttribute("total", checkTableEntities.size());
+		mmap.put("checkTableEntities", checkTableEntities);
+		mmap.put("companyId", companyId);
+		mmap.put("userType", userType);
+		return prefix + "/result";
+	}
+
+	/**
+	 * 检查项答题详情页
+	 *
+	 * @param checkTableId
+	 * @param mmap
+	 * @return
+	 */
+	@GetMapping("/answereCheckTable/{checkTableId}/{companyId}/{num}")
+	public String answereCheckTable(@PathVariable("checkTableId") Long checkTableId,
+			@PathVariable("companyId") String companyId, @PathVariable("num") int num, Map<String, Object> mmap) {
+		Map<String, Object> paramsMap = new HashMap<>();
+		// 查询检查项详情信息
+		CheckTableEntity checkTableEntity = checkTableService.selectCheckTableById(checkTableId);
+		// 查询检查项对应得政策法规
+		List<RegulationEntity> regulations = reualtionService.queryRegualationByCheckTableId(checkTableId);
+		// 根据企业ID查询属于其的任务详情ID
+		TaskDetailEntity detailEntity = taskDetailService.queryTaskDetailByCompanyId(companyId);
+		// 查询企业自评及街道复查信息
+		paramsMap.put("companyId", companyId);
+		paramsMap.put("checkTableId", checkTableId);
+		List<CompanyChecktableEntity> companyChecktableEntity = companyChecktableService
+				.queryCompanyChecktablesByChecktableId(paramsMap);
+		// 是否企业 0 不是 1 是
+		mmap.put("userType", ShiroUtils.getUser().getLsIsEnterprise());
+		mmap.put("taskDetail", detailEntity);
+		mmap.put("regulations", regulations);
+		mmap.put("companyId", companyId);
+		mmap.put("checkTableEntities", checkTableEntity);
+		mmap.put("companyChecktableEntity", companyChecktableEntity);
+		mmap.put("num", num);
+		return prefix + "/answer";
+	}
+
+	/**
+	 * 提交企业自评
+	 */
+	@Log(title = "提交企业自评")
+	@PostMapping("/checkSubmit")
+	@ResponseBody
+	public Result checkSubmit(String companyId) {
+		int result = companyChecktableService.checkCompanyChecktablesSubmit(companyId);
+		if (-1 == result) {
+			return Result.error("还有未填写的检查项");
+		}
+		return result > 0 ? Result.success("操作成功") : Result.error("操作失败");
+	}
+
+	/**
+	 * 动态运行答题详情页
+	 * 
+	 * @param checkTableId
+	 * @param mmap
+	 * @return
+	 */
+	@GetMapping("/answereDynamic/{checkTableId}/{dynamicsId}")
+	public String answereDynamic(@PathVariable("checkTableId") Long checkTableId,
+			@PathVariable("dynamicsId") Long dynamicsId, Map<String, Object> mmap) {
+		// 查询检查项详情信息
+		CheckTableEntity checkTableEntity = checkTableService.selectCheckTableById(checkTableId);
+		// 查询检查项对应得政策法规
+		List<RegulationEntity> regulations = reualtionService.queryRegualationByCheckTableId(checkTableId);
+		// 查询动态运行记录及附件信息
+		DynamicEntity dynamicEntity = dynamicService.selectDynamicAndFileById(dynamicsId);
+		mmap.put("regulations", regulations);
+		mmap.put("dynamicEntity", dynamicEntity);
+		mmap.put("checkTableEntity", checkTableEntity);
+		mmap.put("userType", ShiroUtils.getUser().getLsIsEnterprise());
+		return prefix + "/answerDynamic";
+	}
+
+	/**
+	 * 修改保存动态运行记录状态
+	 */
+	@Log(title = "动态运行记录", businessType = BusinessType.UPDATE)
+	@PostMapping("/editDynamic")
+	@ResponseBody
+	public Result editDynamic(DynamicEntity dynamic,@RequestParam("tempFileId") String tempFileId) {
+		return toAjax(dynamicService.insertDynamic(tempFileId, dynamic));
+	}
+}

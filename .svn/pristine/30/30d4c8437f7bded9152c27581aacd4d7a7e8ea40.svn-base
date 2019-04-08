@@ -1,0 +1,72 @@
+package com.jd.project.module.admin.enterprise.mapper;
+
+
+import com.jd.framework.web.mapper.BaseMapper;
+import com.jd.project.module.admin.enterprise.entity.DmJnajEntity;
+
+import java.util.List;
+
+/**
+ * 所在地区 数据层
+ * 
+ * @author TrevorPhilips
+ * @date 2019-01-04
+ */
+public interface DmJnajMapper extends BaseMapper<DmJnajEntity> {
+	/**
+     * 查询所在地区信息
+     * 
+     * @param id 所在地区ID
+     * @return 所在地区信息
+     */
+	public DmJnajEntity selectDmJnajById(Long id);
+
+	/**
+	 * 根据代码项编码查询信息
+	 *
+	 * @param value 所在地区ID
+	 * @return 所在地区信息
+	 */
+	public List<DmJnajEntity> selectDmJnajByDmxbm(String value);
+	
+	/**
+     * 查询所在地区列表
+     * 
+     * @param dmJnaj 所在地区信息
+     * @return 所在地区集合
+     */
+	public List<DmJnajEntity> selectDmJnajList(DmJnajEntity dmJnaj);
+	
+	/**
+     * 新增所在地区
+     * 
+     * @param dmJnaj 所在地区信息
+     * @return 结果
+     */
+	public int insertDmJnaj(DmJnajEntity dmJnaj);
+	
+	/**
+     * 修改所在地区
+     * 
+     * @param dmJnaj 所在地区信息
+     * @return 结果
+     */
+	public int updateDmJnaj(DmJnajEntity dmJnaj);
+	
+	/**
+     * 删除所在地区
+     * 
+     * @param id 所在地区ID
+     * @return 结果
+     */
+	public int deleteDmJnajById(Long id);
+	
+	/**
+     * 批量删除所在地区
+     * 
+     * @param ids 需要删除的数据ID
+     * @return 结果
+     */
+	public int deleteDmJnajByIds(String[] ids);
+	
+}

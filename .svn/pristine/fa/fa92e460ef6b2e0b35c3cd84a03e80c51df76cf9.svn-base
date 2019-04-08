@@ -1,0 +1,143 @@
+package com.jd.project.module.admin.standard.controller;
+
+import java.util.List;
+
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.jd.framework.aspectj.lang.annotation.Log;
+import com.jd.framework.aspectj.lang.enums.BusinessType;
+import com.jd.framework.web.controller.BaseController;
+import com.jd.framework.web.domain.Result;
+import com.jd.framework.web.page.TableDataInfo;
+import com.jd.project.module.admin.standard.entity.CheckContentTypeEntity;
+import com.jd.project.module.admin.standard.service.CheckContentTypeService;
+
+/**
+ * 检查内容分类 信息操作处理
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-21
+ */
+@Controller
+@RequestMapping("/module/checkContentType")
+public class CheckContentTypeController extends BaseController {
+	private String prefix = "module/admin/standard/checkContentType";
+
+	@Autowired
+	private CheckContentTypeService checkContentTypeService;
+
+	@RequiresPermissions("module:checkContentType:view")
+	@GetMapping()
+	public String initList() {
+		return prefix + "/checkContentType_list";
+	}
+
+	/**
+	 * 查询检查内容分类列表
+	 */
+	@RequiresPermissions("module:checkContentType:list")
+	@PostMapping("/query/{parentId}")
+	@ResponseBody
+	public TableDataInfo query(@PathVariable(value = "parentId") Long parentId, CheckContentTypeEntity checkContentType,
+			ModelMap mmap) {
+		checkContentType.setContentTypeParentId(parentId);
+		startPage();
+		List<CheckContentTypeEntity> list = checkContentTypeService.selectCheckContentTypeList(checkContentType);
+		return getDataTable(list);
+	}
+
+	/**
+	 * 新增检查内容分类
+	 */
+	@GetMapping("/initAdd/{contentTypeParentId}")
+	public String initAdd(@PathVariable(value = "contentTypeParentId") Long contentTypeParentId, ModelMap mmap) {
+		CheckContentTypeEntity cct = new CheckContentTypeEntity();
+		if (null != contentTypeParentId) {
+			// 不为空即子节点
+			cct.setContentTypeParentId(contentTypeParentId);
+		}
+		mmap.put("checkContentType", cct);
+		return prefix + "/edit";
+	}
+
+	/**
+	 * 新增保存检查内容分类
+	 */
+	@RequiresPermissions("module:checkContentType:add")
+	@Log(title = "检查内容分类", businessType = BusinessType.INSERT)
+	@PostMapping("/add")
+	@ResponseBody
+	public Result add(CheckContentTypeEntity checkContentType) {
+		return toAjax(checkContentTypeService.insertCheckContentType(checkContentType));
+	}
+
+	/**
+	 * 修改检查内容分类
+	 */
+	@GetMapping("/initEdit/{contentTypeId}")
+	public String initEdit(@PathVariable("contentTypeId") Long contentTypeId, ModelMap mmap) {
+		CheckContentTypeEntity checkContentType = checkContentTypeService.selectCheckContentTypeById(contentTypeId);
+		mmap.put("checkContentType", checkContentType);
+		return prefix + "/edit";
+	}
+
+	/**
+	 * 修改保存检查内容分类
+	 */
+	@RequiresPermissions("module:checkContentType:edit")
+	@Log(title = "检查内容分类", businessType = BusinessType.UPDATE)
+	@PostMapping("/edit")
+	@ResponseBody
+	public Result edit(CheckContentTypeEntity checkContentType) {
+		return toAjax(checkContentTypeService.updateCheckContentType(checkContentType));
+	}
+
+	/**
+	 * 删除检查内容分类
+	 */
+	@RequiresPermissions("module:checkContentType:remove")
+	@Log(title = "检查内容分类", businessType = BusinessType.DELETE)
+	@PostMapping("/del")
+	@ResponseBody
+	public Result del(String ids) {
+		try {
+			return toAjax(checkContentTypeService.deleteCheckContentTypeByIds(ids));
+		} catch (Exception e) {
+			return error(e.getMessage());
+		}
+	}
+
+	/**
+	 * 查询检查表详情
+	 * 
+	 * @param
+	 * @param mmap
+	 * @return
+	 */
+	@RequiresPermissions("module:checkTableName:list")
+	@GetMapping("/detail/{contentTypeId}")
+	public String detail(@PathVariable("contentTypeId") Long contentTypeId, ModelMap mmap) {
+		mmap.put("contentTypeId", contentTypeId);
+		return prefix + "/childrenCheckContentType_list";
+	}
+
+	/**
+	 * 检验分类编码
+	 * 
+	 * @param dictType
+	 * @return
+	 */
+	@PostMapping("/checkContentTypeCodeUnique")
+	@ResponseBody
+	public boolean checkContentTypeCodeUnique(CheckContentTypeEntity checkContentType) {
+		return checkContentTypeService.checkContentTypeCodeUnique(checkContentType);
+	}
+}

@@ -1,0 +1,149 @@
+package com.jd.project.module.admin.evaluation.service;
+
+import com.jd.project.module.admin.evaluation.entity.CompanyChecktableEntity;
+import com.jd.project.module.admin.standard.entity.CheckTableNameEntity;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 企业自评记录 服务层
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-29
+ */
+public interface CompanyChecktableService {
+	/**
+	 * 查询企业自评记录信息
+	 * 
+	 * @param checktableId
+	 *            企业自评记录ID
+	 * @return 企业自评记录信息
+	 */
+	public CompanyChecktableEntity selectCompanyChecktableById(Long checktableId);
+
+	/**
+	 * 查询企业自评记录列表
+	 * 
+	 * @param companyChecktable
+	 *            企业自评记录信息
+	 * @return 企业自评记录集合
+	 */
+	public List<CompanyChecktableEntity> selectCompanyChecktableList(CompanyChecktableEntity companyChecktable);
+
+	/**
+	 * 带文件的新增或修改企业自评记录
+	 *
+	 * @param companyChecktable
+	 *            企业自评记录信息
+	 * @return 结果
+	 */
+	public int insertOrUpDateCompanyChecktableWithFile(String tempFileId, CompanyChecktableEntity companyChecktable);
+
+	/**
+	 * 新增企业自评记录
+	 * 
+	 * @param companyChecktable
+	 *            企业自评记录信息
+	 * @return 结果
+	 */
+	public int insertCompanyChecktable(CompanyChecktableEntity companyChecktable);
+
+	/**
+	 * 修改企业自评记录
+	 * 
+	 * @param companyChecktable
+	 *            企业自评记录信息
+	 * @return 结果
+	 */
+	public int updateCompanyChecktable(CompanyChecktableEntity companyChecktable);
+
+	/**
+	 * 删除企业自评记录信息
+	 * 
+	 * @param ids
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
+	public int deleteCompanyChecktableByIds(String ids);
+
+	/**
+	 * 查询与企业相关的检查表
+	 * 
+	 * @param enterpriseId
+	 * @return
+	 */
+	public List<CheckTableNameEntity> queryCheckTablesByCompany(String enterpriseId);
+
+	/**
+	 * 查询已答检查项
+	 * 
+	 * @param paramsMap
+	 * @return
+	 */
+	public Integer findCompanyChecktableByCheckTableId(Map<String, Object> paramsMap);
+
+	/**
+	 * 查询企业自评及街道复查信息
+	 * 
+	 * @param paramsMap
+	 * @return
+	 */
+	public List<CompanyChecktableEntity> queryCompanyChecktablesByChecktableId(Map<String, Object> paramsMap);
+
+	/**
+	 * 查询已答题数
+	 * 
+	 * @param paramsMap
+	 * @return
+	 */
+	public List<CompanyChecktableEntity> selectCompanyChecktablesFlished(Map<String, Object> paramsMap);
+
+	/**
+	 * 查询当前企业需要自评的检查表的检查项总数量
+	 * 
+	 * @param companyId
+	 * @return
+	 */
+	public int queryChecktablesCountsByCompanyId(String companyId);
+
+	/**
+	 * 查询当前企业已完成答题的检查项数量
+	 * 
+	 * @param paramsMap
+	 * @return
+	 */
+	public int queryChecktablesCountsAnsweredByCompanyId(Map<String, Object> paramsMap);
+
+	/**
+	 * 筛选出其中的不符合项
+	 * 
+	 * @param companyId
+	 * @return
+	 */
+	public List<CompanyChecktableEntity> queryCompanyChecktablesByCompanyId(String companyId);
+
+	/**
+	 * 校验企业自评及街道复评
+	 * 
+	 * @param companyId
+	 */
+	public int checkCompanyChecktablesSubmit(String companyId);
+
+	/**
+	 * 查询检查表的检查项完成情况
+	 * 
+	 * @param paramsMap
+	 * @return
+	 */
+	public List<CompanyChecktableEntity> queryCheckTableExecutions(Map<String, Object> paramsMap);
+
+	/**
+	 * 查询答题信息
+	 * 
+	 * @param paramsMap
+	 * @return
+	 */
+	public List<Map<String, Object>> queryCompanyCheckTableByCheckTableNameId(Map<String, Object> paramsMap);
+
+}

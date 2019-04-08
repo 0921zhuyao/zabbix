@@ -1,0 +1,69 @@
+package com.jd.project.module.admin.evaluation.mapper;
+
+import com.jd.framework.web.mapper.BaseMapper;
+import com.jd.project.module.admin.evaluation.entity.CompanyChecktableFilesEntity;
+
+import java.util.List;
+
+/**
+ * 企业自评记录附件 数据层
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-29
+ */
+public interface CompanyChecktableFilesMapper extends BaseMapper<CompanyChecktableFilesEntity> {
+	/**
+	 * 查询企业自评记录附件信息
+	 * 
+	 * @param checktableFilesId
+	 *            企业自评记录附件ID
+	 * @return 企业自评记录附件信息
+	 */
+	public CompanyChecktableFilesEntity selectCompanyChecktableFilesById(Long checktableFilesId);
+
+	/**
+	 * 查询企业自评记录附件列表
+	 * 
+	 * @param companyChecktableFiles
+	 *            企业自评记录附件信息
+	 * @return 企业自评记录附件集合
+	 */
+	public List<CompanyChecktableFilesEntity> selectCompanyChecktableFilesList(
+			CompanyChecktableFilesEntity companyChecktableFiles);
+
+	/**
+	 * 新增企业自评记录附件
+	 * 
+	 * @param companyChecktableFiles
+	 *            企业自评记录附件信息
+	 * @return 结果
+	 */
+	public int insertCompanyChecktableFiles(CompanyChecktableFilesEntity companyChecktableFiles);
+
+	/**
+	 * 修改企业自评记录附件
+	 * 
+	 * @param companyChecktableFiles
+	 *            企业自评记录附件信息
+	 * @return 结果
+	 */
+	public int updateCompanyChecktableFiles(CompanyChecktableFilesEntity companyChecktableFiles);
+
+	/**
+	 * 删除企业自评记录附件
+	 * 
+	 * @param checktableFilesId
+	 *            企业自评记录附件ID
+	 * @return 结果
+	 */
+	public int deleteCompanyChecktableFilesById(Long checktableFilesId);
+
+	/**
+	 * 批量删除企业自评记录附件
+	 * 
+	 * @param checktableFilesIds
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
+	public int deleteCompanyChecktableFilesByIds(String[] checktableFilesIds);
+}

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jd.project.module.app.homePage.mapper.HomePageMapper">
+
+    <select id="validatorByCnd" parameterType="QyjcxxEntity" resultType="java.lang.Integer">
+        select count(1) from LS_JB_QYJCXX
+        <where>
+            <if test="id != null and id != ''"> and ID != #{id}</if>
+            <if test="qymc != null and qymc != ''"> and QYMC = #{qymc}</if>
+            <if test="qybm != null and qybm != ''"> and QYBM = #{qybm}</if>
+            <if test="gszch != null and gszch != ''"> and GSZCH = #{gszch}</if>
+            <if test="tyshxydm != null and tyshxydm != ''"> and TYSHXYDM = #{tyshxydm}</if>
+        </where>
+    </select>
+
+    
+    <select id="countEntNumber" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+		IFNULL(SUM(
+		CASE
+		WHEN TD.CHECKTABLE_STATUS &lt; 2 THEN
+		1
+		ELSE
+		0
+		END
+		),0) AS WZPQYS,
+		IFNULL(SUM(
+		CASE
+		WHEN TD.CHECKTABLE_STATUS >= 2 THEN
+		1
+		ELSE
+		0
+		END
+		),0) AS YZPQYS,
+		IFNULL(SUM(
+		CASE
+		WHEN TD.CHECKTABLE_STATUS != 3 THEN
+		1
+		ELSE
+		0
+		END
+		),0) AS ZQYS
+		FROM
+		T_TASK_DETAIL TD
+		INNER JOIN  (SELECT ID FROM qyxx_zc q INNER JOIN LS_SYSORG s ON q.zgbm = s.ORGID
+		WHERE	s.ORG_CODE LIKE CONCAT(#{orgCode}, '%')) QY
+		ON TD.COMPANY_ID = QY.ID
+    </select>
+
+	<resultMap type="DynamicEntity" id="DynamicResult">
+		<result property="dynamicsId"    column="DYNAMICS_ID"    />
+		<result property="companyId"    column="COMPANY_ID"    />
+		<result property="checkTableId"    column="CHECK_TABLE_ID"    />
+		<result property="dynamicType"    column="DYNAMIC_TYPE"    />
+		<result property="dynamicStatus"    column="DYNAMIC_STATUS"    />
+		<result property="selfResult"    column="SELF_RESULT"    />
+		<result property="selfRemark"    column="SELF_REMARK"    />
+		<result property="reviewResult"    column="REVIEW_RESULT"    />
+		<result property="reviewRemark"    column="REVIEW_REMARK"    />
+		<result property="createTime"    column="CREATE_TIME"    />
+		<result property="updateTime"    column="UPDATE_TIME"    />
+	</resultMap>
+
+	<select id="queryNocomfirmance" parameterType="DynamicEntity" resultMap="DynamicResult">
+		SELECT DYNAMICS_ID,COMPANY_ID,CHECK_TABLE_ID,DYNAMIC_TYPE, DYNAMIC_STATUS, SELF_RESULT, SELF_REMARK, REVIEW_RESULT, REVIEW_REMARK, CREATE_TIME, UPDATE_TIME FROM T_DYNAMIC
+		<where>
+			<if test="dynamicsId != null and dynamicsId != ''"> AND DYNAMICS_ID = #{dynamicsId}</if>
+			<if test="companyId != null and companyId != ''"> AND COMPANY_ID = #{companyId}</if>
+			<if test="checkTableId != null and checkTableId != ''"> AND CHECK_TABLE_ID = #{checkTableId}</if>
+			<if test="dynamicType != null and dynamicType != ''"> AND DYNAMIC_TYPE = #{dynamicType}</if>
+			<if test="dynamicStatus != null and dynamicStatus != ''"> AND DYNAMIC_STATUS = #{dynamicStatus}</if>
+			<if test="selfResult != null and selfResult != ''"> AND SELF_RESULT = #{selfResult}</if>
+			<if test="selfRemark != null and selfRemark != ''"> AND SELF_REMARK = #{selfRemark}</if>
+			<if test="reviewResult != null and reviewResult != ''"> AND REVIEW_RESULT = #{reviewResult}</if>
+			<if test="reviewRemark != null and reviewRemark != ''"> AND REVIEW_REMARK = #{reviewRemark}</if>
+			<if test="createTime != null and createTime != ''"> AND CREATE_TIME = #{createTime}</if>
+			<if test="updateTime != null and updateTime != ''"> AND UPDATE_TIME = #{updateTime}</if>
+		</where>
+		LIMIT 0,3
+	</select>
+
+	<resultMap type="QyjcxxEntity" id="qyjcxxResult">
+		<result property="id"    column="ID"    />
+		<result property="qymc"    column="QYMC"    />
+		<result property="jc"    column="JC"    />
+		<result property="qybm"    column="QYBM"    />
+		<result property="qyip"    column="QYIP"    />
+		<result property="qypxh"    column="QYPXH"    />
+		<result property="gszch"    column="GSZCH"    />
+		<result property="tyshxydm"    column="TYSHXYDM"    />
+		<result property="zzjgdm"    column="ZZJGDM"    />
+		<result property="xzqh"    column="XZQH"    />
+		<result property="clrq"    column="CLRQ"    />
+		<result property="fddbr"    column="FDDBR"    />
+		<result property="frdh"    column="FRDH"    />
+		<result property="frdm"    column="FRDM"    />
+		<result property="lxr"    column="LXR"    />
+		<result property="lxdh"    column="LXDH"    />
+		<result property="dzyx"    column="DZYX"    />
+		<result property="lxwxh"    column="LXWXH"    />
+		<result property="lxqqh"    column="LXQQH"    />
+		<result property="qygfwzdz"    column="QYGFWZDZ"    />
+		<result property="dwcz"    column="DWCZ"    />
+		<result property="zyfzr"    column="ZYFZR"    />
+		<result property="zyfzrgddh"    column="ZYFZRGDDH"    />
+		<result property="zyfzryddh"    column="ZYFZRYDDH"    />
+		<result property="zyfzrdzyx"    column="ZYFZRDZYX"    />
+		<result property="aqfzr"    column="AQFZR"    />
+		<result property="aqfzrgddh"    column="AQFZRGDDH"    />
+		<result property="aqfzryddh"    column="AQFZRYDDH"    />
+		<result property="aqfzrdzyx"    column="AQFZRDZYX"    />
+		<result property="zcdz"    column="ZCDZ"    />
+		<result property="scjydz"    column="SCJYDZ"    />
+		<result property="yzbm"    column="YZBM"    />
+		<result property="jjlx"    column="JJLX"    />
+		<result property="hylb"    column="HYLB"    />
+		<result property="lsgx"    column="LSGX"    />
+		<result property="jyfw"    column="JYFW"    />
+		<result property="qyjyzt"    column="QYJYZT"    />
+		<result property="zczj"    column="ZCZJ"    />
+		<result property="nxssr"    column="NXSSR"    />
+		<result property="nlr"    column="NLR"    />
+		<result property="zcze"    column="ZCZE"    />
+		<result property="zdmj"    column="ZDMJ"    />
+		<result property="cyrysl"    column="CYRYSL"    />
+		<result property="tzzyrysl"    column="TZZYRYSL"    />
+		<result property="zzaqscglrysl"    column="ZZAQSCGLRYSL"    />
+		<result property="jzaqscglrysl"    column="JZAQSCGLRYSL"    />
+		<result property="zzyjglrysl"    column="ZZYJGLRYSL"    />
+		<result property="zcaqgcsrysl"    column="ZCAQGCSRYSL"    />
+		<result property="yyzzlb"    column="YYZZLB"    />
+		<result property="gmqk"    column="GMQK"    />
+		<result property="qygm"    column="QYGM"    />
+		<result property="sjgsmc"    column="SJGSMC"    />
+		<result property="jtgsmc"    column="JTGSMC"    />
+		<result property="bzhdj"    column="BZHDJ"    />
+		<result property="aqjgdj"    column="AQJGDJ"    />
+		<result property="jgfl"    column="JGFL"    />
+		<result property="sdajjg"    column="SDAJJG"    />
+		<result property="sfyzzaqjg"    column="SFYZZAQJG"    />
+		<result property="sfyzzaqry"    column="SFYZZAQRY"    />
+		<result property="sfczzdwxy"    column="SFCZZDWXY"    />
+		<result property="zdwxyxq"    column="ZDWXYXQ"    />
+		<result property="qypmt"    column="QYPMT"    />
+		<result property="yhpczlzd"    column="YHPCZLZD"    />
+		<result property="yhpczljh"    column="YHPCZLJH"    />
+		<result property="jd"    column="JD"    />
+		<result property="wd"    column="WD"    />
+		<result property="bz"    column="BZ"    />
+		<result property="qyslt"    column="QYSLT"    />
+		<result property="yyzz"    column="YYZZ"    />
+	</resultMap>
+
+	<sql id="selectqyjcxxVo">
+        select ID, QYMC, JC, QYBM, QYIP, QYPXH, GSZCH, TYSHXYDM, ZZJGDM, XZQH, CLRQ, FDDBR, FRDH, FRDM, LXR, LXDH, DZYX, LXWXH, LXQQH, QYGFWZDZ, DWCZ, ZYFZR, ZYFZRGDDH, ZYFZRYDDH, ZYFZRDZYX, AQFZR, AQFZRGDDH, AQFZRYDDH, AQFZRDZYX, ZCDZ, SCJYDZ, YZBM, JJLX, HYLB, LSGX, JYFW, QYJYZT, ZCZJ, NXSSR, NLR, ZCZE, ZDMJ, CYRYSL, TZZYRYSL, ZZAQSCGLRYSL, JZAQSCGLRYSL, ZZYJGLRYSL, ZCAQGCSRYSL, YYZZLB, GMQK, QYGM, SJGSMC, JTGSMC, BZHDJ, AQJGDJ, JGFL, SDAJJG, SFYZZAQJG, SFYZZAQRY, SFCZZDWXY, ZDWXYXQ, QYPMT, YHPCZLZD, YHPCZLJH, JD, WD, BZ, QYSLT, YYZZ from LS_JB_QYJCXX
+    </sql>
+
+
+	<select id="queryCompany" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+		ID,
+		scjydwqc QYMC,
+		scjydz SCJYDZ,
+		(
+			SELECT
+				count(1)
+			FROM
+				T_DYNAMIC b
+			where a.ID = b.COMPANY_ID
+			and b.DYNAMIC_STATUS = 0
+		) AS noConfirmCount,
+		(
+			SELECT
+				count(1)
+			FROM
+				T_DYNAMIC b
+			where a.ID = b.COMPANY_ID
+			and b.DYNAMIC_STATUS = 1
+		) AS enforce
+		FROM
+		(SELECT q.ID,q.scjydwqc,q.scjydz,s.ORG_CODE FROM qyxx_zc q INNER JOIN LS_SYSORG s ON q.zgbm = s.ORGID
+		WHERE	s.ORG_CODE LIKE CONCAT(#{orgCode}, '%'))  a
+		INNER JOIN T_TASK_DETAIL c on a.ID = c.COMPANY_ID and c.CHECKTABLE_STATUS = 4
+		LIMIT 0,3
+	</select>
+
+</mapper>

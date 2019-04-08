@@ -1,0 +1,93 @@
+package com.jd.project.module.admin.standard.mapper;
+
+import java.util.List;
+
+import com.jd.framework.web.mapper.BaseMapper;
+import com.jd.project.module.admin.standard.entity.RegulationEntity;
+
+/**
+ * 政策法规 数据层
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-22
+ */
+public interface RegulationMapper extends BaseMapper<RegulationEntity> {
+	/**
+	 * 查询政策法规信息
+	 * 
+	 * @param id
+	 *            政策法规ID
+	 * @return 政策法规信息
+	 */
+	public RegulationEntity selectRegulationById(Long id);
+
+	/**
+	 * 查询政策法规列表
+	 * 
+	 * @param regulation
+	 *            政策法规信息
+	 * @return 政策法规集合
+	 */
+	public List<RegulationEntity> selectRegulationList(RegulationEntity regulation);
+
+	/**
+	 * 新增政策法规
+	 * 
+	 * @param regulation
+	 *            政策法规信息
+	 * @return 结果
+	 */
+	public int insertRegulation(RegulationEntity regulation);
+
+	/**
+	 * 修改政策法规
+	 * 
+	 * @param regulation
+	 *            政策法规信息
+	 * @return 结果
+	 */
+	public int updateRegulation(RegulationEntity regulation);
+
+	/**
+	 * 删除政策法规
+	 * 
+	 * @param id
+	 *            政策法规ID
+	 * @return 结果
+	 */
+	public int deleteRegulationById(Long id);
+
+	/**
+	 * 批量删除政策法规
+	 * 
+	 * @param ids
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
+	public int deleteRegulationByIds(String[] ids);
+
+	/**
+	 * 查询非父类政策法规信息
+	 * 
+	 * @param regulation
+	 * @return
+	 */
+	public List<RegulationEntity> selectRegulationListByNotPid(RegulationEntity regulation);
+
+	/**
+	 * 删除政策法规信息
+	 * 
+	 * @param regulationId
+	 * @return
+	 */
+	public int countRegulationById(Long regulationId);
+
+	/**
+	 * 查询检查项对应得政策法规
+	 * 
+	 * @param checkTableId
+	 * @return
+	 */
+	public List<RegulationEntity> queryRegualationByCheckTableId(Long checkTableId);
+
+}

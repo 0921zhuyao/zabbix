@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>动态运行</title>
+</head>
+<link rel="stylesheet" th:href="@{/css/app/mui.min.css}">
+<link rel="stylesheet" th:href="@{/css/app/answer2.css}">
+<link rel="stylesheet" type="text/css" th:href="@{ /css/app/alert.css}">
+<link rel="stylesheet" type="text/css" th:href="@{ /css/app/jquery.mloading.css}">
+<body>
+    <!--头部内容-->
+    <header id="header" class="mui-bar mui-bar-nav">
+        <span class="action-back" onclick="window.history.back()">
+        <img th:src="@{/images/return.png}" alt="">
+    </span>
+        <h1 class="mui-title">动态运行</h1>
+        <span class="submit-btn">提交</span>
+    </header>
+    <div class="content">
+        <p class="question">[[${checkTableEntity.checkTableTypeContent}]]</p>
+	        <form th:if="${userType == 1}" id="companyCheckTableForm1">
+	        	<input id="dynamicsId" type="hidden" name="dynamicsId" th:value="${dynamicEntity?.dynamicsId}">
+	        	<input id="selfResult" type="hidden" name="selfResult" th:value="${dynamicEntity?.selfResult}">
+	        	<input id="dynamicStatus" type="hidden" name="dynamicStatus" th:value="1">
+            		<ul>
+	                <li class="self-right">是</li>
+	                <li class="self-wrong">否</li>
+		            </ul>
+                    <div class="img-box" th:if="!${#lists.isEmpty(dynamicEntity.companyChecktableFilesEntity)}" th:each="file:${dynamicEntity.companyChecktableFilesEntity}">
+                        <img th:if="${#strings.indexOf(file.filePath,'.jpg')}!=-1 or ${#strings.indexOf(file.filePath,'.png')}!=-1 or ${#strings.indexOf(file.filePath,'.jpeg')}!=-1"  th:src="'http:\\vfile\\'+*{file.filePath}"  th:fileId="*{file.checktableFilesId}">
+                        <img th:if="${#strings.indexOf(file.filePath,'.jpg')}==-1 and ${#strings.indexOf(file.filePath,'.png')}==-1 and ${#strings.indexOf(file.filePath,'.jpeg')}==-1"  th:src="${#httpServletRequest.getContextPath()} + '/images/wenjian.jpg'" th:fileId="*{file.checktableFilesId}">
+                        <div class="removeFile" onclick="removeFile(this)"></div>
+                    </div>
+                    <div class="img-box">
+                        <label>
+                            <a href="javascript:;" class="file">
+                                <input type="file" name="file" onchange="afterChangeFile(this)">
+                            </a>
+                            <span class="upload-text">上传文件</span>
+                            <span class="upload-info">（文件大小不得超过10M）</span>
+                        </label>
+                    </div>
+		            <textarea name="selfRemark" id="selfRemark" placeholder="备注: （不超过100字）">[[${dynamicEntity?.selfRemark}]]</textarea>
+		            <div class="dashed"></div>
+		     </form>
+		     <form th:if="${userType == 0}" id="companyCheckTableForm2">
+	        	<input id="dynamicsId" type="hidden" name="dynamicsId" th:value="${dynamicEntity?.dynamicsId}">
+	        	<input id="reviewResult" type="hidden" name="reviewResult" th:value="${dynamicEntity?.reviewResult}">
+            		<ul>
+	                <li class="review-right">是</li>
+	                <li class="review-wrong">否</li>
+		            </ul>
+                 <div class="img-box" th:if="!${#lists.isEmpty(dynamicEntity.companyChecktableFilesEntity)}" th:each="file:${dynamicEntity.companyChecktableFilesEntity}">
+                     <img th:if="${#strings.indexOf(file.filePath,'.jpg')}!=-1 or ${#strings.indexOf(file.filePath,'.png')}!=-1 or ${#strings.indexOf(file.filePath,'.jpeg')}!=-1"  th:src="'http:\\vfile\\'+*{file.filePath}"  th:fileId="*{file.checktableFilesId}">
+                     <img th:if="${#strings.indexOf(file.filePath,'.jpg')}==-1 and ${#strings.indexOf(file.filePath,'.png')}==-1 and ${#strings.indexOf(file.filePath,'.jpeg')}==-1"  th:src="${#httpServletRequest.getContextPath()} + '/images/wenjian.jpg'" th:fileId="*{file.checktableFilesId}">
+                     <div class="removeFile" onclick="removeFile(this)"></div>
+                 </div>
+                 <div class="img-box">
+                     <label>
+                         <a href="javascript:;" class="file">
+                             <input type="file" name="file" onchange="afterChangeFile(this)">
+                         </a>
+                         <span class="upload-text">上传文件</span>
+                         <span class="upload-info">（文件大小不得超过10M）</span>
+                     </label>
+                 </div>
+		            <textarea name="reviewRemark" id="reviewRemark" placeholder="备注: （不超过100字）">[[${dynamicEntity?.reviewRemark}]]</textarea>
+		            <div class="dashed"></div>
+		     </form>
+        <input type="hidden" name="tempFileId" id="tempFileId">
+        <button class="ff">查看检查方法</button>
+        <button class="yj">查看检查依据</button>
+    </div>
+</body>
+<script type="text/javascript" th:src="@{ /js/app/jquery-3.0.0.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/app/mui.min.js}"></script>
+<script type="text/javascript" th:src="@{ /js/app/upLoad.js}"></script>
+<script type="text/javascript" th:src="@{/js/app/alert.min.js}"></script>
+<script type="text/javascript" th:src="@{ /js/app/answerDynamic.js}"></script>
+<script type="text/javascript" th:src="@{/js/app/jquery.mloading.js}"></script>
+<script type="text/javascript" th:src="@{ /js/app/jquery.serializejson.min.js}"></script>
+<script th:inline="javascript">  
+	var regArray = [[${regulations}]];
+	var ff = '[[${checkTableEntity?.checkTableType}]]';
+    //数据提交
+    $('.submit-btn').click(function(){
+    	//判断用户类型
+	    var userType = [[${userType}]]
+    	var data;
+    	if(userType == 1){
+	   		data = $('#companyCheckTableForm1').serializeJSON();
+	   		if(!data.selfResult){
+                mui.alert("您还未选择");
+                return false;
+            }
+    	}else{
+    		data = $('#companyCheckTableForm2').serializeJSON();
+    		if(!data.reviewResult){
+                mui.alert("您还未选择");
+                return false;
+            }
+    	}
+        data.tempFileId=$("#tempFileId").val()|| "";
+    	upLoad.ajaxUpLoad({
+            url: "/app/companyChecktable/editDynamic",
+            param:data
+        })
+    });
+    
+</script>
+
+</html>

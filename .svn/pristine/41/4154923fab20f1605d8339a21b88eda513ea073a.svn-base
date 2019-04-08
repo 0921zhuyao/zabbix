@@ -1,0 +1,95 @@
+package com.jd.project.module.admin.enterprise.mapper;
+
+import java.util.List;
+
+import com.jd.framework.web.mapper.BaseMapper;
+import com.jd.project.module.admin.enterprise.entity.SpecialTreatmentEntity;
+import org.apache.ibatis.annotations.Param;
+
+/**
+ * 企业专项治理 数据层
+ * 
+ * @author TrevorPhilips
+ * @date 2018-12-04
+ */
+public interface SpecialTreatmentMapper extends BaseMapper<SpecialTreatmentEntity> {
+	/**
+	 * 查询企业专项治理信息
+	 * 
+	 * @param id
+	 *            企业专项治理ID
+	 * @return 企业专项治理信息
+	 */
+	public SpecialTreatmentEntity selectSpecialTreatmentById(Long id);
+
+	/**
+	 * 查询企业专项治理列表
+	 * 
+	 * @param specialTreatment
+	 *            企业专项治理信息
+	 * @return 企业专项治理集合
+	 */
+	public List<SpecialTreatmentEntity> selectSpecialTreatmentList(SpecialTreatmentEntity specialTreatment);
+
+	/**
+	 * 新增企业专项治理
+	 * 
+	 * @param specialTreatment
+	 *            企业专项治理信息
+	 * @return 结果
+	 */
+	public int insertSpecialTreatment(SpecialTreatmentEntity specialTreatment);
+
+	/**
+	 * 修改企业专项治理
+	 * 
+	 * @param specialTreatment
+	 *            企业专项治理信息
+	 * @return 结果
+	 */
+	public int updateSpecialTreatment(SpecialTreatmentEntity specialTreatment);
+
+	/**
+	 * 删除企业专项治理
+	 * 
+	 * @param id
+	 *            企业专项治理ID
+	 * @return 结果
+	 */
+	public int deleteSpecialTreatmentById(Long id);
+
+	/**
+	 * 批量删除企业专项治理
+	 * 
+	 * @param ids
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
+	public int deleteSpecialTreatmentByIds(String[] ids);
+
+	/**
+	 * 根据公司ID批量删除企业专项治理
+	 *
+	 * @param ids
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
+	public int deleteSpecialTreatmentByCompanyId(@Param("companyId") String companyId);
+
+	/**
+	 * 批量新增
+	 * 
+	 * @param list
+	 * @return
+	 */
+	public int insertSpecialTreatmentBatch(List<SpecialTreatmentEntity> list);
+
+	/**
+	 * 通过companyId查询专项治理编码
+	 * 
+	 * @param enterpriseId
+	 * @return
+	 */
+	public List<SpecialTreatmentEntity> querySpecialTreatmentCodeBycompanyId(String enterpriseId);
+
+}

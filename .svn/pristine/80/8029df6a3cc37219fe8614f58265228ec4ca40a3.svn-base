@@ -1,0 +1,94 @@
+package com.jd.project.module.admin.evaluation.service;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import com.jd.project.module.admin.evaluation.entity.DynamicEntity;
+
+/**
+ * 动态运行记录 服务层
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-29
+ */
+public interface DynamicService {
+	/**
+	 * 查询动态运行记录信息
+	 * 
+	 * @param dynamicsId
+	 *            动态运行记录ID
+	 * @return 动态运行记录信息
+	 */
+	public DynamicEntity selectDynamicById(Long dynamicsId);
+
+	/**
+	 * 查询动态运行记录列表
+	 * 
+	 * @param dynamic
+	 *            动态运行记录信息
+	 * @return 动态运行记录集合
+	 */
+	public List<DynamicEntity> selectDynamicList(DynamicEntity dynamic);
+
+	/**
+	 * 新增动态运行记录
+	 * 
+	 * @param dynamic
+	 *            动态运行记录信息
+	 * @return 结果
+	 */
+	public int insertDynamic(String tempFileId, DynamicEntity dynamic);
+
+	/**
+	 * 修改动态运行记录
+	 * 
+	 * @param dynamic
+	 *            动态运行记录信息
+	 * @return 结果
+	 */
+	public int updateDynamic(DynamicEntity dynamic);
+
+	/**
+	 * 删除动态运行记录信息
+	 * 
+	 * @param ids
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
+	public int deleteDynamicByIds(String ids);
+
+	/**
+	 * 根据类型查询动态运行信息
+	 * 
+	 * @param dynamicEntity
+	 * @return
+	 */
+	public List<Map<String, Object>> selectCompanyChecktableList(DynamicEntity dynamicEntity);
+
+	/**
+	 * 修改操作
+	 * 
+	 * @param dynamic
+	 * @return
+	 */
+	public int modifyDynamic(DynamicEntity dynamic);
+
+	/**
+	 * 查询动态运行记录及附件信息
+	 * 
+	 * @param dynamicsId
+	 * @return
+	 */
+	public DynamicEntity selectDynamicAndFileById(Long dynamicsId);
+
+	/**
+	 * 批量插入
+	 * 
+	 * @param dynamicEntity
+	 * @return
+	 */
+	public int insertDynamicBatch(List<DynamicEntity> dynamicEntity);
+
+}

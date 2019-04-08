@@ -1,0 +1,73 @@
+package com.jd.project.module.admin.standard.service;
+
+import java.util.List;
+
+import com.jd.project.module.admin.standard.entity.CheckTableNameEntity;
+
+/**
+ * 检查 服务层
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-21
+ */
+public interface CheckTableNameService {
+	/**
+	 * 查询检查信息
+	 * 
+	 * @param checkTableNameId
+	 *            检查ID
+	 * @return 检查信息
+	 */
+	public CheckTableNameEntity selectCheckTableNameById(Long checkTableNameId);
+
+	/**
+	 * 查询检查列表
+	 * 
+	 * @param checkTableName
+	 *            检查信息
+	 * @return 检查集合
+	 */
+	public List<CheckTableNameEntity> selectCheckTableNameList(CheckTableNameEntity checkTableName);
+
+	/**
+	 * 新增检查
+	 * 
+	 * @param checkTableName
+	 *            检查信息
+	 * @return 结果
+	 */
+	public int insertCheckTableName(CheckTableNameEntity checkTableName);
+
+	/**
+	 * 修改检查
+	 * 
+	 * @param checkTableName
+	 *            检查信息
+	 * @return 结果
+	 */
+	public int updateCheckTableName(CheckTableNameEntity checkTableName);
+
+	/**
+	 * 删除检查信息
+	 * 
+	 * @param ids
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
+	public int deleteCheckTableNameByIds(String ids) throws Exception;
+
+	/**
+	 * 查询检查表详情
+	 * 
+	 * @return
+	 */
+	public List<CheckTableNameEntity> selectCheckTableNameAll();
+
+	/**
+	 * 校验检查表名称
+	 * @param checkTableName
+	 * @return
+	 */
+	public boolean checkCheckTableNameUnique(CheckTableNameEntity checkTableName);
+
+}

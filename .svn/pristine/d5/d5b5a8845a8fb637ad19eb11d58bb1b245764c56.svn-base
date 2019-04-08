@@ -1,0 +1,71 @@
+package com.jd.project.module.admin.enterprise.mapper;
+
+import com.jd.project.module.admin.enterprise.entity.DmJnajHylxEntity;
+import java.util.List;
+import com.jd.framework.web.mapper.BaseMapper;
+
+
+/**
+ * 行业类型 数据层
+ * 
+ * @author TrevorPhilips
+ * @date 2019-01-04
+ */
+public interface DmJnajHylxMapper extends BaseMapper<DmJnajHylxEntity> {
+	/**
+     * 查询行业类型信息
+     * 
+     * @param id 行业类型ID
+     * @return 行业类型信息
+     */
+	public DmJnajHylxEntity selectDmJnajHylxById(Long id);
+	
+	/**
+     * 查询行业类型列表
+     * 
+     * @param dmJnajHylx 行业类型信息
+     * @return 行业类型集合
+     */
+	public List<DmJnajHylxEntity> selectDmJnajHylxList(DmJnajHylxEntity dmJnajHylx);
+	
+	/**
+     * 新增行业类型
+     * 
+     * @param dmJnajHylx 行业类型信息
+     * @return 结果
+     */
+	public int insertDmJnajHylx(DmJnajHylxEntity dmJnajHylx);
+
+	/**
+	 * 批量新增行业类型
+	 *
+	 * @param dmJnajHylxs 行业类型信息
+	 * @return 结果
+	 */
+	public int insertDmJnajHylxBatch(List<DmJnajHylxEntity> dmJnajHylxs);
+
+	/**
+     * 修改行业类型
+     * 
+     * @param dmJnajHylx 行业类型信息
+     * @return 结果
+     */
+	public int updateDmJnajHylx(DmJnajHylxEntity dmJnajHylx);
+	
+	/**
+     * 删除行业类型
+     * 
+     * @param id 行业类型ID
+     * @return 结果
+     */
+	public int deleteDmJnajHylxById(Long id);
+	
+	/**
+     * 批量删除行业类型
+     * 
+     * @param ids 需要删除的数据ID
+     * @return 结果
+     */
+	public int deleteDmJnajHylxByIds(String[] ids);
+	
+}

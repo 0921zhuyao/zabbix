@@ -1,0 +1,88 @@
+package com.jd.project.module.admin.enterprise.service;
+
+import com.jd.project.module.admin.enterprise.entity.DmJglbZgbmEntity;
+import com.jd.project.module.admin.enterprise.mapper.DmJglbZgbmMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import com.jd.common.support.Convert;
+import com.jd.framework.web.service.BaseService;
+
+import java.util.List;
+
+/**
+ * 主管部门 服务层实现
+ * 
+ * @author TrevorPhilips
+ * @date 2019-01-04
+ */
+@Service
+@Transactional(rollbackFor = Exception.class)
+public class DmJglbZgbmServiceImpl extends BaseService implements DmJglbZgbmService {
+	@Autowired
+	private DmJglbZgbmMapper dmJglbZgbmMapper;
+
+	/**
+     * 查询主管部门信息
+     * 
+     * @param id 主管部门ID
+     * @return 主管部门信息
+     */
+    @Override
+	public DmJglbZgbmEntity selectDmJglbZgbmById(Long id) {
+	    return dmJglbZgbmMapper.selectDmJglbZgbmById(id);
+	}
+
+	/**
+     * 查询主管部门列表
+     * 
+     * @param dmJglbZgbm 主管部门信息
+     * @return 主管部门集合
+     */
+	@Override
+	public List<DmJglbZgbmEntity> selectDmJglbZgbmList(DmJglbZgbmEntity dmJglbZgbm) {
+	    return dmJglbZgbmMapper.selectDmJglbZgbmList(dmJglbZgbm);
+	}
+
+	/**
+	 * 查询所有列表
+	 *
+	 */
+	public List<DmJglbZgbmEntity> selectAllDmJglbZgbmList() {
+		return dmJglbZgbmMapper.selectDmJglbZgbmList(null);
+	}
+	
+    /**
+     * 新增主管部门
+     * 
+     * @param dmJglbZgbm 主管部门信息
+     * @return 结果
+     */
+	@Override
+	public int insertDmJglbZgbm(DmJglbZgbmEntity dmJglbZgbm) {
+	    return dmJglbZgbmMapper.insertDmJglbZgbm(dmJglbZgbm);
+	}
+	
+	/**
+     * 修改主管部门
+     * 
+     * @param dmJglbZgbm 主管部门信息
+     * @return 结果
+     */
+	@Override
+	public int updateDmJglbZgbm(DmJglbZgbmEntity dmJglbZgbm) {
+	    return dmJglbZgbmMapper.updateDmJglbZgbm(dmJglbZgbm);
+	}
+
+	/**
+     * 删除主管部门对象
+     * 
+     * @param ids 需要删除的数据ID
+     * @return 结果
+     */
+	@Override
+	public int deleteDmJglbZgbmByIds(String ids) {
+		return dmJglbZgbmMapper.deleteDmJglbZgbmByIds(Convert.toStrArray(ids));
+	}
+	
+}

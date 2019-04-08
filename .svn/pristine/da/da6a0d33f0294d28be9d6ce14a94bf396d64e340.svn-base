@@ -1,0 +1,63 @@
+package com.jd.project.module.admin.message.mapper;
+
+import com.jd.framework.web.mapper.BaseMapper;
+import com.jd.project.module.admin.message.entity.NoticeEntity;
+
+import java.util.List;
+
+/**
+ * 消息 数据层
+ * 
+ * @author zaq
+ * @date 2018-11-26
+ */
+ public interface NoticeMapper extends BaseMapper<NoticeEntity> {
+	/**
+     * 查询消息信息
+     * 
+     * @param id 消息ID
+     * @return 消息信息
+     */
+	 NoticeEntity selectMsgById(Long id);
+	
+	/**
+     * 查询消息列表
+     * 
+     * @param msg 消息信息
+     * @return 消息集合
+     */
+	 List<NoticeEntity> selectMsgList(NoticeEntity msg);
+	
+	/**
+     * 新增消息
+     * 
+     * @param msg 消息信息
+     * @return 结果
+     */
+	 int insertMsg(NoticeEntity msg);
+	
+	/**
+     * 修改消息
+     * 
+     * @param msg 消息信息
+     * @return 结果
+     */
+	 int updateMsg(NoticeEntity msg);
+	
+	/**
+     * 删除消息
+     * 
+     * @param id 消息ID
+     * @return 结果
+     */
+	 int deleteMsgById(Long id);
+	
+	/**
+     * 批量删除消息
+     * 
+     * @param ids 需要删除的数据ID
+     * @return 结果
+     */
+	 int deleteMsgByIds(String[] ids);
+	
+}

@@ -1,0 +1,85 @@
+package com.jd.project.module.app.homePage.service;
+
+import java.util.List;
+
+import com.jd.project.module.app.homePage.entity.DynamicCensusEntity;
+import com.jd.project.module.app.homePage.mapper.DynamicCensusMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import com.jd.common.support.Convert;
+import com.jd.framework.web.service.BaseService;
+
+/**
+ * 企业不符合项统计 服务层实现
+ * 
+ * @author TrevorPhilips
+ * @date 2019-01-23
+ */
+@Service
+@Transactional(rollbackFor = Exception.class)
+public class DynamicCensusServiceImpl extends BaseService implements DynamicCensusService {
+	@Autowired
+	private DynamicCensusMapper dynamicCensusMapper;
+
+	/**
+     * 查询企业不符合项统计信息
+     * 
+     * @param id 企业不符合项统计ID
+     * @return 企业不符合项统计信息
+     */
+    @Override
+	public DynamicCensusEntity selectDynamicCensusById(Long id) {
+	    return dynamicCensusMapper.selectDynamicCensusById(id);
+	}
+
+	/**
+     * 查询企业不符合项统计列表
+     * 
+     * @param dynamicCensus 企业不符合项统计信息
+     * @return 企业不符合项统计集合
+     */
+	@Override
+	public List<DynamicCensusEntity> selectDynamicCensusList(DynamicCensusEntity dynamicCensus) {
+	    return dynamicCensusMapper.selectDynamicCensusList(dynamicCensus);
+	}
+	
+    /**
+     * 新增企业不符合项统计
+     * 
+     * @param dynamicCensus 企业不符合项统计信息
+     * @return 结果
+     */
+	@Override
+	public int insertDynamicCensus(DynamicCensusEntity dynamicCensus) {
+	    return dynamicCensusMapper.insertDynamicCensus(dynamicCensus);
+	}
+	
+	/**
+     * 修改企业不符合项统计
+     * 
+     * @param dynamicCensus 企业不符合项统计信息
+     * @return 结果
+     */
+	@Override
+	public int updateDynamicCensus(DynamicCensusEntity dynamicCensus) {
+	    return dynamicCensusMapper.updateDynamicCensus(dynamicCensus);
+	}
+
+	/**
+     * 删除企业不符合项统计对象
+     * 
+     * @param ids 需要删除的数据ID
+     * @return 结果
+     */
+	@Override
+	public int deleteDynamicCensusByIds(String ids) {
+		return dynamicCensusMapper.deleteDynamicCensusByIds(Convert.toStrArray(ids));
+	}
+
+	@Override
+	public DynamicCensusEntity selectDynamicCensus(int currentMonth) {
+		return dynamicCensusMapper.selectDynamicCensus(currentMonth);
+	}
+
+}

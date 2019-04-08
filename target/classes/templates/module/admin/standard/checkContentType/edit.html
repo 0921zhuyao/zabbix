@@ -1,0 +1,109 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-checkContentType-edit" th:object="${checkContentType}">
+            <input id="contentTypeId" name="contentTypeId" th:field="*{contentTypeId}"  type="hidden">
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">分类编码：</label>
+                <div class="col-sm-8">
+                    <input id="contentTypeCode" name="contentTypeCode" th:field="*{contentTypeCode}" class="form-control" type="text">
+                    <input id="contentTypeParentId" name="contentTypeParentId" th:field="*{contentTypeParentId}" type="hidden">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">代码名称：</label>
+                <div class="col-sm-8">
+                    <textarea id="contentTypeName" name="contentTypeName" th:field="*{contentTypeName}" class="form-control" type="text" style="resize: none"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">排序号：</label>
+                <div class="col-sm-8">
+                    <input id="sort" name="sort" th:field="*{sort}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">备注：</label>
+                <div class="col-sm-8">
+                    <textarea id="remark" name="remark" th:field="*{remark}" class="form-control" type="text" style="resize: none"></textarea>
+                </div>
+            </div>
+			<div class="form-group">
+				<div class="form-control-static col-sm-offset-9">
+					<button type="submit" class="btn btn-primary">提交</button>
+					<button onclick="$.modal.close()" class="btn btn-danger" type="button">关闭</button>
+				</div>
+			</div>
+		</form>
+    </div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "module/checkContentType"
+		$("#form-checkContentType-edit").validate({
+			rules:{
+                contentTypeCode:{
+                    required: true,
+                    maxlength: 16,
+                    remote: {
+                        url: prefix + "/checkContentTypeCodeUnique",
+                        type: "post",
+                        dataType: "json",
+                        data: {
+                        	contentTypeId : function() {
+                                return $("#contentTypeId").val();
+                            },
+                            contentTypeCode : function() {
+                                return $.common.trim($("#contentTypeCode").val());
+                            }
+                        },
+                        dataFilter: function(data, type) {
+                            return data;
+                        }
+                    }
+                },
+                contentTypeName:{
+                    required: true,
+                    maxlength: 50
+                },
+                remark:{
+                    maxlength: 250
+                },
+                sort:{
+                	required: true,
+                	min:1
+                },
+			},
+            messages:{
+                contentTypeCode:  {
+                    required: "分类编码不能为空",
+                    maxlength: "分类编码不能大于16个字",
+                    remote:"该分类编码已存在"
+                },
+                contentTypeName:  {
+                    required:"代码名称不能为空",
+                    maxlength: "代码名称不能大于50个字"
+                },
+                remark:{
+                    maxlength: "备注不能大于250个字"
+                },
+                sort:{
+                    required: "排序号不能为空",
+                    min:"排序号不能小于等于0且必须为数字"
+                },
+            },
+			submitHandler: function(form) {
+			    var idVal = $('#contentTypeId').val();
+			    if(idVal){
+			        $.operate.save(prefix + "/edit", $('#form-checkContentType-edit').serialize()); 
+			    }else{
+			        $.operate.save(prefix + "/add", $('#form-checkContentType-edit').serialize());
+			    }
+				
+			}
+		});
+	</script>
+</body>
+</html>

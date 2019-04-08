@@ -1,0 +1,119 @@
+package com.jd.project.module.admin.enterprise.controller;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.jd.framework.aspectj.lang.annotation.Log;
+import com.jd.framework.aspectj.lang.enums.BusinessType;
+import com.jd.framework.web.controller.BaseController;
+import com.jd.framework.web.domain.Result;
+import com.jd.framework.web.page.TableDataInfo;
+import com.jd.project.module.admin.enterprise.entity.NationallEconomyEntity;
+import com.jd.project.module.admin.enterprise.service.NationallEconomyService;
+
+/**
+ * 国民经济行业分类 信息操作处理
+ * 
+ * @author TrevorPhilips
+ * @date 2018-12-20
+ */
+@Controller
+@RequestMapping("/module/nationallEconomy")
+public class NationallEconomyController extends BaseController {
+	private String prefix = "module/nationallEconomy";
+
+	@Autowired
+	private NationallEconomyService nationallEconomyService;
+
+	@RequiresPermissions("module:nationallEconomy:view")
+	@GetMapping()
+	public String initList() {
+		return prefix + "/nationallEconomy_list";
+	}
+
+	/**
+	 * 查询国民经济行业分类列表
+	 */
+	@RequiresPermissions("module:nationallEconomy:list")
+	@PostMapping("/query")
+	@ResponseBody
+	public TableDataInfo query(NationallEconomyEntity nationallEconomy) {
+		startPage();
+		List<NationallEconomyEntity> list = nationallEconomyService.selectNationallEconomyList(nationallEconomy);
+		return getDataTable(list);
+	}
+
+	/**
+	 * 新增国民经济行业分类
+	 */
+	@GetMapping("/initAdd")
+	public String initAdd(ModelMap mmap) {
+		mmap.put("nationallEconomy", new NationallEconomyEntity());
+		return prefix + "/nationallEconomy_edit";
+	}
+
+	/**
+	 * 新增保存国民经济行业分类
+	 */
+	@RequiresPermissions("module:nationallEconomy:add")
+	@Log(title = "国民经济行业分类", businessType = BusinessType.INSERT)
+	@PostMapping("/add")
+	@ResponseBody
+	public Result add(NationallEconomyEntity nationallEconomy) {
+		return toAjax(nationallEconomyService.insertNationallEconomy(nationallEconomy));
+	}
+
+	/**
+	 * 修改国民经济行业分类
+	 */
+	@GetMapping("/initEdit/{nationallEconomyId}")
+	public String initEdit(@PathVariable("nationallEconomyId") String nationallEconomyId, ModelMap mmap) {
+		NationallEconomyEntity nationallEconomy = nationallEconomyService
+				.selectNationallEconomyById(nationallEconomyId);
+		mmap.put("nationallEconomy", nationallEconomy);
+		return prefix + "/nationallEconomy_edit";
+	}
+
+	/**
+	 * 修改保存国民经济行业分类
+	 */
+	@RequiresPermissions("module:nationallEconomy:edit")
+	@Log(title = "国民经济行业分类", businessType = BusinessType.UPDATE)
+	@PostMapping("/edit")
+	@ResponseBody
+	public Result edit(NationallEconomyEntity nationallEconomy) {
+		return toAjax(nationallEconomyService.updateNationallEconomy(nationallEconomy));
+	}
+
+	/**
+	 * 删除国民经济行业分类
+	 */
+	@RequiresPermissions("module:nationallEconomy:remove")
+	@Log(title = "国民经济行业分类", businessType = BusinessType.DELETE)
+	@PostMapping("/del")
+	@ResponseBody
+	public Result del(String ids) {
+		return toAjax(nationallEconomyService.deleteNationallEconomyByIds(ids));
+	}
+
+	/**
+	 * 加载所有国民经济行业列表树
+	 */
+	@GetMapping("/industryTreeData")
+	@ResponseBody
+	public List<Map<String, Object>> industryTreeData() {
+		List<Map<String, Object>> tree = nationallEconomyService.industryTreeData();
+		return tree;
+	}
+
+}

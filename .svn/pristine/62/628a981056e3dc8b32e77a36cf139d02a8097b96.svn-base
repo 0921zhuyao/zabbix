@@ -1,0 +1,63 @@
+package com.jd.project.module.admin.enterprise.mapper;
+
+import com.jd.project.module.admin.enterprise.entity.DmJglbZgbmEntity;
+import java.util.List;
+import com.jd.framework.web.mapper.BaseMapper;
+
+
+/**
+ * 主管部门 数据层
+ * 
+ * @author TrevorPhilips
+ * @date 2019-01-04
+ */
+public interface DmJglbZgbmMapper extends BaseMapper<DmJglbZgbmEntity> {
+	/**
+     * 查询主管部门信息
+     * 
+     * @param id 主管部门ID
+     * @return 主管部门信息
+     */
+	public DmJglbZgbmEntity selectDmJglbZgbmById(Long id);
+	
+	/**
+     * 查询主管部门列表
+     * 
+     * @param dmJglbZgbm 主管部门信息
+     * @return 主管部门集合
+     */
+	public List<DmJglbZgbmEntity> selectDmJglbZgbmList(DmJglbZgbmEntity dmJglbZgbm);
+	
+	/**
+     * 新增主管部门
+     * 
+     * @param dmJglbZgbm 主管部门信息
+     * @return 结果
+     */
+	public int insertDmJglbZgbm(DmJglbZgbmEntity dmJglbZgbm);
+	
+	/**
+     * 修改主管部门
+     * 
+     * @param dmJglbZgbm 主管部门信息
+     * @return 结果
+     */
+	public int updateDmJglbZgbm(DmJglbZgbmEntity dmJglbZgbm);
+	
+	/**
+     * 删除主管部门
+     * 
+     * @param id 主管部门ID
+     * @return 结果
+     */
+	public int deleteDmJglbZgbmById(Long id);
+	
+	/**
+     * 批量删除主管部门
+     * 
+     * @param ids 需要删除的数据ID
+     * @return 结果
+     */
+	public int deleteDmJglbZgbmByIds(String[] ids);
+	
+}

@@ -1,0 +1,131 @@
+package com.jd.project.module.admin.evaluation.entity;
+
+import java.util.Date;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.jd.framework.web.domain.BasisEntity;
+
+/**
+ * 动态运行历史记录表 T_DYNAMIC_HISTORY
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-29
+ */
+public class DynamicHistoryEntity extends BasisEntity {
+	private static final long serialVersionUID = 1L;
+
+	/** 动态运行记录ID */
+	private Long dynamicsHistoryId;
+	/** 企业自评记录ID */
+	private Long checktableId;
+	/** 企业自评记录ID */
+	private String companyId;
+	/** 状态：0 新建 1待审核 2 审核通过 3审核不通过 */
+	private Long dynamicStatus;
+	/** 定级结果 */
+	private Long selfResult;
+	/** 定级备注 */
+	private String selfRemark;
+	/** 复核结果 */
+	private Long reviewResult;
+	/** 复核备注 */
+	private String reviewRemark;
+	/** 创建时间 */
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date createTime;
+	/** 更新时间 */
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date updateTime;
+
+	public String getCompanyId() {
+		return companyId;
+	}
+
+	public void setCompanyId(String companyId) {
+		this.companyId = companyId;
+	}
+
+	public void setDynamicsHistoryId(Long dynamicsHistoryId) {
+		this.dynamicsHistoryId = dynamicsHistoryId;
+	}
+
+	public Long getDynamicsHistoryId() {
+		return dynamicsHistoryId;
+	}
+
+	public void setChecktableId(Long checktableId) {
+		this.checktableId = checktableId;
+	}
+
+	public Long getChecktableId() {
+		return checktableId;
+	}
+
+	public void setDynamicStatus(Long dynamicStatus) {
+		this.dynamicStatus = dynamicStatus;
+	}
+
+	public Long getDynamicStatus() {
+		return dynamicStatus;
+	}
+
+	public void setSelfResult(Long selfResult) {
+		this.selfResult = selfResult;
+	}
+
+	public Long getSelfResult() {
+		return selfResult;
+	}
+
+	public void setSelfRemark(String selfRemark) {
+		this.selfRemark = selfRemark;
+	}
+
+	public String getSelfRemark() {
+		return selfRemark;
+	}
+
+	public void setReviewResult(Long reviewResult) {
+		this.reviewResult = reviewResult;
+	}
+
+	public Long getReviewResult() {
+		return reviewResult;
+	}
+
+	public void setReviewRemark(String reviewRemark) {
+		this.reviewRemark = reviewRemark;
+	}
+
+	public String getReviewRemark() {
+		return reviewRemark;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
+
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public String toString() {
+		return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+				.append("dynamicsHistoryId", getDynamicsHistoryId()).append("checktableId", getChecktableId())
+				.append("dynamicStatus", getDynamicStatus()).append("selfResult", getSelfResult())
+				.append("selfRemark", getSelfRemark()).append("reviewResult", getReviewResult())
+				.append("reviewRemark", getReviewRemark()).append("createTime", getCreateTime())
+				.append("updateTime", getUpdateTime()).toString();
+	}
+}

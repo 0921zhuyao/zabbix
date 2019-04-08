@@ -1,0 +1,53 @@
+.info_list{
+    position: relative;
+}
+.info_list button{
+    position: absolute;
+    top: 23pxpx;
+    right: -4px;
+    width: 70px;
+    height: 27.25px;
+    line-height: 19.25px;
+    font-size: 10px;
+    -webkit-transform: scale(0.8);
+    background: #fff;
+}
+.finish{
+    border: 1px solid #21a61a;
+    color: #21a61a;
+}
+.no-finish{
+    border:  1px solid #ff2f2f;
+    color: #ff2f2f;
+}
+.wait{
+    border:  1px solid #3061ec;
+    color: #3061ec;
+}
+.fucha{
+    border:  1px solid #fda35a;
+    color: #fda35a;
+}
+.dingji{
+    border:  1px solid #DB70DB                ;
+    color: #DB70DB                ;
+}
+.zuofei {
+    border: 1px solid #8f8f94;
+    color: #8f8f94;
+}
+.dot{
+    width: 6px;
+    height: 6px;
+    border-radius: 100%;
+    background: red;
+    position: absolute;
+    left: 10px;
+    top: 10px;
+}
+.info_list .sure{
+    top: 44px;
+    background-color: #00b7ee;
+    color: white;
+    z-index: 999;
+}

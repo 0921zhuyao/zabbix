@@ -1,0 +1,79 @@
+package com.jd.project.module.admin.evaluation.service;
+
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import com.jd.common.support.Convert;
+import com.jd.framework.web.service.BaseService;
+import com.jd.project.module.admin.evaluation.entity.DynamicHistoryEntity;
+import com.jd.project.module.admin.evaluation.mapper.DynamicHistoryMapper;
+
+/**
+ * 动态运行历史记录 服务层实现
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-29
+ */
+@Service
+@Transactional(rollbackFor = Exception.class)
+public class DynamicHistoryServiceImpl extends BaseService implements DynamicHistoryService {
+	@Autowired
+	private DynamicHistoryMapper dynamicHistoryMapper;
+
+	/**
+     * 查询动态运行历史记录信息
+     * 
+     * @param dynamicsHistoryId 动态运行历史记录ID
+     * @return 动态运行历史记录信息
+     */
+    @Override
+	public DynamicHistoryEntity selectDynamicHistoryById(Long dynamicsHistoryId) {
+	    return dynamicHistoryMapper.selectDynamicHistoryById(dynamicsHistoryId);
+	}
+	
+	/**
+     * 查询动态运行历史记录列表
+     * 
+     * @param dynamicHistory 动态运行历史记录信息
+     * @return 动态运行历史记录集合
+     */
+	@Override
+	public List<DynamicHistoryEntity> selectDynamicHistoryList(DynamicHistoryEntity dynamicHistory) {
+	    return dynamicHistoryMapper.selectDynamicHistoryList(dynamicHistory);
+	}
+	
+    /**
+     * 新增动态运行历史记录
+     * 
+     * @param dynamicHistory 动态运行历史记录信息
+     * @return 结果
+     */
+	@Override
+	public int insertDynamicHistory(DynamicHistoryEntity dynamicHistory) {
+	    return dynamicHistoryMapper.insertDynamicHistory(dynamicHistory);
+	}
+	
+	/**
+     * 修改动态运行历史记录
+     * 
+     * @param dynamicHistory 动态运行历史记录信息
+     * @return 结果
+     */
+	@Override
+	public int updateDynamicHistory(DynamicHistoryEntity dynamicHistory) {
+	    return dynamicHistoryMapper.updateDynamicHistory(dynamicHistory);
+	}
+
+	/**
+     * 删除动态运行历史记录对象
+     * 
+     * @param ids 需要删除的数据ID
+     * @return 结果
+     */
+	@Override
+	public int deleteDynamicHistoryByIds(String ids) {
+		return dynamicHistoryMapper.deleteDynamicHistoryByIds(Convert.toStrArray(ids));
+	}
+	
+}

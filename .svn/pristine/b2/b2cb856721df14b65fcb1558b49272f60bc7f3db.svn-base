@@ -1,0 +1,173 @@
+package com.jd.project.module.app.plan.controller;
+
+import com.github.pagehelper.PageInfo;
+import com.jd.common.utils.StringUtils;
+import com.jd.common.utils.file.FileUploadUtils;
+import com.jd.common.utils.security.ShiroUtils;
+import com.jd.framework.web.controller.BaseController;
+import com.jd.framework.web.domain.Result;
+import com.jd.project.module.admin.evaluation.entity.TaskDetailEntity;
+import com.jd.project.module.admin.evaluation.entity.TaskPlanEntity;
+import com.jd.project.module.admin.evaluation.service.TaskDetailService;
+import com.jd.project.module.admin.evaluation.service.TaskPlanService;
+import com.jd.project.system.sysorg.service.SysorgService;
+import com.jd.project.system.user.domain.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 自评计划任务 信息操作处理
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-29
+ */
+@Controller
+@RequestMapping("/app/taskplan")
+public class AppTaskPlanController extends BaseController{
+    private String prefix = "module/app/taskplan";
+	private String enterprisePrefix = "module/app/enterprise";
+    private static final Logger log = LoggerFactory.getLogger(AppTaskPlanController.class);
+	@Value("${upLoadDir}")
+	private String upLoadDir;
+	@Autowired
+	private TaskPlanService taskPlanService;
+
+	@Autowired
+	private TaskDetailService taskDetailService;
+
+	@Autowired
+	private SysorgService sysorgService;
+	@GetMapping("/init")
+	public String init() {
+	    return prefix + "/plan_manage_header";
+	}
+	
+	
+	@GetMapping("/initQuery")
+	public String initQuery() {
+	    return prefix + "/plan_manage";
+	}
+	/**
+	 * 查询自评计划任务列表
+	 */
+	@PostMapping("/query")
+	@ResponseBody
+	public Map<String, Object> initListData(TaskPlanEntity taskPlan)
+	{
+		Map<String,Object> result =new HashMap<>();
+		taskPlan.setCreateUser(ShiroUtils.getUserId());
+		startPage();
+		List<TaskPlanEntity> list = taskPlanService.selectTaskPlanListForMbile(taskPlan);
+		//查询分页信息
+		PageInfo<TaskPlanEntity> pageInfo =new PageInfo<TaskPlanEntity>(list);
+		result.put("totalPage",pageInfo.getPages());
+		resultInit(result,list);
+		return result;
+	}
+
+	@GetMapping("/detail/{taskPlanId}")
+	public String init(@PathVariable("taskPlanId") String taskPlanId,@RequestParam(value = "planName",required = false)String planName, Map<String,String> map) {
+		map.put("taskPlanId",taskPlanId);
+		map.put("planName",planName);
+		return enterprisePrefix + "/Co_info";
+	}
+
+	/**
+	 * 查询企业列表信息
+	 */
+	@PostMapping("/queryplanDetailListData")
+	@ResponseBody
+	public Map<String, Object> queryplanDetailListData(TaskDetailEntity taskDetailEntity)
+	{
+		User user = ShiroUtils.getUser();
+		if(null!=user){
+			List<String> orgCodes=new ArrayList<>();
+			if(StringUtils.isNotEmpty(taskDetailEntity.getOrgId())){
+				//有条件，以条件为主
+				orgCodes=sysorgService.selectSysOrgCodesById(taskDetailEntity.getOrgId());
+			}else if(StringUtils.isNotEmpty(user.getLsEnterpriseId())){
+				//不带条件
+				orgCodes=sysorgService.selectSysOrgCodesById(user.getLsEnterpriseId());
+			}else{
+				//都没有说明有问题，返回空
+				return null;
+			}
+			taskDetailEntity.setOrgIds(orgCodes.toArray(new String[orgCodes.size()]));
+			Map<String,Object> result =new HashMap<>();
+			startPage();
+			List<TaskDetailEntity> list = taskDetailService.queryQyjcxxByTaskPlanDetailId(taskDetailEntity);
+			//查询分页信息
+			PageInfo<TaskDetailEntity> pageInfo =new PageInfo<TaskDetailEntity>(list);
+			resultInit(result,list);
+			result.put("totalPage",pageInfo.getPages());
+			return result;
+		}else{
+			return null;
+		}
+	}
+
+	/**
+	 * 前端ajax获取文件的方法
+	 * @param url
+	 * @param request
+	 * @param response
+	 */
+	@GetMapping("/getPlanUpLoadFile")
+	@ResponseBody
+	public void getPlanUpLoadFile(@RequestParam("url") String url, HttpServletRequest request, HttpServletResponse response){
+		String serverUrl = upLoadDir;
+		FileUploadUtils.downFile(upLoadDir,url);
+	}
+
+	/**
+	 * 确认用户定级状态的方法（定级中改为已完成）
+	 * @param  id 任务详情表id
+	 */
+	@PostMapping("/updateStatus")
+	@ResponseBody
+	public Result updateStatus(@RequestParam("id") Long id){
+		TaskDetailEntity td=new TaskDetailEntity();
+		td.setTaskDetailId(id);
+		td.setChecktableStatus(4);
+		return toAjax(taskDetailService.updateTaskDetail(td));
+	}
+
+	/**
+	 * 封装移动端计划查询结果
+	 * @return
+	 */
+	private void resultInit(Map<String,Object> result,Object obj){
+		if(obj!=null){
+			if(obj instanceof List){
+				List list= (List)obj;
+				if(list.size()>0){
+					result.put("status","success");
+					result.put("result",obj);
+					return;
+				}
+			}else{
+				result.put("status","success");
+				result.put("result",obj);
+				return;
+			}
+		}
+		result.put("status","false");
+		result.put("msg","未查到数据");
+	}
+
+	public void setUpLoadDir(String upLoadDir) {
+		this.upLoadDir = upLoadDir;
+	}
+}

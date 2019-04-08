@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link th:href="@{/css/app/reset.css}" rel="stylesheet"/>
+    <link th:href="@{/css/app/Organization.css}" rel="stylesheet"/>
+    <link th:href="@{/css/app/about.css}" rel="stylesheet"/>
+    <title>Document</title>
+</head>
+<body>
+    <header id="header" class="mui-bar mui-bar-nav">
+        <span class="action-back" onclick="window.history.back()">
+            <img src="../../images/return.png" alt="">
+        </span>
+        <h1 class="mui-title">关于我们</h1>
+    </header>
+    <div class="space"></div>
+    <div class="user-title">
+        <div class="user-img">
+            <img src="../../images/company-logo.png" alt="">
+        </div>
+        <p>江宁安监局</p>
+    </div>
+    <ul class="list-title">
+        <li class="list-info"><span>检查更新</span></li>
+        <li class="list-info middle"><span>版本号：&nbsp;&nbsp;01-02-003</span></li>
+        <li class="list-info"><span>意见反馈</span></li>
+    </ul>
+</body>
+</html>

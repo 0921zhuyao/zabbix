@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link th:href="@{/css/app/reset.css}" rel="stylesheet"/>
+    <link th:href="@{/css/app/swiper.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/app/Organization.css}" rel="stylesheet"/>
+    <script th:src="@{/js/app/swiper.min.js}"></script>
+    <script th:src="@{/js/app/jquery-3.0.0.min.js}"></script>
+    <script src="https://img.hcharts.cn/highcharts/highcharts.js"></script>
+    <script src="https://img.hcharts.cn/highcharts/highcharts-3d.js"></script>
+    <script src="https://img.hcharts.cn/highcharts-plugins/highcharts-zh_CN.js"></script>
+</head>
+<body>
+	<!--头部内容-->
+	<header id="header" class="mui-bar mui-bar-nav">
+	    <span class="action-back" onclick="android.doClose();">
+	        <img src="/images/return.png" alt="">
+	    </span>
+	    <h1 class="mui-title">江宁安监分级管理系统</h1>
+	    <span class="pic_mine"><a href="/app/userCenter/info"><img src="/images/fig.png" alt=""></a></span>
+
+		<i class="num_tag" th:if="${msgCount} gt '0'">[[${msgCount}]]</i>
+	</header>
+	<div class="content">
+		<!--<img src="../images/main_bg.jpg" alt="" class="main_bg">-->
+		<div class="swiper-container main_bg">
+			<div class="swiper-wrapper">
+				<div class="swiper-slide">
+					<img src="/images/main_bg.jpg" alt="">
+				</div>
+				<div class="swiper-slide">
+					<img src="/images/main_bg.jpg" alt="">
+				</div>
+				<div class="swiper-slide">
+					<img src="/images/main_bg.jpg" alt="">
+				</div>
+			</div>
+			<!-- 如果需要分页器 -->
+			<div class="swiper-pagination"></div>
+		</div>
+		<div class="notice" >
+			<p class="omg"><a href="/app/notice/initList">通知公告：</a><a th:href="@{'/app/notice/info/' + ${notice?.id}}">[[${notice.title}]]</a></p>
+		</div>
+		<div class="notice_nav">
+			<div>
+				<a href="initEntInfo" th:href="@{/app/qyjcxx/initList}">
+					<img src="../../images/notice_1.png" alt="">
+					<p>企业信息</p>
+				</a>
+			</div>
+			<div>
+				<a href="javascript:void(0);" th:href="@{/app/taskplan/init}">
+					<img src="../../images/notice_3.png" alt="" >
+					<p>计划管理</p>
+				</a>
+			</div>
+			<div>
+				<a href="javascript:void(0);" th:href="@{/app/accident/initAccident}">
+					<img src="../../images/notice_2.png" alt="" >
+					<p>事故登记</p>
+				</a>
+			</div>
+			<div>
+				<a href="javascript:void(0);" th:href="@{/app/accident/initSanction}">
+					<img src="../../images/notice_4.png" alt="" >
+					<p>行政处罚</p>
+				</a>
+			</div>
+			<div>
+				<a href="javascript:void(0);" th:href="@{/app/taskplan/init}">
+					<img src="../../images/notice_5.png" alt="" >
+					<p>统计信息</p>
+				</a>
+			</div>
+		</div>
+		<div class="self_judge">
+			<h3>运行状态</h3>
+			<a th:href="@{/app/taskplan/detail/-1}" class="go_judge">查看详情 &gt;</a>
+		</div>
+		<div class="judge_info">
+			<div class="had_judge" >
+				<div class="number_judge">
+					<p>已自评企业</p>
+					<span><i>[[${evaluation?.YZPQYS}]] </i>家</span>
+				</div>
+			</div>
+			<div id="container" style="width:200px;height:200px"></div>
+			<div class="no_judge" >
+				<div class="number_judge number_judge2">
+					<p>未自评企业</p>
+					<span><i>[[${evaluation?.WZPQYS}]] </i>家</span>
+				</div>
+			</div>
+			<h6 class="all_num">总企业数[[${evaluation?.ZQYS}]]家</h6>
+		</div>
+		<div class="self_judge states">
+			<h3>动态运行</h3>
+			<a th:href="@{/app/dynamic/initList}" class="go_judge">更多 &gt;</a>
+		</div>
+		<div class="states_content" th:each="item:${enterprise}">
+			<div class="content_line"  th:onclick="'javascript:toDynamicList(\''+${item.ID}+'\')'" >
+				<div class="stat_con">
+					<div>
+						<p class="con_name">[[${item?.QYMC}]]</p>
+						<span>不符合项:&nbsp;[[${item.noConfirmCount}]]条</span>
+						<span>执法检查项:&nbsp;[[${item.enforce}]]条</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<script type="text/javascript">
+		function toDynamicList(id){
+            window.location.href='/app/companyChecktable/initList/-1/' + id;
+		}
+	$(document).ready(function() {
+
+        var mySwiper = new Swiper('.swiper-container', {
+            direction: 'horizontal', // 垂直切换选项
+            loop: true, // 循环模式选项
+            autoplay: true,
+            // 如果需要分页器
+            pagination: {
+                el: '.swiper-pagination',
+            }
+        })
+        $(".stat_con").click(function () {
+            var img_a = $(this).find('img');
+            img_a.parent().siblings(".hide_content").slideToggle();
+            if (img_a.attr("src") === '../../images/down_icon.png') {
+                img_a.attr('src', '../../images/up_icon.png');
+            } else {
+                img_a.attr('src', '../../images/down_icon.png');
+            }
+        });
+        $(".hide_content li").click(function () {
+            window.location.href = '[[@{/app/companyChecktable/answereDynamic/}]]' + $(this).attr("data-tid") + '/' + $(this).attr("data-id")
+        });
+    })
+	$(document).ready(function() {
+		var chart = Highcharts.chart('container', {
+			chart: {
+				plotBackgroundColor: null,
+				plotBorderWidth: null,
+				plotShadow: false,
+				type: 'pie',
+				options3d: {
+					enabled: true,
+					alpha: 45,
+					beta: 0
+				}
+			},
+			title: {
+				text: null
+			},
+			colors: ['#f2765d', '#e8e8e8'],
+			tooltip: {
+				enabled: true,
+				pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+			},
+			credits:{
+			     enabled: false // 禁用版权信息
+			},
+			plotOptions: {
+				pie: {
+				allowPointSelect: true,
+				allowPointSelect: true,
+				cursor: 'pointer',
+				dataLabels: {
+					enabled: false
+				},
+				showInLegend: true,
+					cursor: 'pointer',
+					depth: 35,
+					dataLabels: {
+						enabled: false,
+						format: '{point.name}'
+					}
+				}
+			},
+			series: [{
+				name: 'Brands',
+				colorByPoint: true,
+				data: [{
+					name: '已自评',
+					y: parseInt("[[${evaluation?.YZPQYS}]]"),
+					sliced: true,
+					selected: true
+				}, {
+					name: '未自评',
+					y: parseInt("[[${evaluation?.WZPQYS}]]")
+				}]
+			}]
+		});
+	});
+</script>
+</body>
+</html>

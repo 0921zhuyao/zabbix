@@ -1,0 +1,67 @@
+package com.jd.project.module.admin.enterprise.entity;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+import com.jd.framework.web.domain.BasisEntity;
+import java.util.Date;
+
+/**
+ * 所在地区表 t_dm_jnaj
+ * 
+ * @author TrevorPhilips
+ * @date 2019-01-04
+ */
+public class DmJnajEntity extends BasisEntity {
+	private static final long serialVersionUID = 1L;
+	
+	/** 主键 */
+	private Long id;
+	/** 代码类编码 */
+	private String dmldm;
+	/** 代码项编码 */
+	private String dmxbm;
+	/** 描述 */
+	private String ms;
+	/** 父类ID。如果没有父类默认为0 */
+	private String pid;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getDmldm() {
+		return dmldm;
+	}
+
+	public void setDmldm(String dmldm) {
+		this.dmldm = dmldm;
+	}
+
+	public String getDmxbm() {
+		return dmxbm;
+	}
+
+	public void setDmxbm(String dmxbm) {
+		this.dmxbm = dmxbm;
+	}
+
+	public String getMs() {
+		return ms;
+	}
+
+	public void setMs(String ms) {
+		this.ms = ms;
+	}
+
+	public String getPid() {
+		return pid;
+	}
+
+	public void setPid(String pid) {
+		this.pid = pid;
+	}
+}

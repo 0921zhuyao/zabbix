@@ -1,0 +1,130 @@
+package com.jd.project.module.admin.enterprise.entity;
+
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.jd.framework.web.domain.BasisEntity;
+
+/**
+ * 国民经济行业分类表 T_NATIONALl_ECONOMY
+ * 
+ * @author TrevorPhilips
+ * @date 2018-12-20
+ */
+public class NationallEconomyEntity extends BasisEntity {
+	private static final long serialVersionUID = 1L;
+
+	/** 基础代码编号 */
+	private String nationallEconomyId;
+	/**  */
+	private String nationallEconomyCode;
+	/** 计划名称-行业名称 */
+	private String nationallEconomyName;
+	/** 父节点ID */
+	private String parentNationallEconomyId;
+	/** 备注 */
+	private String remark;
+	/**  */
+	private String allCode;
+	/** 创建人 */
+	private Long createUser;
+	/** 创建时间 */
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date createTime;
+	/** 最后更新人 */
+	private Long updateUser;
+	/** 最后更新时间 */
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date updateTime;
+	/** 0 未删 1 已删 */
+	private Long isDelete;
+
+	public String getNationallEconomyId() {
+		return nationallEconomyId;
+	}
+
+	public void setNationallEconomyId(String nationallEconomyId) {
+		this.nationallEconomyId = nationallEconomyId;
+	}
+
+	public String getNationallEconomyCode() {
+		return nationallEconomyCode;
+	}
+
+	public void setNationallEconomyCode(String nationallEconomyCode) {
+		this.nationallEconomyCode = nationallEconomyCode;
+	}
+
+	public String getNationallEconomyName() {
+		return nationallEconomyName;
+	}
+
+	public void setNationallEconomyName(String nationallEconomyName) {
+		this.nationallEconomyName = nationallEconomyName;
+	}
+
+	public String getParentNationallEconomyId() {
+		return parentNationallEconomyId;
+	}
+
+	public void setParentNationallEconomyId(String parentNationallEconomyId) {
+		this.parentNationallEconomyId = parentNationallEconomyId;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public String getAllCode() {
+		return allCode;
+	}
+
+	public void setAllCode(String allCode) {
+		this.allCode = allCode;
+	}
+
+	public Long getCreateUser() {
+		return createUser;
+	}
+
+	public void setCreateUser(Long createUser) {
+		this.createUser = createUser;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Long getUpdateUser() {
+		return updateUser;
+	}
+
+	public void setUpdateUser(Long updateUser) {
+		this.updateUser = updateUser;
+	}
+
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
+
+	public Long getIsDelete() {
+		return isDelete;
+	}
+
+	public void setIsDelete(Long isDelete) {
+		this.isDelete = isDelete;
+	}
+
+}

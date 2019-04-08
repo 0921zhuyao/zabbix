@@ -1,0 +1,153 @@
+package com.jd.project.module.admin.standard.controller;
+
+import java.util.List;
+
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.jd.framework.aspectj.lang.annotation.Log;
+import com.jd.framework.aspectj.lang.enums.BusinessType;
+import com.jd.framework.web.controller.BaseController;
+import com.jd.framework.web.domain.Result;
+import com.jd.framework.web.page.TableDataInfo;
+import com.jd.project.module.admin.standard.entity.CheckTableNameEntity;
+import com.jd.project.module.admin.standard.service.CheckTableNameService;
+import com.jd.project.system.dict.domain.DictData;
+import com.jd.project.system.dict.service.IDictDataService;
+
+/**
+ * 检查 信息操作处理
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-21
+ */
+@Controller
+@RequestMapping("/module/checkTableName")
+public class CheckTableNameController extends BaseController {
+	private String prefix = "module/admin/standard/checkTableName";
+
+	@Autowired
+	private CheckTableNameService checkTableNameService;
+
+	@Autowired
+	private IDictDataService iDictDataService;
+
+	@RequiresPermissions("module:checkTableName:view")
+	@GetMapping()
+	public String initList(ModelMap mmap) {
+		// 查询行业信息
+		List<DictData> list = iDictDataService.selectDictDataByType("industry_code");
+		mmap.put("industry", list);
+		return prefix + "/checkTableName_list";
+	}
+
+	/**
+	 * 查询检查列表
+	 */
+	@RequiresPermissions("module:checkTableName:list")
+	@PostMapping("/query")
+	@ResponseBody
+	public TableDataInfo query(CheckTableNameEntity checkTableName) {
+		startPage();
+		List<CheckTableNameEntity> list = checkTableNameService.selectCheckTableNameList(checkTableName);
+		return getDataTable(list);
+	}
+
+	/**
+	 * 新增检查
+	 */
+	@GetMapping("/initAdd")
+	public String initAdd(ModelMap mmap) {
+		CheckTableNameEntity checkTableName = new CheckTableNameEntity();
+		checkTableName.setCheckTableTypeId(1L);
+		// 查询行业信息
+		List<DictData> list = iDictDataService.selectDictDataByType("industry_code");
+		mmap.put("checkTableName", checkTableName);
+		mmap.put("industry", list);
+		return prefix + "/checkTableName_edit";
+	}
+
+	/**
+	 * 新增保存检查
+	 */
+	@RequiresPermissions("module:checkTableName:add")
+	@Log(title = "检查", businessType = BusinessType.INSERT)
+	@PostMapping("/add")
+	@ResponseBody
+	public Result add(CheckTableNameEntity checkTableName) {
+		return toAjax(checkTableNameService.insertCheckTableName(checkTableName));
+	}
+
+	/**
+	 * 修改检查
+	 */
+	@GetMapping("/initEdit/{checkTableNameId}")
+	public String initEdit(@PathVariable("checkTableNameId") Long checkTableNameId, ModelMap mmap) {
+		CheckTableNameEntity checkTableName = checkTableNameService.selectCheckTableNameById(checkTableNameId);
+		mmap.put("checkTableName", checkTableName);
+		// 查询行业信息
+		List<DictData> list = iDictDataService.selectDictDataByType("industry_code");
+		mmap.put("industry", list);
+		return prefix + "/checkTableName_edit";
+	}
+
+	/**
+	 * 修改保存检查
+	 */
+	@RequiresPermissions("module:checkTableName:edit")
+	@Log(title = "检查", businessType = BusinessType.UPDATE)
+	@PostMapping("/edit")
+	@ResponseBody
+	public Result edit(CheckTableNameEntity checkTableName) {
+		return toAjax(checkTableNameService.updateCheckTableName(checkTableName));
+	}
+
+	/**
+	 * 删除检查
+	 */
+	@RequiresPermissions("module:checkTableName:remove")
+	@Log(title = "检查", businessType = BusinessType.DELETE)
+	@PostMapping("/del")
+	@ResponseBody
+	public Result del(String ids) {
+		try {
+			return toAjax(checkTableNameService.deleteCheckTableNameByIds(ids));
+		} catch (Exception e) {
+			return error(e.getMessage());
+		}
+		
+	}
+
+	/**
+	 * 查询检查表详情
+	 * 
+	 * @param
+	 * @param mmap
+	 * @return
+	 */
+	@RequiresPermissions("module:checkTableName:list")
+	@GetMapping("/detail/{checkTableNameId}")
+	public String detail(@PathVariable("checkTableNameId") Long checkTableNameId, ModelMap mmap) {
+		mmap.put("checkTableName", checkTableNameService.selectCheckTableNameById(checkTableNameId));
+		mmap.put("checkTableNameList", checkTableNameService.selectCheckTableNameAll());
+		return "module/admin/standard/checkTable/checkTable_list";
+	}
+	
+	/**
+	 * 校验检查表名称
+	 * @param checkTableName
+	 * @return
+	 */
+	@PostMapping("/checkCheckTableNameUnique")
+    @ResponseBody
+    public boolean checkCheckTableNameUnique(CheckTableNameEntity checkTableName) {
+        return checkTableNameService.checkCheckTableNameUnique(checkTableName);
+    }
+}

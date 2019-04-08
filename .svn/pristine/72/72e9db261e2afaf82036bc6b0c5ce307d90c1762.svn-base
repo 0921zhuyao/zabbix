@@ -1,0 +1,114 @@
+package com.jd.project.module.admin.standard.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.jd.common.support.Convert;
+import com.jd.common.utils.security.ShiroUtils;
+import com.jd.framework.web.service.BaseService;
+import com.jd.project.module.admin.standard.entity.RegulationEntity;
+import com.jd.project.module.admin.standard.mapper.RegulationMapper;
+
+/**
+ * 政策法规 服务层实现
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-22
+ */
+@Service
+@Transactional(rollbackFor = Exception.class)
+public class RegulationServiceImpl extends BaseService implements RegulationService {
+	@Autowired
+	private RegulationMapper regulationMapper;
+
+	/**
+	 * 查询政策法规信息
+	 * 
+	 * @param id
+	 *            政策法规ID
+	 * @return 政策法规信息
+	 */
+	@Override
+	public RegulationEntity selectRegulationById(Long id) {
+		return regulationMapper.selectRegulationById(id);
+	}
+
+	/**
+	 * 查询政策法规列表
+	 * 
+	 * @param regulation
+	 *            政策法规信息
+	 * @return 政策法规集合
+	 */
+	@Override
+	public List<RegulationEntity> selectRegulationList(RegulationEntity regulation) {
+		return regulationMapper.selectRegulationList(regulation);
+	}
+
+	/**
+	 * 新增政策法规
+	 * 
+	 * @param regulation
+	 *            政策法规信息
+	 * @return 结果
+	 */
+	@Override
+	public int insertRegulation(RegulationEntity regulation) {
+		regulation.setCrtUser(ShiroUtils.getUserId());
+		regulation.setUpdUser(ShiroUtils.getUserId());
+		return regulationMapper.insertRegulation(regulation);
+	}
+
+	/**
+	 * 修改政策法规
+	 * 
+	 * @param regulation
+	 *            政策法规信息
+	 * @return 结果
+	 */
+	@Override
+	public int updateRegulation(RegulationEntity regulation) {
+		regulation.setUpdUser(ShiroUtils.getUserId());
+		return regulationMapper.updateRegulation(regulation);
+	}
+
+	/**
+	 * 删除政策法规信息
+	 * 
+	 * @param ids
+	 *            需要删除的数据ID
+	 * @return 结果
+	 * @throws Exception
+	 */
+	@Override
+	public int deleteRegulationByIds(String ids) throws Exception {
+		Long[] regulationIds = Convert.toLongArray(ids);
+		for (Long regulationId : regulationIds) {
+			RegulationEntity regulationEntity = selectRegulationById(regulationId);
+			if (regulationMapper.countRegulationById(regulationId) > 0) {
+				throw new Exception(String.format("%1$s已分配,不能删除", regulationEntity.getTitle()));
+			}
+		}
+		return regulationMapper.deleteRegulationByIds(Convert.toStrArray(ids));
+	}
+
+	/**
+	 * 查询非父类政策法规信息
+	 */
+	@Override
+	public List<RegulationEntity> selectRegulationListByNotPid(RegulationEntity regulation) {
+		return regulationMapper.selectRegulationListByNotPid(regulation);
+	}
+
+	/**
+	 * 查询检查项对应得政策法规
+	 */
+	@Override
+	public List<RegulationEntity> queryRegualationByCheckTableId(Long checkTableId) {
+		return regulationMapper.queryRegualationByCheckTableId(checkTableId);
+	}
+
+}

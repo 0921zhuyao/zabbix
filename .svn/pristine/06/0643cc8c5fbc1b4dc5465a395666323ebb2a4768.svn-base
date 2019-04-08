@@ -1,0 +1,110 @@
+package com.jd.project.module.admin.enterprise.entity;
+
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.jd.framework.web.domain.BasisEntity;
+
+/**
+ * 大中小微表 T_LDS_DETAIL
+ * 
+ * @author TrevorPhilips
+ * @date 2018-12-20
+ */
+public class LdsDetailEntity extends BasisEntity {
+	private static final long serialVersionUID = 1L;
+
+	/** 基础代码编号 */
+	private Long ldsDetailId;
+	/** 0 大 1中 2 小 3 微 */
+	private String lmsType;
+	/**  */
+	private String expression;
+
+	/** 基础代码编号 */
+	private Long lmsId;
+	/** 创建人 */
+	private Long createUser;
+	/** 创建时间 */
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date createTime;
+	/** 最后更新人 */
+	private Long updateUser;
+	/** 最后更新时间 */
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date updateTime;
+	/** 0 未删 1 已删 */
+	private Long isDelete;
+
+	public String getExpression() {
+		return expression;
+	}
+
+	public void setExpression(String expression) {
+		this.expression = expression;
+	}
+
+	public void setLdsDetailId(Long ldsDetailId) {
+		this.ldsDetailId = ldsDetailId;
+	}
+
+	public Long getLdsDetailId() {
+		return ldsDetailId;
+	}
+
+	public void setLmsType(String lmsType) {
+		this.lmsType = lmsType;
+	}
+
+	public String getLmsType() {
+		return lmsType;
+	}
+
+	public void setLmsId(Long lmsId) {
+		this.lmsId = lmsId;
+	}
+
+	public Long getLmsId() {
+		return lmsId;
+	}
+
+	public void setCreateUser(Long createUser) {
+		this.createUser = createUser;
+	}
+
+	public Long getCreateUser() {
+		return createUser;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setUpdateUser(Long updateUser) {
+		this.updateUser = updateUser;
+	}
+
+	public Long getUpdateUser() {
+		return updateUser;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
+
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setIsDelete(Long isDelete) {
+		this.isDelete = isDelete;
+	}
+
+	public Long getIsDelete() {
+		return isDelete;
+	}
+}

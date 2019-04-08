@@ -1,0 +1,131 @@
+package com.jd.project.module.admin.standard.entity;
+
+import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.validator.constraints.Length;
+
+import com.jd.framework.web.domain.BaseEntity;
+
+/**
+ * 检查表 T_CHECK_TABLE_NAME
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-21
+ */
+public class CheckTableNameEntity extends BaseEntity {
+	private static final long serialVersionUID = 1L;
+
+	/** 基础代码编号 */
+	private Long checkTableNameId;
+	/** 基础代码编号 */
+	private Long checkTableTypeId;
+	/** 基础代码编号 */
+	private Long industryId;
+	/** 代码名称 */
+	@NotEmpty(message = "检查表名称不能为空")
+	@Length(max = 50, message = "检查表名称长度不能大于50字")
+	private String checkTableName;
+	/** 排序号 */
+	@NotEmpty(message = "排序号不能为空")
+	private Long sort;
+	/** 0 未删 1 已删 */
+	private Long isDelete;
+	/** 编码 */
+	private String checkTableCode;
+
+	private Long createUser;
+
+	private Long updateUser;
+	/** 专项分类 */
+	private String specialCode;
+	/** 对应得检查项完成状态 0未开始1进行中2已完成 */
+	private int status;
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
+	public Long getSort() {
+		return sort;
+	}
+
+	public void setSort(Long sort) {
+		this.sort = sort;
+	}
+
+	public String getSpecialCode() {
+		return specialCode;
+	}
+
+	public void setSpecialCode(String specialCode) {
+		this.specialCode = specialCode;
+	}
+
+	public Long getCreateUser() {
+		return createUser;
+	}
+
+	public void setCreateUser(Long createUser) {
+		this.createUser = createUser;
+	}
+
+	public Long getUpdateUser() {
+		return updateUser;
+	}
+
+	public void setUpdateUser(Long updateUser) {
+		this.updateUser = updateUser;
+	}
+
+	public void setCheckTableNameId(Long checkTableNameId) {
+		this.checkTableNameId = checkTableNameId;
+	}
+
+	public Long getCheckTableNameId() {
+		return checkTableNameId;
+	}
+
+	public void setCheckTableTypeId(Long checkTableTypeId) {
+		this.checkTableTypeId = checkTableTypeId;
+	}
+
+	public Long getCheckTableTypeId() {
+		return checkTableTypeId;
+	}
+
+	public void setIndustryId(Long industryId) {
+		this.industryId = industryId;
+	}
+
+	public Long getIndustryId() {
+		return industryId;
+	}
+
+	public void setCheckTableName(String checkTableName) {
+		this.checkTableName = checkTableName;
+	}
+
+	public String getCheckTableName() {
+		return checkTableName;
+	}
+
+	public void setIsDelete(Long isDelete) {
+		this.isDelete = isDelete;
+	}
+
+	public Long getIsDelete() {
+		return isDelete;
+	}
+
+	public void setCheckTableCode(String checkTableCode) {
+		this.checkTableCode = checkTableCode;
+	}
+
+	public String getCheckTableCode() {
+		return checkTableCode;
+	}
+}

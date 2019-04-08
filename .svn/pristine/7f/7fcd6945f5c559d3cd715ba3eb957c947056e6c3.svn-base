@@ -1,0 +1,124 @@
+package com.jd.project.module.admin.evaluation.service;
+
+import com.jd.common.support.Convert;
+import com.jd.common.utils.DateUtils;
+import com.jd.common.utils.file.FileUploadUtils;
+import com.jd.framework.web.domain.Result;
+import com.jd.framework.web.service.BaseService;
+import com.jd.project.module.admin.evaluation.entity.CompanyChecktableFilesEntity;
+import com.jd.project.module.admin.evaluation.mapper.CompanyChecktableFilesMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+
+/**
+ * 企业自评记录附件 服务层实现
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-29
+ */
+@Service
+@Transactional(rollbackFor = Exception.class)
+public class CompanyChecktableFilesServiceImpl extends BaseService implements CompanyChecktableFilesService {
+	protected static final Logger logger = LoggerFactory.getLogger(CompanyChecktableFilesServiceImpl.class);
+	@Autowired
+	private CompanyChecktableFilesMapper companyChecktableFilesMapper;
+	@Value("${upLoadDir}")
+	private String upLoadDir;
+	/**
+	 * 查询企业自评记录附件信息
+	 * 
+	 * @param checktableFilesId
+	 *            企业自评记录附件ID
+	 * @return 企业自评记录附件信息
+	 */
+	@Override
+	public CompanyChecktableFilesEntity selectCompanyChecktableFilesById(Long checktableFilesId) {
+		return companyChecktableFilesMapper.selectCompanyChecktableFilesById(checktableFilesId);
+	}
+
+	/**
+	 * 查询企业自评记录附件列表
+	 * 
+	 * @param companyChecktableFiles
+	 *            企业自评记录附件信息
+	 * @return 企业自评记录附件集合
+	 */
+	@Override
+	public List<CompanyChecktableFilesEntity> selectCompanyChecktableFilesList(
+			CompanyChecktableFilesEntity companyChecktableFiles) {
+		return companyChecktableFilesMapper.selectCompanyChecktableFilesList(companyChecktableFiles);
+	}
+
+	/**
+	 * 新增企业自评记录附件
+	 * 
+	 * @param companyChecktableFiles
+	 *            企业自评记录附件信息
+	 * @return 结果
+	 */
+	@Override
+	public int insertCompanyChecktableFiles(CompanyChecktableFilesEntity companyChecktableFiles) {
+		return companyChecktableFilesMapper.insertCompanyChecktableFiles(companyChecktableFiles);
+	}
+
+	/**
+	 * 修改企业自评记录附件
+	 * 
+	 * @param companyChecktableFiles
+	 *            企业自评记录附件信息
+	 * @return 结果
+	 */
+	@Override
+	public int updateCompanyChecktableFiles(CompanyChecktableFilesEntity companyChecktableFiles) {
+		return companyChecktableFilesMapper.updateCompanyChecktableFiles(companyChecktableFiles);
+	}
+
+	/**
+	 * 删除企业自评记录附件对象
+	 * 
+	 * @param ids
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
+	@Override
+	public int deleteCompanyChecktableFilesByIds(String ids) {
+		return companyChecktableFilesMapper.deleteCompanyChecktableFilesByIds(Convert.toStrArray(ids));
+	}
+	/**
+	 * 企业自评记录文件上传
+	 */
+	@Override
+	public String insertFile(MultipartFile file) {
+		try {
+			if (file != null) {
+				// 文件存放路径
+				Result result = FileUploadUtils.uploadFile(upLoadDir, file, DateUtils.getDate());
+				// 将文件信息添加到T_COMPANY_CHECKTABLE_FILES表中
+				CompanyChecktableFilesEntity cf = new CompanyChecktableFilesEntity();
+				// 0 自评 1 复核 2定级
+				cf.setChecktableFilesType(0);
+				cf.setFilePath((String) result.get("fileUrl"));
+				insertCompanyChecktableFiles(cf);
+				return cf.getChecktableFilesId().toString();
+			}
+		} catch (Exception e) {
+			logger.error("失败文件上传：" + e.getMessage());
+		}
+		return null;
+	}
+
+	public String getUpLoadDir() {
+		return upLoadDir;
+	}
+
+	public void setUpLoadDir(String upLoadDir) {
+		this.upLoadDir = upLoadDir;
+	}
+}

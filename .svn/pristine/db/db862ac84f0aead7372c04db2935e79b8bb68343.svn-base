@@ -1,0 +1,105 @@
+package com.jd.project.module.admin.evaluation.controller;
+
+import java.util.List;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import com.jd.framework.aspectj.lang.annotation.Log;
+import com.jd.framework.aspectj.lang.enums.BusinessType;
+import com.jd.framework.web.controller.BaseController;
+import com.jd.framework.web.page.TableDataInfo;
+import com.jd.project.module.admin.evaluation.entity.TaskDetailEntity;
+import com.jd.project.module.admin.evaluation.service.TaskDetailService;
+import com.jd.framework.web.domain.Result;
+
+/**
+ * 任务详情 信息操作处理
+ * 
+ * @author TrevorPhilips
+ * @date 2018-11-29
+ */
+@Controller
+@RequestMapping("/module/taskDetail")
+public class TaskDetailController extends BaseController{
+    private String prefix = "module/taskDetail";
+	
+	@Autowired
+	private TaskDetailService taskDetailService;
+	
+	@RequiresPermissions("module:taskDetail:view")
+	@GetMapping()
+	public String initList() {
+	    return prefix + "/taskDetail_list";
+	}
+	
+	/**
+	 * 查询任务详情列表
+	 */
+	@RequiresPermissions("module:taskDetail:list")
+	@PostMapping("/query")
+	@ResponseBody
+	public TableDataInfo query(TaskDetailEntity taskDetail) {
+		startPage();
+        List<TaskDetailEntity> list = taskDetailService.selectTaskDetailList(taskDetail);
+		return getDataTable(list);
+	}
+	
+	/**
+	 * 新增任务详情
+	 */
+	@GetMapping("/initAdd")
+	public String initAdd(ModelMap mmap) {
+	    mmap.put("taskDetail",new TaskDetailEntity());
+	    return prefix + "/taskDetail_edit";
+	}
+	
+	/**
+	 * 新增保存任务详情
+	 */
+	@RequiresPermissions("module:taskDetail:add")
+	@Log(title = "任务详情", businessType = BusinessType.INSERT)
+	@PostMapping("/add")
+	@ResponseBody
+	public Result add(TaskDetailEntity taskDetail) {		
+		return toAjax(taskDetailService.insertTaskDetail(taskDetail));
+	}
+
+	/**
+	 * 修改任务详情
+	 */
+	@GetMapping("/initEdit/{taskDetailId}")
+	public String initEdit(@PathVariable("taskDetailId") Long taskDetailId, ModelMap mmap) {
+		TaskDetailEntity taskDetail = taskDetailService.selectTaskDetailById(taskDetailId);
+		mmap.put("taskDetail", taskDetail);
+	    return prefix + "/taskDetail_edit";
+	}
+	
+	/**
+	 * 修改保存任务详情
+	 */
+	@RequiresPermissions("module:taskDetail:edit")
+	@Log(title = "任务详情", businessType = BusinessType.UPDATE)
+	@PostMapping("/edit")
+	@ResponseBody
+	public Result edit(TaskDetailEntity taskDetail) {		
+		return toAjax(taskDetailService.updateTaskDetail(taskDetail));
+	}
+	
+	/**
+	 * 删除任务详情
+	 */
+	@RequiresPermissions("module:taskDetail:remove")
+	@Log(title = "任务详情", businessType = BusinessType.DELETE)
+	@PostMapping( "/del")
+	@ResponseBody
+	public Result del(String ids) {		
+		return toAjax(taskDetailService.deleteTaskDetailByIds(ids));
+	}
+	
+}
